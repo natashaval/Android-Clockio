@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+.DS_Store
+/build
+/captures
+.externalNativeBuild
