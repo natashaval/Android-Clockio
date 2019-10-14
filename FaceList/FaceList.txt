@@ -1,0 +1,27 @@
+Azure Face API Key: f65f134fef0a4fe783df4a9a6a0485a0
+A. untuk yang profile picture / persisted face
+1. PUT - FaceList Create(a list up to 1,000 faces)
+2. POST - FaceList AddFace
+
+B. untuk yang clock in setiap harinya
+3. POST - Face Detect
+4. POST - Face Find Similar
+
+
+Jessica Chastain
+https://pmcvariety.files.wordpress.com/2017/04/jessica-chastain-power-of-women-ny-2017.jpg
+    "persistedFaceId": "ed759892-29c0-48bf-9fc6-5f2d4da0549c"
+https://www.biography.com/.image/t_share/MTIwNjA4NjM0MTM1OTM4NTcy/jessica-chastain-20830013-1-402.jpg
+    "persistedFaceId": "7729e50e-786b-4172-b552-e3ae37d714fe"
+https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2018/02/gettyimages-904017520-h_2018.jpg
+    "persistedFaceId": "8a1aba0f-22fd-46a5-887d-48a807752908"
+https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2018/02/gettyimages-904017520-h_2018.jpg
+
+Bryce Dallas Howard
+https://i1.wp.com/www.usmagazine.com/wp-content/uploads/2019/07/Bryce-Dallas-Howard-Kids-Dont-Know-She-Is-Famous-02.jpg?crop=0px%2C41px%2C1333px%2C753px&resize=1600%2C900&ssl=1
+    "persistedFaceId": "3bd194ba-cd03-450f-94f0-908af0effe9a"
+https://ichef.bbci.co.uk/news/624/cpsprodpb/A738/production/_100780824_gettyimages-911034944.jpg
+    "persistedFaceId": "5c0c6424-9fa0-4904-ae52-4e95d7f253f4"
+https://www.biography.com/.image/t_share/MTE5NDg0MDU0ODM3NDk1MzEx/bryce-dallas-howard-485752-1-402.jpg
+    "persistedFaceId": "8826cfa3-130b-4a90-81e8-d72e93905771"
+https://m.media-amazon.com/images/M/MV5BODEzNzBhODYtOWEzNi00Y2I3LWFjMGEtNzAxNzU5ZjZiMDRiXkEyXkFqcGdeQXVyMjQ0MTg4Nw@@._V1_.jpg
