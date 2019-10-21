@@ -3,9 +3,12 @@
 
     <string name="client_id">client</string>
     <string name="client_secret">SuperSecret</string>
+    <string name="grant_password">password</string>
+    <string name="grant_refresh_token">refresh_token</string>
 
     <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Login</string>
