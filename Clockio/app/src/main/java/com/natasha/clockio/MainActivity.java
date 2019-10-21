@@ -2,6 +2,8 @@ package com.natasha.clockio;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.natasha.clockio.model.Test;
 import com.natasha.clockio.service.LoginService;
+import com.natasha.clockio.ui.login.LoginActivity;
 import com.natasha.clockio.utils.RetrofitInstance;
 
 import retrofit2.Call;
@@ -19,9 +22,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etUsername;
-    private EditText etPassword;
-    private Button btnLogin;
+    private Button btnTest, btnLogin;
     private TextView tvAbout;
     LoginService loginService;
 
@@ -33,17 +34,24 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         clickButtonLogin();
         loginService = RetrofitInstance.getClient().create(LoginService.class);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void findViews() {
-        etUsername = (EditText) findViewById(R.id.et_username);
-        etPassword = (EditText) findViewById(R.id.et_password);
+        btnTest = (Button) findViewById(R.id.btn_test);
         btnLogin = (Button) findViewById(R.id.btn_login);
         tvAbout = (TextView) findViewById(R.id.tv_about);
     }
 
     private void clickButtonLogin() {
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Call<Test> testCall = loginService.getTestJson();
