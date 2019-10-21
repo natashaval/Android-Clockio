@@ -2,6 +2,8 @@ package com.natasha.clockio.data;
 
 import com.natasha.clockio.data.model.LoggedInUser;
 
+import retrofit2.Retrofit;
+
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
@@ -17,7 +19,7 @@ public class LoginRepository {
     private LoggedInUser user = null;
 
     // private constructor : singleton access
-    private LoginRepository(LoginDataSource dataSource) {
+    public LoginRepository(LoginDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
