@@ -1,6 +1,7 @@
 package com.natasha.clockio.data.repository;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -22,16 +23,19 @@ public class UserRepository {
 //    public UserRepository(Context context) {
 //        this.context = context;
 //    }
+
     public static final String TAG = UserRepository.class.getSimpleName();
 
-    public LiveData<String> login (String username, String password) {
+//    https://medium.com/@amtechnovation/android-architecture-component-mvvm-part-1-a2e7cff07a76
+    public LiveData<AccessToken> login (String username, String password) {
         Log.d(TAG, "User Repository call Retrofit MutableLiveData");
 
-        final MutableLiveData<String> loginResponse = new MutableLiveData<>();
+        final MutableLiveData<AccessToken> loginResponse = new MutableLiveData<>();
 
         LoginService loginService = RetrofitGenerator.createService(LoginService.class,
         "client", "SuperSecret");
-//                context.getString(R.string.client_id), context.getString(R.string.client_secret));
+//        Resources res = context.getResources();
+//        context.getString(R.string.client_id), context.getString(R.string.client_secret));
 
 //        Call<AccessToken> tokenCall = loginService.requestToken(username, password, context.getString(R.string.grant_password));
         Call<AccessToken> tokenCall = loginService.requestToken(username, password, "password");
@@ -39,17 +43,18 @@ public class UserRepository {
             @Override
             public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                 if (response.isSuccessful()) {
-                    loginResponse.setValue(response.body().toString());
+                    loginResponse.setValue(response.body());
                     Log.d(TAG, "Access Token" + response.body().getAccessToken());
                 } else {
                     Log.d(TAG, "Failed Request" + response.errorBody().toString());
-                    loginResponse.setValue(response.errorBody().toString());
+                    loginResponse.setValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<AccessToken> call, Throwable t) {
-                loginResponse.setValue(t.getMessage());
+                Log.e(TAG, "Error in retrofit auth: " + t.getMessage());
+                loginResponse.setValue(null);
             }
         });
 

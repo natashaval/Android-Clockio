@@ -8,13 +8,16 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.natasha.clockio.data.model.AccessToken;
 import com.natasha.clockio.databinding.ActivityLogin2Binding;
 import com.natasha.clockio.ui.AuthListener;
 import com.natasha.clockio.ui.AuthViewModel;
@@ -22,8 +25,7 @@ import com.natasha.clockio.ui.AuthViewModel;
 public class Login2Activity extends AppCompatActivity implements AuthListener {
 
     public ProgressBar progressBar;
-    public EditText usernameEdit, passwordEdit;
-    public Button loginButton;
+    public SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
 
         viewModel.authListener = this;
         findViews();
+        preferences = getSharedPreferences("Token", Context.MODE_PRIVATE);
     }
 
     public void findViews() {
@@ -48,14 +51,19 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
     }
 
     @Override
-    public void onSuccess(LiveData<String> loginResponse) {
+    public void onSuccess(LiveData<AccessToken> loginResponse) {
 //        Toast.makeText(this, "Login Success" + loginResponse, Toast.LENGTH_SHORT).show();
         final Context context = this;
-        loginResponse.observe(this, new Observer<String>() {
+        loginResponse.observe(this, new Observer<AccessToken>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(AccessToken token) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(context, "Login Success" + s, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Login Success" + token.getAccessToken(), Toast.LENGTH_SHORT).show();
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("access_token", token.getAccessToken());
+                editor.putString("refresh_token", token.getRefreshToken());
+                editor.apply();
             }
         });
     }
