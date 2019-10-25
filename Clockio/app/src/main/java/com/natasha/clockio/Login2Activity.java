@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +27,7 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
 
     public ProgressBar progressBar;
     public SharedPreferences preferences;
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
         binding.setViewModel(viewModel);
 
         viewModel.authListener = this;
+        context = getApplicationContext();
         findViews();
         preferences = getSharedPreferences("Token", Context.MODE_PRIVATE);
     }
@@ -64,6 +67,9 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
                 editor.putString("access_token", token.getAccessToken());
                 editor.putString("refresh_token", token.getRefreshToken());
                 editor.apply();
+
+                Intent intent = new Intent(context, ProfileActivity.class);
+                startActivity(intent);
             }
         });
     }

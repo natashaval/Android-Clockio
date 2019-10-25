@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.natasha.clockio.R;
 import com.natasha.clockio.data.model.AccessToken;
+import com.natasha.clockio.model.User;
 import com.natasha.clockio.service.LoginService;
 import com.natasha.clockio.utils.RetrofitGenerator;
 
@@ -59,5 +60,30 @@ public class UserRepository {
         });
 
         return loginResponse;
+    }
+
+    public MutableLiveData<User> getProfile (String token) {
+        final MutableLiveData<User> userResponse = new MutableLiveData<>();
+        Log.d(TAG, "Get profile data");
+        LoginService loginService = RetrofitGenerator.createServiceBearer(LoginService.class, token);
+        Call<User> userCall = loginService.getProfile();
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    userResponse.setValue(response.body());
+                    Log.d(TAG, "Profile" + response.body().getUsername());
+                } else {
+                    Log.d(TAG, "Profile Error" + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e(TAG, "Error in retrofit get token: " + t.getMessage());
+                userResponse.setValue(null);
+            }
+        });
+        return userResponse;
     }
 }

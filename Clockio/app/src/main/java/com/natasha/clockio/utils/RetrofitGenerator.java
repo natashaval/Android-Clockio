@@ -68,4 +68,27 @@ public class RetrofitGenerator {
 
         return retrofit.create(serviceClass);
     }
+
+    public static <S> S createServiceBearer(Class<S> serviceClass, final String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+//            https://stackoverflow.com/questions/41078866/retrofit2-authorisation-with-bearer-token
+            Interceptor interceptor = new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + authToken)
+                            .build();
+                    return chain.proceed(request);
+                }
+            };
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(serviceClass);
+    }
 }

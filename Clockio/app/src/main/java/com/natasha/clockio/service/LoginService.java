@@ -2,6 +2,7 @@ package com.natasha.clockio.service;
 
 import com.natasha.clockio.data.model.AccessToken;
 import com.natasha.clockio.model.Test;
+import com.natasha.clockio.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -30,4 +31,7 @@ public interface LoginService {
             @Field("refresh_token") String refreshToken,
             @Field("grant_type") String grant
     );
+
+    @GET("/api/profile")
+    Call<User> getProfile();
 }

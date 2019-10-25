@@ -2,6 +2,7 @@ package com.natasha.clockio.ui;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.natasha.clockio.data.model.AccessToken;
 import com.natasha.clockio.data.repository.UserRepository;
+import com.natasha.clockio.model.User;
 
 //https://www.youtube.com/watch?v=1GBCg70G7cI
 //https://github.com/probelalkhan/android-mvvm-architecture/commit/1fba9f9adb184600d381179413b7f060fc5e5cd8
@@ -46,15 +48,10 @@ public class AuthViewModel extends AndroidViewModel {
     }
 
     public void onToken(View view) {
-//        if (isChecked) {
             SharedPreferences preferences = getApplication().getSharedPreferences("Token", Context.MODE_PRIVATE);
             String accessToken = preferences.getString("access_token", "access token ga ada");
             String refreshToken = preferences.getString("refresh_token", "refresh ga ada");
             token = accessToken + " @ " + refreshToken;
             Log.d(TAG, token);
-//            Toast.makeText(getApplication(), "Access: " + accessToken + " @ " + refreshToken, Toast.LENGTH_SHORT).show();
-//        } else {
-            // The toggle is disabled
-//        }
     }
 }
