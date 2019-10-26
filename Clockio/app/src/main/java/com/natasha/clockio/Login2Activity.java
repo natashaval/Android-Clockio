@@ -22,6 +22,7 @@ import com.natasha.clockio.data.model.AccessToken;
 import com.natasha.clockio.databinding.ActivityLogin2Binding;
 import com.natasha.clockio.ui.AuthListener;
 import com.natasha.clockio.ui.AuthViewModel;
+import com.natasha.clockio.ui.home.DashboardActivity;
 
 public class Login2Activity extends AppCompatActivity implements AuthListener {
 
@@ -68,7 +69,7 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
                 editor.putString("refresh_token", token.getRefreshToken());
                 editor.apply();
 
-                Intent intent = new Intent(context, ProfileActivity.class);
+                Intent intent = new Intent(context, DashboardActivity.class);
                 startActivity(intent);
             }
         });
