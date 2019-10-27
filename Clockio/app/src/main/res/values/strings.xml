@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Clockio</string>
+
+    <string name="client_id">client</string>
+    <string name="client_secret">SuperSecret</string>
+    <string name="grant_password">password</string>
+    <string name="grant_refresh_token">refresh_token</string>
+
+    <string name="title_activity_login">Login</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Login</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >4 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="navigation_activity">Activity</string>
+    <string name="navigation_friend">Friend</string>
+    <string name="navigation_checkin">Check In</string>
+    <string name="navigation_checkout">Check Out</string>
+    <string name="navigation_notification">Notification</string>
+    <string name="navigation_profile">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
