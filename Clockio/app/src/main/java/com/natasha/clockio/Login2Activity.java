@@ -41,6 +41,13 @@ public class Login2Activity extends AppCompatActivity implements AuthListener {
         viewModel.authListener = this;
         context = getApplicationContext();
         findViews();
+
+        viewModel.loginResult.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(true){}//TODO
+            }
+        });
         preferences = getSharedPreferences("Token", Context.MODE_PRIVATE);
     }
 

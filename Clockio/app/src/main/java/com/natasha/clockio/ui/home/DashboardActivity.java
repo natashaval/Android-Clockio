@@ -24,7 +24,7 @@ public class DashboardActivity extends AppCompatActivity {
         toolbar = getSupportActionBar();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.dashboard_navigation);
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
-        loadFragment(new ActivityFragment());
+//        loadFragment(new ActivityFragment());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener =
@@ -63,9 +63,9 @@ public class DashboardActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        finish();
+//    }
 }

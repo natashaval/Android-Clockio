@@ -13,11 +13,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.natasha.clockio.data.model.AccessToken;
 import com.natasha.clockio.data.repository.UserRepository;
-import com.natasha.clockio.model.User;
 
 //https://www.youtube.com/watch?v=1GBCg70G7cI
 //https://github.com/probelalkhan/android-mvvm-architecture/commit/1fba9f9adb184600d381179413b7f060fc5e5cd8
@@ -29,6 +29,9 @@ public class AuthViewModel extends AndroidViewModel {
     public String password;
     public AuthListener authListener;
     public String token;
+
+    public MutableLiveData<Boolean> loginResult = new MutableLiveData<>();
+
 
     public AuthViewModel(@NonNull Application application) {
         super(application);
@@ -44,6 +47,7 @@ public class AuthViewModel extends AndroidViewModel {
         }
 
         LiveData<AccessToken> loginResponse = new UserRepository().login(username, password);
+        loginResult.postValue(true);
         authListener.onSuccess(loginResponse);
     }
 

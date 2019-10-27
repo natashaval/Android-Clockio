@@ -19,9 +19,11 @@ public class RetrofitGenerator {
 
     private static Retrofit retrofit;
 
-    private static final String BASE_URL = "http://192.168.1.12:8080";
+//    private static final String BASE_URL = "http://192.168.1.12:8080";
+    private static final String BASE_URL = "http://192.168.0.30:8080";
 
-//    https://stackoverflow.com/questions/45646188/how-can-i-debug-my-retrofit-api-call/45646202
+
+    //    https://stackoverflow.com/questions/45646188/how-can-i-debug-my-retrofit-api-call/45646202
     private static HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY);
 
