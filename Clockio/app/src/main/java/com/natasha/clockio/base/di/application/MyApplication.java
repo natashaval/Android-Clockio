@@ -1,37 +1,39 @@
 package com.natasha.clockio.base.di.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 import com.natasha.clockio.base.di.component.ApplicationComponent;
 import com.natasha.clockio.base.di.component.DaggerApplicationComponent;
 import com.natasha.clockio.base.di.constant.UrlConstantKt;
-import com.natasha.clockio.base.di.module.ContextModule;
-import com.natasha.clockio.base.di.module.RetrofitModule;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasAndroidInjector;
 
-public class MyApplication extends Application {
+import javax.inject.Inject;
+
+public class MyApplication extends Application implements HasAndroidInjector {
 
     private static final String TAG = MyApplication.class.getSimpleName();
     ApplicationComponent applicationComponent;
+
+    @Inject
+    DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         applicationComponent = DaggerApplicationComponent.builder()
-                .contextModule(new ContextModule(this))
-                .retrofitModule(new RetrofitModule(UrlConstantKt.BASE_URL))
+                .contextModule(this)
+                .retrofitModule(UrlConstantKt.BASE_URL)
                 .build();
 
         applicationComponent.injectApplication(this);
         Log.d(TAG, "application component init on create");
     }
 
-    public static MyApplication get(Activity activity) {
-        return (MyApplication) activity.getApplication();
-    }
-
-    public ApplicationComponent getApplicationComponent() {
-        return applicationComponent;
+    @Override
+    public AndroidInjector<Object> androidInjector() {
+        return dispatchingAndroidInjector;
     }
 }
