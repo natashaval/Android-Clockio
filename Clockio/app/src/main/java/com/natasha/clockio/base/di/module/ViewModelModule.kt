@@ -7,6 +7,7 @@ import com.natasha.clockio.MainViewModel
 import com.natasha.clockio.base.di.qualifier.ViewModelKey
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.base.di.viewmodel.ViewModelFactory
+import com.natasha.clockio.login.ui.LoginViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,4 +22,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel::class)
+    abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
 }

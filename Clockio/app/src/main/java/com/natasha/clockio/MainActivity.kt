@@ -3,26 +3,16 @@ package com.natasha.clockio
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.natasha.clockio.base.di.viewmodel.ViewModelFactory
 import com.natasha.clockio.base.model.Test
-import com.natasha.clockio.base.service.TestApi
 import com.natasha.clockio.base.util.RetrofitInterceptor
-import com.natasha.clockio.base.model.LoggedInUser
-import com.natasha.clockio.login.ui.login.LoginActivity
+import com.natasha.clockio.login.ui.LoginActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.lifecycle.Observer
 
 
@@ -55,6 +45,7 @@ class MainActivity : DaggerAppCompatActivity() {
         // https://stackoverflow.com/questions/53903762/viewmodelproviders-is-deprecated-in-1-1-0
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
+        getTestAuto()
         getTest()
         getApix()
     }
@@ -79,6 +70,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     }
                 }
             })*/
+
             viewModel.testLiveData.observe(this, Observer {
                 val test: Test = it.body()!!
                 helloTextView.text = test.test
@@ -89,10 +81,16 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
+    private fun getTestAuto() {
+        viewModel.testData.observe(this, Observer {
+            helloTextView.text = it!!.test
+        })
+    }
+
     private fun getApix() {
         aboutButton.setOnClickListener {
             val token = sharedPref.getString("access_token", "1234")
-            interceptor.setToken(token)
+            interceptor.setToken(token!!)
             /*testApi.getProfile().enqueue(object : Callback<LoggedInUser> {
                 override fun onFailure(call: Call<LoggedInUser>, t: Throwable) {
                     Log.e(TAG, t.message)

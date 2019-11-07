@@ -6,4 +6,5 @@ import retrofit2.Response
 interface MainRepository {
 
     suspend fun getTest() : Response<Test>
+    suspend fun getTestAuto(): Response<Test>
 }

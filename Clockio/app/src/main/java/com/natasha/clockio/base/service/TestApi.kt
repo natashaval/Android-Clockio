@@ -7,9 +7,13 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface TestApi {
-    @GET("/bins/hh9vk")
-//    @GET("/test")
+//    @GET("/bins/hh9vk")
+    @GET("/test")
     suspend fun getTest() : Response<Test>
+
+//    @GET("/bins/n3g1g")
+    @GET("/test")
+    suspend fun getTestAutomatically() : Response<Test>
 
     @GET("/api/profile")
     fun getProfile() : Call<LoggedInUser>

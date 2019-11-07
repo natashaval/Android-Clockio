@@ -7,7 +7,8 @@ import com.natasha.clockio.base.di.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
 
-@Module
+@Module(includes = [
+    SharedPrefModule::class])
 class ContextModule {
 
     @Provides
