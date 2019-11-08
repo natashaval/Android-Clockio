@@ -15,12 +15,14 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
 import com.natasha.clockio.base.model.Response
 import com.natasha.clockio.base.util.RetrofitInterceptor
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginActivity : DaggerAppCompatActivity() {
@@ -101,7 +103,7 @@ class LoginActivity : DaggerAppCompatActivity() {
                 )
             }
 
-            setOnEditorActionListener { _, actionId, _ ->
+            /*setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                         loginViewModel.login(
@@ -110,14 +112,18 @@ class LoginActivity : DaggerAppCompatActivity() {
                         )
                 }
                 false
-            }
+            }*/
 
         }
 
         login.setOnClickListener {
             loading.visibility = View.VISIBLE
             Log.d(TAG, "login is called from activity")
-            loginViewModel.login(username.text.toString(), password.text.toString())
+            loginViewModel.viewModelScope.launch {
+                // harus diginikan supaya coroutinenya jalan, kalau yang cuma panggil fungsi tidak ada yang observe fungsinya
+                val hasil = loginViewModel.login(username.text.toString(), password.text.toString())
+                Log.d(TAG, "data: {$hasil.data} msg: ${hasil.message}")
+            }
         }
     }
 

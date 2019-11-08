@@ -35,9 +35,9 @@ class LoginDataSource @Inject constructor(private val authApi: AuthApi) {
 //            return Response.error(e.message!!, null)
 //        }
 //    }
-    fun login(username: String, password: String): Call<AccessToken> = authApi.requestToken(username, password, "password")
+//    fun login(username: String, password: String): Call<AccessToken> = authApi.requestToken(username, password, "password")
 
-//    fun login(username: String, password: String) = authApi.requestToken(username, password)
+    suspend fun login(username: String, password: String) = authApi.requestToken(username, password, "password")
 
 fun logout() {
     // TODO: revoke authentication

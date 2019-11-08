@@ -47,13 +47,13 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
         return result
     }*/
 
-    fun login(username: String, password: String): Response<AccessToken> {
+    suspend fun login(username: String, password: String): Response<AccessToken> {
         try {
             Log.d(TAG, "login is called from repository")
             val response = dataSource.login(username, password)
-//            Log.d(TAG, "Success " + response.body().toString())
-//            return Response.success(response)
-            return Response.success(null)
+            Log.d(TAG, "Success " + response.body().toString())
+            return Response.success(response.body())
+//            return Response.success(null)
         } catch (e: Exception) {
             Log.e(TAG, "Error " + e.message)
             return Response.error(e.message!!, null)

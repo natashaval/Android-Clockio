@@ -18,7 +18,7 @@ import okhttp3.ResponseBody
 import java.lang.Exception
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(private val loginRepository: LoginaRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
     private val TAG = LoginViewModel::class.java.simpleName
 
     private val _loginForm = MutableLiveData<LoginFormState>()
@@ -32,6 +32,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginaRepo
     val loginFailed: LiveData<ResponseBody>
     get() = _loginFailed
 
+    /*
     fun login(username: String, password: String) {
         Log.d(TAG, "login is called in view model")
         loginRepository.login(username, password,
@@ -41,26 +42,27 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginaRepo
 
         Log.d(TAG, "Login view model has changed " + loginResult.value.toString())
     }
+     */
 
     //https://medium.com/@harmittaa/retrofit-2-6-0-with-koin-and-coroutines-network-error-handling-a5b98b5e5ca0
-    /*
-    fun login(username: String, password: String) {
+
+    suspend fun login(username: String, password: String): Response<AccessToken> {
         Log.d(TAG, "login is called in view model")
-        liveData {
+//        liveData {
 //            emit (Response.loading(null))
-            try {
+//            try {
                 val result = loginRepository.login(username, password)
                 Log.d(TAG, "login is called in live data emit")
-                _loginResult.value = result
-                emit(result)
-            } catch (e: Exception) {
-                Log.e(TAG, "login is NOT called in view model repository")
-            }
-        }
+//                _loginResult.value = result
+//            _loginResult.postValue(result)
+        return result
+//                emit(result)
+//            } catch (e: Exception) {
+//                Log.e(TAG, "login is NOT called in view model repository")
+//            }
+//        }
         Log.d(TAG, "login is finished in view model")
     }
-
-     */
 
     /*fun login(username: String, password: String) = liveData(Dispatchers.IO) {
         emit(Response.loading(null))

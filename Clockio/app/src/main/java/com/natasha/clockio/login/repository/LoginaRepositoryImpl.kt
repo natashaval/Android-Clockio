@@ -18,7 +18,7 @@ class LoginaRepositoryImpl(private val authApi: AuthApi): LoginaRepository {
     ) {
         Log.d("LoginRepository", "login is called from repository")
 //        https://stackoverflow.com/questions/37141013/how-to-return-value-using-async-retrofit-2-0
-        authApi.requestToken(username, password, "password").enqueue(object : Callback<AccessToken> {
+        /*authApi.requestToken(username, password, "password").enqueue(object : Callback<AccessToken> {
             override fun onFailure(call: Call<AccessToken>, t: Throwable) {
 //                t.message.let { message ->
                 Log.d("LoginRepository", "login is failed ${t.message}")
@@ -38,6 +38,6 @@ class LoginaRepositoryImpl(private val authApi: AuthApi): LoginaRepository {
                     response.errorBody().let { err -> onFailed.invoke(err!!) }
                 }
             }
-        })
+        })*/
     }
 }
