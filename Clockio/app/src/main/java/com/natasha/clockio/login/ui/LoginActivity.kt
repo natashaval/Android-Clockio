@@ -76,7 +76,8 @@ class LoginActivity : DaggerAppCompatActivity() {
 
         loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
             loading.visibility = View.GONE
-            Toast.makeText(this, it.string(), Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "Login Failed: $it")
+            showLoginFailed(R.string.login_failed)
         })
 
         username.afterTextChanged {
@@ -93,34 +94,12 @@ class LoginActivity : DaggerAppCompatActivity() {
                     password.text.toString()
                 )
             }
-
-            /*setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
-                }
-                false
-            }*/
-
         }
 
         login.setOnClickListener {
             loading.visibility = View.VISIBLE
             Log.d(TAG, "login is called from activity")
-//            loginViewModel.viewModelScope.launch {
                 loginViewModel.login(username.text.toString(), password.text.toString())
-//            }
-
-//            loginViewModel.viewModelScope.launch {
-                // harus diginikan supaya coroutinenya jalan, kalau yang cuma panggil fungsi tidak ada yang observe fungsinya
-//                val loginResponse = loginViewModel.login(username.text.toString(), password.text.toString())
-//                Log.d(TAG, "data: {$hasil.data} msg: ${hasil.message}")
-//                Log.d(TAG, "data $loginResponse")
-//            }
-//            }
         }
     }
 

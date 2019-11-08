@@ -14,17 +14,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".ui.login.LoginActivity"
-                android:label="@string/title_activity_login"></activity>
-
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key" />
-
-        <activity
-                android:name=".maps.MapsActivity"
-                android:label="@string/title_activity_maps" />
-        <activity
                 android:name=".login.ui.LoginActivity"
                 android:label="@string/title_activity_login" />
         <activity android:name=".MainActivity">

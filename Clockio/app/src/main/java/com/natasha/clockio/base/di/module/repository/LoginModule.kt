@@ -3,8 +3,6 @@ package com.natasha.clockio.base.di.module.repository
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.login.data.LoginDataSource
 import com.natasha.clockio.login.data.LoginRepository
-import com.natasha.clockio.login.repository.LoginaRepositoryImpl
-import com.natasha.clockio.login.repository.LoginaRepository
 import com.natasha.clockio.login.service.AuthApi
 import dagger.Module
 import dagger.Provides
@@ -22,11 +20,5 @@ class LoginModule {
     @ActivityScope
     fun provideLoginDataSource(authApi: AuthApi): LoginDataSource {
         return LoginDataSource(authApi)
-    }
-
-    @Provides
-    @ActivityScope
-    fun provideLoginaRepository(authApi: AuthApi): LoginaRepository {
-        return LoginaRepositoryImpl(authApi)
     }
 }
