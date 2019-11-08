@@ -1,6 +1,7 @@
 package com.natasha.clockio.login.ui
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -15,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.util.RetrofitInterceptor
+import com.natasha.clockio.home.ui.HomeActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
@@ -59,7 +61,7 @@ class LoginActivity : DaggerAppCompatActivity() {
             loading.visibility = View.GONE
 
             Log.d(TAG, "login is called from login result $loginResult")
-            when(loginResult.status) {
+            /*when(loginResult.status) {
                 BaseResponse.Status.SUCCESS -> {
                     Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
                 }
@@ -67,11 +69,14 @@ class LoginActivity : DaggerAppCompatActivity() {
                 BaseResponse.Status.ERROR -> {
                     showError(loginResult.message!!)
                 }
-            }
+            }*/
+            Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
             finish()
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
         })
 
         loginViewModel.loginFailed.observe(this@LoginActivity, Observer {

@@ -45,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity() {
         // https://stackoverflow.com/questions/53903762/viewmodelproviders-is-deprecated-in-1-1-0
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
-        getTestAuto()
+//        getTestAuto()
         getTest()
         getApix()
     }

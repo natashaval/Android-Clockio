@@ -4,6 +4,15 @@
     <string name="client_id">client</string>
     <string name="client_secret">SuperSecret</string>
 
+<!--    Navigation-->
+    <string name="navigation_activity">Activity</string>
+    <string name="navigation_friend">Friend</string>
+    <string name="navigation_checkin">Check In</string>
+    <string name="navigation_checkout">Check Out</string>
+    <string name="navigation_notification">Notification</string>
+    <string name="navigation_profile">Profile</string>
+
+<!--    Login-->
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
