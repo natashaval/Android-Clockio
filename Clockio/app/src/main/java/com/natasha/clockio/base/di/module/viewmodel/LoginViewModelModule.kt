@@ -1,4 +1,4 @@
-package com.natasha.clockio.base.di.viewmodel
+package com.natasha.clockio.base.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.natasha.clockio.MainViewModel

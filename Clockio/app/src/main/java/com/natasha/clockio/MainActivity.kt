@@ -59,7 +59,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
 
-                override fun onResponse(call: Call<Test>, response: Response<Test>) {
+                override fun onResponse(call: Call<Test>, response: BaseResponse<Test>) {
                     if (response.code() == 200) {
                         Log.d(TAG, response.body()!!.toString())
                         val test: String = response.body()!!.test
@@ -97,7 +97,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
                 }
 
-                override fun onResponse(call: Call<LoggedInUser>, response: Response<LoggedInUser>) {
+                override fun onResponse(call: Call<LoggedInUser>, response: BaseResponse<LoggedInUser>) {
                     if (response.code() == 200) {
                         Log.d(TAG, response.body()!!.toString())
                         val user: LoggedInUser = response.body()!!

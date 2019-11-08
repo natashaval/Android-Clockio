@@ -5,17 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import android.widget.Toast
-import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
 import com.natasha.clockio.base.model.AccessToken
-import com.natasha.clockio.base.model.Response
+import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.login.data.LoginRepository
-import com.natasha.clockio.login.data.Result
-import com.natasha.clockio.login.repository.LoginaRepository
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import java.lang.Exception
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
@@ -25,47 +21,31 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
     //    private val _loginResult = MutableLiveData<LoginResult>()
-    private val _loginResult = MutableLiveData<Response<AccessToken>>()
-    val loginResult: LiveData<Response<AccessToken>> = _loginResult
+    private val _loginResult = MutableLiveData<BaseResponse<AccessToken>>()
+    val loginResult: LiveData<BaseResponse<AccessToken>> = _loginResult
 
     private val _loginFailed = MutableLiveData<ResponseBody>()
     val loginFailed: LiveData<ResponseBody>
-    get() = _loginFailed
+        get() = _loginFailed
 
-    /*
+//    https://medium.com/@cesarmcferreira/how-to-use-the-new-android-viewmodelscope-in-clean-architecture-2a33aac959ee
+//    https://proandroiddev.com/coroutines-with-architecture-components-4c223a51b112
     fun login(username: String, password: String) {
-        Log.d(TAG, "login is called in view model")
-        loginRepository.login(username, password,
-            { accessToken -> _loginResult.value = accessToken},
-            { err -> _loginFailed.value = err },
-            {t -> Log.e(TAG, "onFailure: ", t)})
-
-        Log.d(TAG, "Login view model has changed " + loginResult.value.toString())
+        viewModelScope.launch {
+            Log.d(TAG, "login is called in view model")
+            loginRepository.login(username, password,
+                { accessToken -> _loginResult.value = accessToken},
+                { err -> _loginFailed.value = err },
+                {t -> Log.e(TAG, "onFailure: ", t)})
+            Log.d(TAG, "Login view model has changed " + loginResult.value.toString())
+        }
     }
-     */
+
 
     //https://medium.com/@harmittaa/retrofit-2-6-0-with-koin-and-coroutines-network-error-handling-a5b98b5e5ca0
 
-    suspend fun login(username: String, password: String): Response<AccessToken> {
-        Log.d(TAG, "login is called in view model")
-//        liveData {
-//            emit (Response.loading(null))
-//            try {
-                val result = loginRepository.login(username, password)
-                Log.d(TAG, "login is called in live data emit")
-//                _loginResult.value = result
-//            _loginResult.postValue(result)
-        return result
-//                emit(result)
-//            } catch (e: Exception) {
-//                Log.e(TAG, "login is NOT called in view model repository")
-//            }
-//        }
-        Log.d(TAG, "login is finished in view model")
-    }
-
     /*fun login(username: String, password: String) = liveData(Dispatchers.IO) {
-        emit(Response.loading(null))
+        emit(BaseResponse.loading(null))
         Log.d(TAG, "login is called from short view model livedata")
         try {
             val result = loginRepository.login(username, password)
@@ -76,22 +56,13 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
         }
     }*/
 
-/*
-    suspend fun login(username: String, password: String) {
+/* punya Alfian terus disini LoginActivity loginViewModel.viewModelScope.launch { this function }
+    suspend fun login(username: String, password: String): BaseResponse<AccessToken> {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value =
-                LoginResult(
-                    success = LoggedInUserView(
-                        displayName = result.data.displayName
-                    )
-                )
-        } else {
-            _loginResult.value =
-                LoginResult(error = R.string.login_failed)
-        }
+        Log.d(TAG, "login is called in live data emit")
+        return result
+        Log.d(TAG, "login is finished in view model")
     }
 
  */

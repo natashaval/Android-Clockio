@@ -1,6 +1,4 @@
 package com.natasha.clockio.base.di.constant
 
-//const val BASE_URL = "https://api.myjson.com/";
-const val BASE_URL = "http://192.168.43.163:8080/";
-const val CLIENT_ID = "secret";
-const val CLIENT_SECRET = "SuperSecret";
+//const val BASE_URL = "https://api.myjson.com/"
+const val BASE_URL = "http://10.212.7.151:8080/"

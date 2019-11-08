@@ -6,8 +6,8 @@ import com.natasha.clockio.base.di.module.activity.MainActivityModule
 import com.natasha.clockio.base.di.module.repository.LoginModule
 import com.natasha.clockio.base.di.module.repository.TestModule
 import com.natasha.clockio.base.di.scope.ActivityScope
-import com.natasha.clockio.base.di.viewmodel.LoginViewModelModule
-import com.natasha.clockio.base.di.viewmodel.MainViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.LoginViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.MainViewModelModule
 import com.natasha.clockio.login.ui.LoginActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

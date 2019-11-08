@@ -4,20 +4,16 @@ import android.app.Activity
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
-import com.natasha.clockio.base.model.Response
+import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.util.RetrofitInterceptor
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -61,19 +57,14 @@ class LoginActivity : DaggerAppCompatActivity() {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
-            /*if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }*/
+
             Log.d(TAG, "login is called from login result $loginResult")
             when(loginResult.status) {
-                Response.Status.SUCCESS -> {
+                BaseResponse.Status.SUCCESS -> {
                     Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
                 }
-                Response.Status.LOADING -> showLoading()
-                Response.Status.ERROR -> {
+                BaseResponse.Status.LOADING -> showLoading()
+                BaseResponse.Status.ERROR -> {
                     showError(loginResult.message!!)
                 }
             }
@@ -119,11 +110,17 @@ class LoginActivity : DaggerAppCompatActivity() {
         login.setOnClickListener {
             loading.visibility = View.VISIBLE
             Log.d(TAG, "login is called from activity")
-            loginViewModel.viewModelScope.launch {
+//            loginViewModel.viewModelScope.launch {
+                loginViewModel.login(username.text.toString(), password.text.toString())
+//            }
+
+//            loginViewModel.viewModelScope.launch {
                 // harus diginikan supaya coroutinenya jalan, kalau yang cuma panggil fungsi tidak ada yang observe fungsinya
-                val hasil = loginViewModel.login(username.text.toString(), password.text.toString())
-                Log.d(TAG, "data: {$hasil.data} msg: ${hasil.message}")
-            }
+//                val loginResponse = loginViewModel.login(username.text.toString(), password.text.toString())
+//                Log.d(TAG, "data: {$hasil.data} msg: ${hasil.message}")
+//                Log.d(TAG, "data $loginResponse")
+//            }
+//            }
         }
     }
 

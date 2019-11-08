@@ -2,10 +2,9 @@ package com.natasha.clockio.login.data
 
 import android.util.Log
 import com.natasha.clockio.base.model.AccessToken
-import com.natasha.clockio.base.model.Response
+import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.login.data.model.LoggedInUser
-import com.natasha.clockio.login.service.AuthApi
-import java.lang.Exception
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 /**
@@ -47,18 +46,43 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
         return result
     }*/
 
-    suspend fun login(username: String, password: String): Response<AccessToken> {
+    /*suspend fun login(username: String, password: String): BaseResponse<AccessToken> {
         try {
             Log.d(TAG, "login is called from repository")
             val response = dataSource.login(username, password)
             Log.d(TAG, "Success " + response.body().toString())
-            return Response.success(response.body())
-//            return Response.success(null)
+            return BaseResponse.success(response.body())
+//            return BaseResponse.success(null)
         } catch (e: Exception) {
             Log.e(TAG, "Error " + e.message)
-            return Response.error(e.message!!, null)
+            return BaseResponse.error(e.message!!, null)
+        }
+    }*/
+
+    suspend fun login(username: String, password: String,
+                      onSuccess: (accessToken: BaseResponse<AccessToken>) -> Unit,
+                      onFailed: (errorBody: ResponseBody) -> Unit,
+                      onFailure: (t: Throwable) -> Unit) {
+        try {
+            val response = dataSource.login(username, password)
+            if (response.isSuccessful) {
+                Log.d("LoginRepository", "login is success " + response.body().toString())
+                response.body()?.let { token ->
+                    onSuccess.invoke(BaseResponse.success(token))
+                }
+            }
+            else {
+                Log.d("LoginRepository", "login on response but failed ${response.code()} errorBody: ${response.errorBody()} msg: ${response.message()}")
+                response.errorBody().let { err -> onFailed.invoke(err!!) }
+            }
+        } catch (t: Throwable) {
+            t.message.let { message ->
+                Log.d("LoginRepository", "login is failed ${t.message}")
+                onFailure.invoke(t)
+            }
         }
     }
+
 //    suspend fun login(username: String, password: String) = authApi.requestToken(username, password)
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

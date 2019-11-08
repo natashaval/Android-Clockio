@@ -4,15 +4,12 @@ import android.util.Log
 import com.natasha.clockio.base.model.AccessToken
 import com.natasha.clockio.login.service.AuthApi
 import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginaRepositoryImpl(private val authApi: AuthApi): LoginaRepository {
     override fun login(
         username: String,
         password: String,
-        onSuccess: (accessToken: com.natasha.clockio.base.model.Response<AccessToken>) -> Unit,
+        onSuccess: (accessToken: com.natasha.clockio.base.model.BaseResponse<AccessToken>) -> Unit,
         onFailed: (errorBody: ResponseBody) -> Unit,
         onFailure: (t: Throwable) -> Unit
     ) {
@@ -26,11 +23,11 @@ class LoginaRepositoryImpl(private val authApi: AuthApi): LoginaRepository {
 //                }
             }
 
-            override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
+            override fun onResponse(call: Call<AccessToken>, response: BaseResponse<AccessToken>) {
                 if (response.isSuccessful) {
                     Log.d("LoginRepository", "login is success " + response.body().toString())
                     response.body()?.let { token ->
-                        onSuccess.invoke(com.natasha.clockio.base.model.Response.success(token))
+                        onSuccess.invoke(com.natasha.clockio.base.model.BaseResponse.success(token))
                     }
                 }
                 else {
