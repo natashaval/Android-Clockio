@@ -17,7 +17,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+<!--    https://github.com/armcha/Space-Navigation-View -->
+    <com.luseen.spacenavigation.SpaceNavigationView
+        android:id="@+id/spaceNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:space_background_color="@color/colorPrimary"
+        app:active_item_color="@color/colorIcon"
+        app:centre_button_color="@color/colorAccent"
+        app:centre_button_icon="@drawable/ic_alarm_black_24dp"
+        app:inactive_centre_button_icon_color="@color/colorIcon"
+        app:active_centre_button_icon_color="@color/colorIcon"
+
+        app:space_item_icon_only_size="20dp"
+    />
+
+    <!--com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +49,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/navigation" /-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

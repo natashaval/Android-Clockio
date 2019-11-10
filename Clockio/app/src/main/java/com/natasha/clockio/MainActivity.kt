@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import javax.inject.Inject
 import androidx.lifecycle.Observer
+import com.natasha.clockio.home.ui.HomeActivity
 
 
 class MainActivity : DaggerAppCompatActivity() {
@@ -89,8 +90,8 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun getApix() {
         aboutButton.setOnClickListener {
-            val token = sharedPref.getString("access_token", "1234")
-            interceptor.setToken(token!!)
+//            val token = sharedPref.getString("access_token", "1234")
+//            interceptor.setToken(token!!)
             /*testApi.getProfile().enqueue(object : Callback<LoggedInUser> {
                 override fun onFailure(call: Call<LoggedInUser>, t: Throwable) {
                     Log.e(TAG, t.message)
@@ -104,7 +105,11 @@ class MainActivity : DaggerAppCompatActivity() {
                         helloTextView.text = user.username
                     }
                 }
-            })*/
+            })
+             */
+            val home = Intent(this@MainActivity, HomeActivity::class.java)
+            startActivity(home)
+
         }
     }
 }

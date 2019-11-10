@@ -37,6 +37,11 @@ ext {
     dagger = "2.24"
     dagger_android = "2.24"
     room = "2.2.0"
+
+    // UI
+    space_navigation_view = "1.6.0"
+//    lollipin = "2.1.0"
+    blur_lock_view = "1.0.0"
 }
 
 dependencies {
@@ -84,5 +89,11 @@ dependencies {
     implementation "androidx.room:room-runtime:$room"
     kapt "androidx.room:room-compiler:$room"
     implementation "androidx.room:room-ktx:$room"
+
+    // UI - Space Navigation View
+    implementation "com.github.armcha:SpaceNavigationView:$space_navigation_view"
+    implementation "com.nightonke:blurlockview:$blur_lock_view"
+
+
 
 }
