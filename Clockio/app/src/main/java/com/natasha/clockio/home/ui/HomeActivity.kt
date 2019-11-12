@@ -15,8 +15,10 @@ import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.natasha.clockio.MainActivity
 import com.natasha.clockio.presence.ui.PresenceActivity
+import com.natasha.clockio.presence.ui.fragment.LockFragment
 
 
 class HomeActivity : AppCompatActivity() {
@@ -54,6 +56,11 @@ class HomeActivity : AppCompatActivity() {
             .commit()
     }
 
+    private fun showDialog(dialogFragment: DialogFragment) {
+        val ft = supportFragmentManager.beginTransaction()
+        dialogFragment.show(ft, dialogFragment::class.java.simpleName)
+    }
+
     private fun addSpaceNavigation(savedInstanceState: Bundle?) {
         spaceNavigation.initWithSaveInstanceState(savedInstanceState);
         spaceNavigation.addSpaceItem(SpaceItem("Home", R.drawable.ic_dashboard_black_24dp))
@@ -70,6 +77,9 @@ class HomeActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "onCenterButtonClick", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@HomeActivity, PresenceActivity::class.java)
             startActivity(intent)
+
+//            val dialogFragment = LockFragment.newInstance()
+//            showDialog(dialogFragment)
         }
 
         override fun onItemClick(itemIndex: Int, itemName: String) {

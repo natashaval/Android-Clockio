@@ -4,6 +4,9 @@
     <string name="client_id">client</string>
     <string name="client_secret">SuperSecret</string>
 
+    <string name="base_save">Save</string>
+    <string name="base_cancel">Cancel</string>
+
     <!--    Navigation-->
     <string name="navigation_activity">Activity</string>
     <string name="navigation_friend">Friend</string>
@@ -24,4 +27,14 @@
     <string name="login_failed">"Login failed"</string>
 
     <string name="title_activity_maps">Maps</string>
+
+<!--    Biometric Prompt-->
+    <string name="biometric_title">Check In</string>
+    <string name="biometric_subtitle">Confirm fingerprint to continue</string>
+    <string name="biometric_failed">Fingerprint failed!</string>
+    <string name="biometric_success">Fingerprint success!</string>
+
+<!--    BlurLockView-->
+    <string name="blurlock_right_button">Backspace</string>
+    <string name="blurlock_left_button"> </string>
 </resources>
