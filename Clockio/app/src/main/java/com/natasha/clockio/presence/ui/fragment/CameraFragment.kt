@@ -1,23 +1,29 @@
 package com.natasha.clockio.presence.ui.fragment
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Matrix
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Environment
+import android.util.DisplayMetrics
+import android.util.Log
 import android.util.Rational
 import android.util.Size
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
+import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.natasha.clockio.MainActivity
 
 import com.natasha.clockio.R
+import com.natasha.clockio.presence.ui.PresenceActivity
 import kotlinx.android.synthetic.main.camera_fragment.*
+import java.io.File
+import java.lang.Exception
 import java.util.concurrent.Executors
 
 class CameraFragment : Fragment() {
@@ -25,15 +31,19 @@ class CameraFragment : Fragment() {
   companion object {
     fun newInstance() = CameraFragment()
 
-    private const val CAMERA_REQUEST_CODE_PERMISSIONS = 13
-    private val CAMERA_REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA)
+    private const val CAMERA_REQUEST_CODE_PERMISSIONS = 12
+    private val CAMERA_REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val TAG = CameraFragment::class.java.simpleName
   }
 
   private lateinit var viewModel: CameraViewModel
+  private var lensFacing = CameraX.LensFacing.FRONT
+  private val screenAspectRatio = AspectRatio.RATIO_4_3
+  private lateinit var outputDirectory: File
 
   override fun onCreateView(
-      inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View? {
     return inflater.inflate(R.layout.camera_fragment, container, false)
   }
@@ -46,11 +56,12 @@ class CameraFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    cameraTextView.setOnClickListener {
-      Toast.makeText(activity, "Camera clicked!", Toast.LENGTH_SHORT).show()
-      activity!!.finish()
-    }
+//    cameraTextView.setOnClickListener {
+//      Toast.makeText(activity, "Camera clicked!", Toast.LENGTH_SHORT).show()
+//      activity!!.finish()
+//    }
 
+    outputDirectory = PresenceActivity.getOutputDirectory(requireContext())
     viewFinder = activity!!.findViewById(R.id.cameraTexture)
     if (allPermissionGranted()) {
       viewFinder.post { startCamera() }
@@ -61,6 +72,7 @@ class CameraFragment : Fragment() {
     viewFinder.addOnLayoutChangeListener { view, i, i2, i3, i4, i5, i6, i7, i8 ->
       updateTransform()
     }
+    switchCamera()
   }
 
   //    https://codelabs.developers.google.com/codelabs/camerax-getting-started/#4
@@ -70,14 +82,17 @@ class CameraFragment : Fragment() {
   private fun startCamera() {
 
     val preview = setupPreview()
-    CameraX.bindToLifecycle(this, preview)
+    // Setup image capture
+    val imageCapture = setupImageCapture()
+    CameraX.bindToLifecycle(this, preview, imageCapture)
   }
 
   private fun setupPreview(): Preview {
     val previewConfig = PreviewConfig.Builder().apply {
-      setLensFacing(CameraX.LensFacing.FRONT)
-//      setTargetAspectRatio(AspectRatio.RATIO_4_3)
-      setTargetResolution(Size(640, 480))
+      setLensFacing(lensFacing)
+      setTargetAspectRatio(screenAspectRatio)
+//      setTargetResolution(Size(640, 480))
+      setTargetRotation(viewFinder.display.rotation)
     }.build()
 
     val preview = Preview(previewConfig)
@@ -90,6 +105,66 @@ class CameraFragment : Fragment() {
       updateTransform()
     }
     return preview
+  }
+
+  private fun setupImageCapture(): ImageCapture {
+    val imageCaptureConfig = ImageCaptureConfig.Builder().apply {
+      setLensFacing(lensFacing)
+      setTargetAspectRatio(screenAspectRatio)
+      setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
+      setTargetRotation(viewFinder.display.rotation)
+    }.build()
+
+    val imageCapture = ImageCapture(imageCaptureConfig)
+    cameraCaptureButton.setOnClickListener {
+      Log.d(TAG, "Camera Capture Clicked!")
+      val file = File(outputDirectory, "${System.currentTimeMillis()}.jpg")
+      imageCapture.takePicture(file, executor,
+        object: ImageCapture.OnImageSavedListener {
+          override fun onImageSaved(file: File) {
+            val msg = "Photo capture succeeded: ${file.absolutePath}"
+            Log.d(TAG, msg)
+            viewFinder.post {
+              Toast.makeText(activity!!, msg, Toast.LENGTH_SHORT).show()
+            }
+          }
+
+          override fun onError(
+            imageCaptureError: ImageCapture.ImageCaptureError,
+            message: String,
+            cause: Throwable?
+          ) {
+            val msg = "Photo capture failed: $message"
+            Log.e(TAG, msg, cause)
+            cause?.printStackTrace()
+            viewFinder.post {
+              Toast.makeText(activity!!, msg, Toast.LENGTH_SHORT).show()
+            }
+          }
+
+        })
+    }
+    return imageCapture
+  }
+
+  @SuppressLint("RestrictedApi")
+  private fun switchCamera() {
+    cameraSwitchButton.setOnClickListener {
+      lensFacing = if (lensFacing == CameraX.LensFacing.FRONT) {
+        CameraX.LensFacing.BACK
+      } else {
+        CameraX.LensFacing.FRONT
+      }
+
+      try {
+        CameraX.getCameraWithLensFacing(lensFacing)
+        CameraX.unbindAll()
+        startCamera()
+
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
+    }
   }
 
   private fun updateTransform() {
@@ -110,9 +185,9 @@ class CameraFragment : Fragment() {
   }
 
   override fun onRequestPermissionsResult(
-      requestCode: Int,
-      permissions: Array<out String>,
-      grantResults: IntArray
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
   ) {
     if (requestCode == CAMERA_REQUEST_CODE_PERMISSIONS) {
       if (allPermissionGranted()) {

@@ -42,6 +42,7 @@
 
 <!--    CameraX-->
     <string name="camera_capture">Capture</string>
+    <string name="camera_switch_button_alt">Switch Camera</string>
 
 <!--    Permission-->
     <string name="camera_permission">Camera Permissions not granted!</string>
