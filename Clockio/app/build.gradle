@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     androidExtensions {
         experimental = true
     }
@@ -43,6 +47,7 @@ ext {
 //    lollipin = "2.1.0"
     blur_lock_view = "1.0.0"
     biometric = "1.0.0"
+    camerax_version = "1.0.0-alpha06"
 }
 
 dependencies {
@@ -97,6 +102,10 @@ dependencies {
 
     // Android Biometrics (Android P)
     implementation "androidx.biometric:biometric:$biometric"
+
+    // Android Camerax
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
 
 
 }

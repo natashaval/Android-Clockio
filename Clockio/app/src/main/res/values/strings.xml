@@ -28,6 +28,8 @@
 
     <string name="title_activity_maps">Maps</string>
 
+    <string name="title_activity_presence">Check In</string>
+
 <!--    Biometric Prompt-->
     <string name="biometric_title">Check In</string>
     <string name="biometric_subtitle">Confirm fingerprint to continue</string>
@@ -37,4 +39,10 @@
 <!--    BlurLockView-->
     <string name="blurlock_right_button">Backspace</string>
     <string name="blurlock_left_button"> </string>
+
+<!--    CameraX-->
+    <string name="camera_capture">Capture</string>
+
+<!--    Permission-->
+    <string name="camera_permission">Camera Permissions not granted!</string>
 </resources>
