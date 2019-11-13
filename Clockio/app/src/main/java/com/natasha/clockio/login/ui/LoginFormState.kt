@@ -1,4 +1,4 @@
-package com.natasha.clockio.login.ui.login
+package com.natasha.clockio.login.ui
 
 /**
  * Data validation state of the login form.

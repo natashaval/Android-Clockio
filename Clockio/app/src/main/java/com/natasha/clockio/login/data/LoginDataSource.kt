@@ -1,22 +1,17 @@
 package com.natasha.clockio.login.data
 
-import com.natasha.clockio.login.data.model.LoggedInUser
-import java.io.IOException
+import com.natasha.clockio.base.model.AccessToken
+import com.natasha.clockio.login.service.AuthApi
+import retrofit2.Response
+import javax.inject.Inject
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-class LoginDataSource {
+class LoginDataSource @Inject constructor(private val authApi: AuthApi) {
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
-        }
-    }
+    suspend fun login(username: String, password: String): Response<AccessToken> =
+        authApi.requestToken(username, password, "password")
 
     fun logout() {
         // TODO: revoke authentication

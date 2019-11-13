@@ -1,62 +1,44 @@
-package com.natasha.clockio.login.ui.login
+package com.natasha.clockio.login.ui
 
 import android.app.Activity
-import android.content.SharedPreferences
+import android.content.Intent
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.annotation.StringRes
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
-import com.natasha.clockio.base.model.AccessToken
-import com.natasha.clockio.base.service.AuthService
+import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.util.RetrofitInterceptor
+import com.natasha.clockio.home.ui.HomeActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginActivity : DaggerAppCompatActivity() {
-    val TAG: String? = LoginActivity::class.simpleName
+    private val TAG: String = LoginActivity::class.java.simpleName
 
+    @Inject lateinit var factory: ViewModelProvider.Factory
+    @Inject lateinit var interceptor: RetrofitInterceptor
     private lateinit var loginViewModel: LoginViewModel
-
-    @Inject
-    lateinit var retrofit: Retrofit
-
-    @Inject
-    lateinit var interceptor: RetrofitInterceptor
-
-    @Inject
-    lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
-
-        val username = findViewById<EditText>(R.id.username)
-        val password = findViewById<EditText>(R.id.password)
-        val login = findViewById<Button>(R.id.login)
-        val loading = findViewById<ProgressBar>(R.id.loading)
-
         AndroidInjection.inject(this)
-        basicAuthClick()
 
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        interceptor.setBasic(getString(R.string.client_id), getString(R.string.client_secret))
+        loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -72,20 +54,35 @@ class LoginActivity : DaggerAppCompatActivity() {
             }
         })
 
+
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
             loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-            }
+
+            Log.d(TAG, "login is called from login result $loginResult")
+            /*when(loginResult.status) {
+                BaseResponse.Status.SUCCESS -> {
+                    Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
+                }
+                BaseResponse.Status.LOADING -> showLoading()
+                BaseResponse.Status.ERROR -> {
+                    showError(loginResult.message!!)
+                }
+            }*/
+            Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
             finish()
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        })
+
+        loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
+            loading.visibility = View.GONE
+            Log.e(TAG, "Login Failed: $it")
+            showLoginFailed(R.string.login_failed)
         })
 
         username.afterTextChanged {
@@ -102,22 +99,12 @@ class LoginActivity : DaggerAppCompatActivity() {
                     password.text.toString()
                 )
             }
+        }
 
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
-                }
-                false
-            }
-
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
+        login.setOnClickListener {
+            loading.visibility = View.VISIBLE
+            Log.d(TAG, "login is called from activity")
                 loginViewModel.login(username.text.toString(), password.text.toString())
-            }
         }
     }
 
@@ -136,31 +123,13 @@ class LoginActivity : DaggerAppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
-    private fun basicAuthClick() {
-        basicAuthButton.setOnClickListener {
-            interceptor.setBasic("client", "SuperSecret")
-            val authApi = retrofit!!.create(AuthService::class.java)
-            authApi.requestToken(username.text.toString(), password.text.toString(), "password")
-                .enqueue(object: Callback<AccessToken> {
-                    override fun onFailure(call: Call<AccessToken>, t: Throwable) {
-                        Log.e(TAG, t.message)
-                        Toast.makeText(this@LoginActivity, t.message, Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
-                        if (response.code() == 200) {
-                            val token: AccessToken = response.body()!!
-                            Log.d(TAG, "Access Token acquired: " + token.accessToken)
-//                            Toast.makeText(this@LoginActivity, token.accessToken, Toast.LENGTH_SHORT).show()
-                            val editor: SharedPreferences.Editor = sharedPref.edit()
-                            editor.putString("access_token", token.accessToken)
-                            editor.putString("refresh_token", token.refreshToken)
-                            editor.apply()
-                        }
-                    }
-
-                })
-        }
+    private fun showLoading() {
+        loading.visibility = View.VISIBLE
+        Log.d(TAG, "login return response loading")
+    }
+    private fun showError(message: String?) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "login return response error")
     }
 }
 
