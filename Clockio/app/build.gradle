@@ -48,6 +48,7 @@ ext {
     blur_lock_view = "1.0.0"
     biometric = "1.0.0"
     camerax_version = "1.0.0-alpha06"
+    glide = "4.10.0"
 }
 
 dependencies {
@@ -107,5 +108,7 @@ dependencies {
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
 
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide"
 
 }

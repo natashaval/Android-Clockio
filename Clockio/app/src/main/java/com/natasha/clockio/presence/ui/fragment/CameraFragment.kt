@@ -126,6 +126,7 @@ class CameraFragment : Fragment() {
             Log.d(TAG, msg)
             viewFinder.post {
               Toast.makeText(activity!!, msg, Toast.LENGTH_SHORT).show()
+              sendImagePathToFragment(file.absolutePath)
             }
           }
 
@@ -201,6 +202,20 @@ class CameraFragment : Fragment() {
 
   private fun allPermissionGranted() = CAMERA_REQUIRED_PERMISSIONS.all {
     ContextCompat.checkSelfPermission(activity!!.baseContext, it) == PackageManager.PERMISSION_GRANTED
+  }
+
+//  https://stackoverflow.com/questions/34847634/passing-image-from-one-fragment-to-a-another-fragment-and-display-image-in-that
+  private fun sendImagePathToFragment(path: String) {
+    val frag = ImageFragment.newInstance()
+    var bundle = Bundle().apply {
+      putString("imagePath", path)
+    }
+    frag.arguments = bundle
+
+  activity!!.supportFragmentManager.beginTransaction()
+    .replace(R.id.presenceContent, frag, frag::class.java.simpleName)
+    .addToBackStack(null)
+    .commit()
   }
 
 }
