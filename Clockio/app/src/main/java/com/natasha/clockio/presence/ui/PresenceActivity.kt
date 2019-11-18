@@ -18,6 +18,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import com.natasha.clockio.presence.ui.fragment.LockFragment
 import com.nightonke.blurlockview.BlurLockView
 import com.nightonke.blurlockview.Directions.HideType
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_presence.*
 import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-
+import javax.inject.Inject
 
 class PresenceActivity : AppCompatActivity() {
 

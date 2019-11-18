@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 
 import com.nightonke.blurlockview.BlurLockView
@@ -16,11 +15,10 @@ import com.nightonke.blurlockview.Directions.HideType
 import com.nightonke.blurlockview.Eases.EaseType
 import com.nightonke.blurlockview.Password
 import java.util.concurrent.Executor
-import android.app.Dialog
-import android.view.Window
 import androidx.biometric.BiometricManager
 import androidx.fragment.app.Fragment
 import com.natasha.clockio.R
+import com.natasha.clockio.presence.viewModel.LockViewModel
 import kotlinx.android.synthetic.main.lock_fragment.*
 import java.util.concurrent.Executors
 

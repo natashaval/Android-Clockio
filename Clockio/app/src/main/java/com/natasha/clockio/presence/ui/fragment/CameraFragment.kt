@@ -6,21 +6,17 @@ import android.content.pm.PackageManager
 import android.graphics.Matrix
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Environment
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Rational
-import android.util.Size
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.natasha.clockio.MainActivity
 
 import com.natasha.clockio.R
 import com.natasha.clockio.presence.ui.PresenceActivity
+import com.natasha.clockio.presence.viewModel.CameraViewModel
 import kotlinx.android.synthetic.main.camera_fragment.*
 import java.io.File
 import java.lang.Exception

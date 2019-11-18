@@ -1,4 +1,4 @@
-package com.natasha.clockio.presence.ui.fragment
+package com.natasha.clockio.presence.viewModel
 
 import androidx.lifecycle.ViewModel
 
