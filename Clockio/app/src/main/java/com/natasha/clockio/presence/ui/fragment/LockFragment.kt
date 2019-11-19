@@ -62,8 +62,11 @@ class LockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         helloPresence.setOnClickListener {
-            Toast.makeText(activity, "Text clicked!", Toast.LENGTH_SHORT).show()
-            activity!!.finish()
+//            Toast.makeText(activity, "Text clicked!", Toast.LENGTH_SHORT).show()
+//            activity!!.finish()
+            activity!!.supportFragmentManager.beginTransaction()
+                .replace(R.id.presenceContent, CameraFragment.newInstance())
+                .commit()
         }
 
 

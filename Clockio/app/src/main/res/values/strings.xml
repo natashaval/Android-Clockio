@@ -28,13 +28,25 @@
 
     <string name="title_activity_maps">Maps</string>
 
-<!--    Biometric Prompt-->
+    <string name="title_activity_presence">Check In</string>
+
+    <!--    Biometric Prompt-->
     <string name="biometric_title">Check In</string>
     <string name="biometric_subtitle">Confirm fingerprint to continue</string>
     <string name="biometric_failed">Fingerprint failed!</string>
     <string name="biometric_success">Fingerprint success!</string>
 
-<!--    BlurLockView-->
+    <!--    BlurLockView-->
     <string name="blurlock_right_button">Backspace</string>
     <string name="blurlock_left_button"> </string>
+
+    <!--    CameraX-->
+    <string name="camera_capture">Capture</string>
+    <string name="camera_switch_button_alt">Switch Camera</string>
+
+    <!--    Permission-->
+    <string name="camera_permission">Camera Permissions not granted!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

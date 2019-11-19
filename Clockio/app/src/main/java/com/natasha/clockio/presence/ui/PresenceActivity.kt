@@ -1,6 +1,7 @@
 package com.natasha.clockio.presence.ui
 
 import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.natasha.clockio.R
@@ -23,6 +24,7 @@ import com.nightonke.blurlockview.Directions.HideType
 import com.nightonke.blurlockview.Eases.EaseType
 import com.nightonke.blurlockview.Password
 import kotlinx.android.synthetic.main.activity_presence.*
+import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -51,5 +53,16 @@ class PresenceActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.presenceContent, fragment, fragment::class.java.simpleName)
             .commit()
+    }
+
+    companion object {
+        fun getOutputDirectory(context: Context): File {
+            val appContext = context.applicationContext
+            val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+                File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+            return if (mediaDir != null && mediaDir.exists())
+                mediaDir else appContext.filesDir
+        }
     }
 }
