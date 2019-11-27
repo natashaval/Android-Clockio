@@ -23,7 +23,7 @@ class LocationLiveData(context: Context) : LiveData<LocationModel>() {
     super.onActive()
     fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
       Log.d(TAG, "onActive locationLiveData $location")
-      location?.also {
+      location?.let {
         setLocationData(it)
       }
     }

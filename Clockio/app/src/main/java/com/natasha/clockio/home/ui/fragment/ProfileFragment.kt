@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 
 import com.natasha.clockio.R
@@ -31,6 +33,7 @@ class ProfileFragment : Fragment() {
   private lateinit var profileViewModel: ProfileViewModel
   private lateinit var locationViewModel: LocationViewModel
 
+  private val TAG:String = ProfileFragment::class.java.simpleName
   private var isGps: Boolean = false
 
   override fun onCreateView(
@@ -50,21 +53,23 @@ class ProfileFragment : Fragment() {
     profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
     locationViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
     // TODO: Use the ViewModel
-    GpsUtils(activity!!).turnOnGps(object : GpsUtils.OnGpsListener {
+    GpsUtils(context!!).turnOnGps(object : GpsUtils.OnGpsListener {
       override fun gpsStatus(isGpsEnable: Boolean) {
-        this@ProfileFragment.isGps = isGps
+        isGps = isGpsEnable
       }
     })
   }
 
   override fun onStart() {
     super.onStart()
+    Log.d(TAG, "onStart loc")
     invokeLocationAction()
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     if (resultCode == Activity.RESULT_OK) {
+      Log.d(TAG, "onActivityResult requestCode $requestCode")
       if (requestCode == GPS_REQUEST) {
         isGps = true
         invokeLocationAction()
@@ -73,30 +78,38 @@ class ProfileFragment : Fragment() {
   }
 
   private fun invokeLocationAction() {
+    Log.d(TAG, "permissionGranted = ${isPermissionGranted()} && permissionRationale = ${shouldShowPermissionRationale()}")
     when {
-      !isGps -> latLong.text = getString(R.string.enable_gps)
+      !isGps -> {
+        Log.d(TAG, "isGPS enabled")
+        latLong.text = getString(R.string.enable_gps)
+      }
 
       isPermissionGranted() -> startLocationUpdate()
 
       shouldShowPermissionRationale() -> latLong.text = getString(R.string.location_permission)
 
-      else -> requestPermissions(
-          arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-          LOCATION_REQUEST
-      )
+      else -> {
+        Log.d(TAG, "requestPermission")
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+            LOCATION_REQUEST
+        )
+      }
     }
   }
 
   private fun startLocationUpdate() {
+    Log.d(TAG, "locationUpdate Happened")
     locationViewModel.getLocationData().observe(this, Observer {
       latLong.text = getString(R.string.latLong, it.latitude, it.longitude)
     })
   }
 
   private fun isPermissionGranted() =
-      ActivityCompat.checkSelfPermission(context!!,
+      ContextCompat.checkSelfPermission(context!!,
           Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-      ActivityCompat.checkSelfPermission(context!!,
+      ContextCompat.checkSelfPermission(context!!,
           Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
   private fun shouldShowPermissionRationale() =
@@ -106,8 +119,12 @@ class ProfileFragment : Fragment() {
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
       grantResults: IntArray) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    Log.d(TAG, "onRequestPermissionResult $requestCode")
     when(requestCode) {
-      LOCATION_REQUEST -> invokeLocationAction()
+      LOCATION_REQUEST -> {
+        isGps = true
+        invokeLocationAction()
+      }
     }
   }
 }
