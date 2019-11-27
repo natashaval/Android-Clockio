@@ -12,4 +12,6 @@
         android:layout_gravity="center"
         android:text="Profile" />
 
+    <include layout="@layout/item_location" />
+
 </FrameLayout>

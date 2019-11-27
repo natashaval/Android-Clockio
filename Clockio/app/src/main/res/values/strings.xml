@@ -44,12 +44,17 @@
     <string name="camera_capture">Capture</string>
     <string name="camera_switch_button_alt">Switch Camera</string>
 
-<!--    Cloudinary Image Upload-->
+    <!--    Cloudinary Image Upload-->
     <string name="cloudinary_default">Default</string>
     <string name="cloudinary_start">Upload Start</string>
     <string name="cloudinary_error">Upload Error</string>
     <string name="cloudinary_success">Upload Success!</string>
 
+    <!--    Location-->
+    <string name="enable_gps">Please enable your GPS!</string>
+    <string name="latLong">Latitude: %.3f, Longitude: %.3f</string>
+
     <!--    Permission-->
-    <string name="camera_permission">Camera Permissions not granted!</string>
+    <string name="camera_permission">Camera Permission not granted!</string>
+    <string name="location_permission">Location permission not granted!</string>
 </resources>
