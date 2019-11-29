@@ -10,19 +10,19 @@ import dagger.Provides
 @Module
 class HomeModule {
 
-//    @Provides
-//    @ActivityScope
-//    fun provideEmployeeRepository(employeeDao: EmployeeDao): EmployeeRepository {
-//        return EmployeeRepository(employeeDao)
-//    }
-
-//    @Provides
-//    @ActivityScope
-//    fun provideEmployeeDao(database: AppDatabase) = database.employeeDao()
+    @Provides
+    @ActivityScope
+    fun provideEmployeeRepository(employeeDao: EmployeeDao): EmployeeRepository {
+        return EmployeeRepository(employeeDao)
+    }
 
     @Provides
     @ActivityScope
-    fun provideEmployeeRepository(): EmployeeRepository {
-        return EmployeeRepository()
-    }
+    fun provideEmployeeDao(database: AppDatabase) = database.employeeDao()
+
+//    @Provides
+//    @ActivityScope
+//    fun provideEmployeeRepository(database: AppDatabase): EmployeeRepository {
+//        return EmployeeRepository(database)
+//    }
 }

@@ -1,15 +1,13 @@
 package com.natasha.clockio.login.ui
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.natasha.clockio.R
 import com.natasha.clockio.base.model.AccessToken
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.login.data.LoginRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import javax.inject.Inject
@@ -32,7 +30,7 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     val profile: LiveData<BaseResponse<Any>>
         get() = _profile
 
-//    https://medium.com/@cesarmcferreira/how-to-use-the-new-android-viewmodelscope-in-clean-architecture-2a33aac959ee
+    //    https://medium.com/@cesarmcferreira/how-to-use-the-new-android-viewmodelscope-in-clean-architecture-2a33aac959ee
 //    https://proandroiddev.com/coroutines-with-architecture-components-4c223a51b112
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -45,12 +43,18 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
         }
     }
 
-    fun getProfile() {
+    fun loadProfile() =
         viewModelScope.launch {
+
             Log.d(TAG, "getProfile is called in view model")
             _profile.value = loginRepository.getProfile()
         }
-    }
+        /*liveData(Dispatchers.IO) {
+            emit(BaseResponse.loading(null))
+            val result = loginRepository.getProfile()
+            _profile.value = result
+            emit(result)
+        }*/
 
 
     //https://medium.com/@harmittaa/retrofit-2-6-0-with-koin-and-coroutines-network-error-handling-a5b98b5e5ca0

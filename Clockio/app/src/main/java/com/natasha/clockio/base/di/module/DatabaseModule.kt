@@ -17,8 +17,7 @@ class DatabaseModule {
           .fallbackToDestructiveMigration()
           .build()
 
-    @Provides
-//    @ApplicationScope
+/*    @Provides
     @ActivityScope
-    fun provideEmployeeDao(database: AppDatabase) = database.employeeDao()
+    fun provideEmployeeDao(database: AppDatabase) = database.employeeDao()*/
 }

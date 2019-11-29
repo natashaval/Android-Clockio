@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module(includes = [
-    SharedPrefModule::class])
+    SharedPrefModule::class, DatabaseModule::class])
 class ContextModule {
 
     @Provides

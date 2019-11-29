@@ -40,7 +40,7 @@ interface AuthApi {
     ): Response<AccessToken>
 
     //    https://proandroiddev.com/suspend-what-youre-doing-retrofit-has-now-coroutines-support-c65bd09ba067
-    @GET("/api/getProfile")
+    @GET("/api/profile")
     suspend fun getProfile(
     ): Response<LoggedInUser>
 }

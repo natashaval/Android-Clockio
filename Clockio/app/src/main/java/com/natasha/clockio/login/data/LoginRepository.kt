@@ -33,8 +33,8 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
                 response.errorBody().let { err -> onFailed.invoke(err!!) }
             }
         } catch (t: Throwable) {
-            t.message.let { message ->
-                Log.d(TAG, "login is failed ${t.message}")
+            t.message.let { _ ->
+                Log.d(TAG, "login is failed")
                 onFailure.invoke(t)
             }
         }
