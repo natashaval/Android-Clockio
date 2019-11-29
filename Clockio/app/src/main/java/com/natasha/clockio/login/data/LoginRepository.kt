@@ -4,6 +4,7 @@ import android.util.Log
 import com.natasha.clockio.base.model.AccessToken
 import com.natasha.clockio.base.model.BaseResponse
 import okhttp3.ResponseBody
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -36,6 +37,22 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
                 Log.d(TAG, "login is failed ${t.message}")
                 onFailure.invoke(t)
             }
+        }
+    }
+
+    suspend fun getProfile(): BaseResponse<Any> {
+        val response = dataSource.profile()
+        try {
+            if (response.isSuccessful) {
+                Log.d(TAG, "profileSuccess ${response.body()}")
+                return BaseResponse.success(response.body())
+            } else {
+                Log.d(TAG, "profileFailed ${response.errorBody()}")
+                return BaseResponse.failed(response.errorBody())
+            }
+        }catch (t: Throwable) {
+            Log.d(TAG, "profileError ${t.message}")
+            return BaseResponse.error(t.message, null)
         }
     }
 

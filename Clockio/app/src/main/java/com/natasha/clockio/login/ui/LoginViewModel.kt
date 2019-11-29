@@ -28,6 +28,10 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     val loginFailed: LiveData<ResponseBody>
         get() = _loginFailed
 
+    private val _profile = MutableLiveData<BaseResponse<Any>>()
+    val profile: LiveData<BaseResponse<Any>>
+        get() = _profile
+
 //    https://medium.com/@cesarmcferreira/how-to-use-the-new-android-viewmodelscope-in-clean-architecture-2a33aac959ee
 //    https://proandroiddev.com/coroutines-with-architecture-components-4c223a51b112
     fun login(username: String, password: String) {
@@ -38,6 +42,13 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
                 { err -> _loginFailed.value = err },
                 {t -> Log.e(TAG, "onFailure: ", t)})
             Log.d(TAG, "Login view model has changed " + loginResult.value.toString())
+        }
+    }
+
+    fun getProfile() {
+        viewModelScope.launch {
+            Log.d(TAG, "getProfile is called in view model")
+            _profile.value = loginRepository.getProfile()
         }
     }
 

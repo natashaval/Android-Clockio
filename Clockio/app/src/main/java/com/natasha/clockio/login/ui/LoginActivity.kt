@@ -2,6 +2,7 @@ package com.natasha.clockio.login.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -28,6 +29,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var factory: ViewModelProvider.Factory
     @Inject lateinit var interceptor: RetrofitInterceptor
+    @Inject lateinit var sharedPref: SharedPreferences
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,8 @@ class LoginActivity : DaggerAppCompatActivity() {
             Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
             setResult(Activity.RESULT_OK)
 
+            loginViewModel.getProfile()
+
             //Complete and destroy login activity once successful
             finish()
             val intent = Intent(this, HomeActivity::class.java)
@@ -83,6 +87,12 @@ class LoginActivity : DaggerAppCompatActivity() {
             loading.visibility = View.GONE
             Log.e(TAG, "Login Failed: $it")
             showLoginFailed(R.string.login_failed)
+        })
+
+        loginViewModel.profile.observe(this, Observer {
+            when (it) {
+
+            }
         })
 
         username.afterTextChanged {

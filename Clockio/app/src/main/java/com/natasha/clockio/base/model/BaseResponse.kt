@@ -17,7 +17,7 @@ data class BaseResponse<out T>(val status: Status, val success: Boolean, val dat
             return BaseResponse(Status.SUCCESS, false, data, null)
         }
 
-        fun<T> error(msg: String, data: T?) : BaseResponse<T> {
+        fun<T> error(msg: String?, data: T?) : BaseResponse<T> {
             return BaseResponse(Status.ERROR, false, data, msg)
         }
 
