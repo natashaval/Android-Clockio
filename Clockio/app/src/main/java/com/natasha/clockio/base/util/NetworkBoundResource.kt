@@ -1,5 +1,6 @@
 package com.natasha.clockio.base.util
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -10,6 +11,9 @@ import com.natasha.clockio.base.model.*
 //https://github.com/android/architecture-components-samples/tree/master/GithubBrowserSample
 abstract class NetworkBoundResource<ResultType, RequestType>
 @MainThread constructor(private val appExecutors: AppExecutors){
+
+  private val TAG: String = NetworkBoundResource::class.java.simpleName
+
   private val result = MediatorLiveData<BaseResponse<ResultType>>()
 
   init {
@@ -26,10 +30,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>
   }
 
   private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
+    Log.d(TAG, "fetchFromNetwork")
     val apiResponse = createCall()
     result.addSource(apiResponse) { response ->
       result.removeSource(apiResponse)
       result.removeSource(dbSource)
+      Log.d(TAG, "fetch from $response")
       when (response) {
         is ApiSuccessResponse -> {
          appExecutors.diskIO().execute {
@@ -54,6 +60,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         }
         is ApiErrorResponse -> {
           onFetchFailed()
+          Log.d(TAG, "fetch ApiErrorResponse ${response.errorMessage}")
           result.addSource(dbSource) {newData ->
             setValue(BaseResponse.error(response.errorMessage, newData))
           }

@@ -1,5 +1,6 @@
 package com.natasha.clockio.home.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -16,10 +17,16 @@ class ProfileViewModel @Inject constructor(private val employeeRepository: Emplo
   val id: LiveData<String>
   get() = _id
 
+  val employee: LiveData<BaseResponse<Employee>> = Transformations
+      .switchMap(_id) {id ->
+        Log.d(TAG, "profileViewModule id $id")
+        employeeRepository.getEmployeeById(id)
+      }
 
   fun setId(id: String?) {
     if (_id.value != id) {
       _id.value = id
     }
+    Log.d(TAG, "profileViewModule _id ${_id.value}")
   }
 }

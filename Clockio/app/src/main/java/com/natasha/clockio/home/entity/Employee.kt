@@ -10,7 +10,7 @@ import java.util.*
 @Entity(tableName = "employees",
     primaryKeys = ["id"])
 data class Employee(
-    var id: Int,
+    var id: String,
     val status: String?,
     @ColumnInfo(name = "first_name")
     val firstName: String,
@@ -34,12 +34,12 @@ data class Employee(
     val updatedAt: Date?,
     val updatedBy: String?
 
-//    @Ignore
-//    val department: Department
+    //    @Ignore
+    //    val department: Department
 ) {
-    data class Department(
-        val id: String?,
-        val name: String,
-        val branchId: String?
-    )
+  data class Department(
+      val id: String?,
+      val name: String,
+      val branchId: String?
+  )
 }

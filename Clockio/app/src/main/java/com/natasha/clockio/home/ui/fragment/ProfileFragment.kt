@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
     fun newInstance() = ProfileFragment()
   }
 
-//  @Inject lateinit var factory: ViewModelProvider.Factory
+  @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var profileViewModel: ProfileViewModel
   private lateinit var locationViewModel: LocationViewModel
 
@@ -52,14 +52,16 @@ class ProfileFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-    locationViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
+    profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+    locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
     // TODO: Use the ViewModel
     GpsUtils(context!!).turnOnGps(object : GpsUtils.OnGpsListener {
       override fun gpsStatus(isGpsEnable: Boolean) {
         isGps = isGpsEnable
       }
     })
+
+    getEmployee()
   }
 
   override fun onStart() {
@@ -77,6 +79,14 @@ class ProfileFragment : Fragment() {
         invokeLocationAction()
       }
     }
+  }
+
+  private fun getEmployee() {
+    profileViewModel.setId("f3fdbd1b-57ba-4a95-9bb1-4db5b0ce5ad0")
+
+    profileViewModel.employee.observe(this, Observer {
+      Log.d(TAG, "Employee get $it")
+    })
   }
 
   private fun invokeLocationAction() {

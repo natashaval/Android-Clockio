@@ -10,13 +10,13 @@ import dagger.multibindings.IntoMap
 
 @Module
 abstract class ProfileViewModelModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(LocationViewModel::class)
-    abstract fun bindLocationViewModel(viewModel: LocationViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(LocationViewModel::class)
+  abstract fun bindLocationViewModel(viewModel: LocationViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(ProfileViewModel::class)
-    abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
+  @Binds
+  @IntoMap
+  @ViewModelKey(ProfileViewModel::class)
+  abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
 }

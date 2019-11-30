@@ -30,7 +30,7 @@ abstract class BuilderActivityModule {
     @ActivityScope
     internal abstract fun bindPresenceActivity(): PresenceActivity
 
-    @ContributesAndroidInjector(modules = [HomeViewModelModule::class])
+    @ContributesAndroidInjector
     @ActivityScope
     internal abstract fun bindHomeActivity(): HomeActivity
 }
