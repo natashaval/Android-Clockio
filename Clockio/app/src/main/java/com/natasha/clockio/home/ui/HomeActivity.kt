@@ -28,15 +28,15 @@ import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
 
-    @Inject lateinit var factory: ViewModelProvider.Factory
-    private lateinit var viewModel: HomeViewModel
+//    @Inject lateinit var factory: ViewModelProvider.Factory
+//    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         AndroidInjection.inject(this)
-        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+//        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val fragment = ActivityFragment.newInstance()

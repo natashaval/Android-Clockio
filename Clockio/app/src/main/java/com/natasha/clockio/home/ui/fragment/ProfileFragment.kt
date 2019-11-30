@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 import com.natasha.clockio.R
 import com.natasha.clockio.home.ui.viewmodel.ProfileViewModel
@@ -22,6 +23,7 @@ import com.natasha.clockio.location.GpsUtils
 import com.natasha.clockio.location.LocationViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.item_location.*
+import javax.inject.Inject
 
 class ProfileFragment : Fragment() {
 
@@ -29,7 +31,7 @@ class ProfileFragment : Fragment() {
     fun newInstance() = ProfileFragment()
   }
 
-  //    @Inject lateinit var factory: ViewModelProvider.Factory
+//  @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var profileViewModel: ProfileViewModel
   private lateinit var locationViewModel: LocationViewModel
 

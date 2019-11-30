@@ -8,13 +8,13 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class HomeModule {
+class ProfileModule {
 
-    @Provides
-    @ActivityScope
-    fun provideEmployeeRepository(employeeDao: EmployeeDao): EmployeeRepository {
-        return EmployeeRepository(employeeDao)
-    }
+//    @Provides
+//    @ActivityScope
+//    fun provideEmployeeRepository(employeeDao: EmployeeDao): EmployeeRepository {
+//        return EmployeeRepository(employeeDao)
+//    }
 
     @Provides
     @ActivityScope

@@ -1,5 +1,6 @@
 package com.natasha.clockio.home.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -11,7 +12,7 @@ import java.util.*
 
   @Query("SELECT * FROM employees") fun getAll(): List<Employee>
 
-  @Query("SELECT * FROM employees WHERE id = :id LIMIT 1") fun getById(id: String): Employee
+  @Query("SELECT * FROM employees WHERE id = :id LIMIT 1") fun getById(id: String): LiveData<Employee>
 
 //  @Insert fun insertAll(vararg employee: Employee)
 }
