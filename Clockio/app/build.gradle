@@ -50,6 +50,7 @@ ext {
     camerax_version = "1.0.0-alpha06"
     glide = "4.10.0"
     cloudinary_android = "1.26.0"
+    circle_image_view = "3.0.1"
 }
 
 dependencies {
@@ -113,5 +114,8 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$glide"
     implementation "com.cloudinary:cloudinary-android:$cloudinary_android"
+
+    // Circle Image View
+    implementation "de.hdodenhof:circleimageview:$circle_image_view"
 
 }

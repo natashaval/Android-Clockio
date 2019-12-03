@@ -101,8 +101,8 @@ class LoginActivity : DaggerAppCompatActivity() {
             Log.d(TAG, "profile Success ${result.data}")
             val loggedInUser: LoggedInUser = result.data as LoggedInUser
             val editor = sharedPref.edit()
-            editor.putString("user-id", loggedInUser.id)
-            Log.d(TAG, "user-id ${loggedInUser.id}")
+            editor.putString("id", loggedInUser.employeeId)
+            Log.d(TAG, "employee-id ${loggedInUser.employeeId}")
             editor.apply()
           }
           else {

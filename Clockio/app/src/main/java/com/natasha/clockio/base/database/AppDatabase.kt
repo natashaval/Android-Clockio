@@ -8,7 +8,7 @@ import com.natasha.clockio.home.dao.EmployeeDao
 import com.natasha.clockio.home.entity.Employee
 
 //https://proandroiddev.com/android-architecture-starring-kotlin-coroutines-jetpack-mvvm-room-paging-retrofit-and-dagger-7749b2bae5f7
-@Database(entities = [Employee::class], version = 1, exportSchema = false)
+@Database(entities = [Employee::class], version = 2, exportSchema = false)
 //https://developer.android.com/training/data-storage/room/referencing-data (for date)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

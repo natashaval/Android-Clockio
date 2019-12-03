@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import com.natasha.clockio.R
 import com.natasha.clockio.presence.ui.PresenceActivity
 import com.natasha.clockio.presence.viewModel.CameraViewModel
-import kotlinx.android.synthetic.main.camera_fragment.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.lang.Exception
 import java.util.concurrent.Executors
@@ -41,7 +41,7 @@ class CameraFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.camera_fragment, container, false)
+    return inflater.inflate(R.layout.fragment_camera, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {

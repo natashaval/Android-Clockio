@@ -1,9 +1,6 @@
 package com.natasha.clockio.home.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
@@ -32,10 +29,10 @@ data class Employee(
     val createdAt: Date?,
     val createdBy: String?,
     val updatedAt: Date?,
-    val updatedBy: String?
+    val updatedBy: String?,
 
-    //    @Ignore
-    //    val department: Department
+    @Embedded(prefix = "dept_")
+    val department: Department
 ) {
   data class Department(
       val id: String?,

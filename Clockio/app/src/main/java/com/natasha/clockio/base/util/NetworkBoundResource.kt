@@ -24,6 +24,10 @@ abstract class NetworkBoundResource<ResultType, RequestType>
       result.removeSource(dbSource)
       if (shouldFetch(data)) {
         fetchFromNetwork(dbSource)
+      } else {
+        result.addSource(dbSource) { newData ->
+          setValue(BaseResponse.success(newData))
+        }
       }
     }
 
@@ -32,23 +36,27 @@ abstract class NetworkBoundResource<ResultType, RequestType>
   private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
     Log.d(TAG, "fetchFromNetwork")
     val apiResponse = createCall()
+    // we re-attach dbSource as a new source, it will dispatch its latest value quickly
+    result.addSource(dbSource) {newData ->
+      setValue(BaseResponse.loading(newData))
+    }
     result.addSource(apiResponse) { response ->
       result.removeSource(apiResponse)
       result.removeSource(dbSource)
       Log.d(TAG, "fetch from $response")
       when (response) {
         is ApiSuccessResponse -> {
-         appExecutors.diskIO().execute {
-           saveCallResult(processResponse(response))
-           appExecutors.mainThread().execute {
-             result.addSource(loadFromDb()) {newData ->
-               // we specially request a new live data,
-               // otherwise we will get immediately last cached value,
-               // which may not be updated with latest results received from network.
-               setValue(BaseResponse.success(newData))
-             }
-           }
-         }
+          appExecutors.diskIO().execute {
+            saveCallResult(processResponse(response))
+            appExecutors.mainThread().execute {
+              // we specially request a new live data,
+              // otherwise we will get immediately last cached value,
+              // which may not be updated with latest results received from network.
+              result.addSource(loadFromDb()) {newData ->
+                setValue(BaseResponse.success(newData))
+              }
+            }
+          }
         }
         is ApiEmptyResponse -> {
           appExecutors.mainThread().execute {
@@ -96,4 +104,4 @@ abstract class NetworkBoundResource<ResultType, RequestType>
   protected open fun onFetchFailed() {}
 
   fun asLiveData() = result as LiveData<BaseResponse<ResultType>>
- }
+}

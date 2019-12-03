@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
 import com.natasha.clockio.R
 import com.natasha.clockio.presence.viewModel.ImageViewModel
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.image_fragment.*
+import kotlinx.android.synthetic.main.fragment_image.*
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class ImageFragment : Fragment() {
       inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.image_fragment, container, false)
+    return inflater.inflate(R.layout.fragment_image, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
