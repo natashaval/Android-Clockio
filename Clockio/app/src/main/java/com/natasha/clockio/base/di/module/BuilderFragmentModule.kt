@@ -2,7 +2,8 @@ package com.natasha.clockio.base.di.module
 
 import com.natasha.clockio.base.di.module.repository.ImageModule
 import com.natasha.clockio.base.di.module.repository.ProfileModule
-import com.natasha.clockio.base.di.module.viewmodel.ImageViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.LocationViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.PresenceViewModelModule
 import com.natasha.clockio.base.di.module.viewmodel.ProfileViewModelModule
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
@@ -13,11 +14,17 @@ import dagger.android.ContributesAndroidInjector
 //https://dev.to/autonomousapps/the-daggerandroid-missing-documentation-part-3-fragments-12go
 @Module
 abstract class BuilderFragmentModule {
-  @ContributesAndroidInjector(modules = [ImageViewModelModule::class, ImageModule::class])
+  @ContributesAndroidInjector(modules = [
+    PresenceViewModelModule::class,
+    LocationViewModelModule::class,
+    ImageModule::class])
   @ActivityScope
   abstract fun imageFragment(): ImageFragment
 
-  @ContributesAndroidInjector(modules = [ProfileViewModelModule::class, ProfileModule::class])
+  @ContributesAndroidInjector(modules = [
+    ProfileViewModelModule::class,
+    LocationViewModelModule::class,
+    ProfileModule::class])
   @ActivityScope
   abstract fun profileFragment(): ProfileFragment
 }

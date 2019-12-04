@@ -66,9 +66,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             }
           }
         }
-        is ApiErrorResponse -> {
+        is ApiFailedResponse -> {
           onFetchFailed()
-          Log.d(TAG, "fetch ApiErrorResponse ${response.errorMessage}")
+          Log.d(TAG, "fetch ApiFailedResponse ${response.errorMessage}")
           result.addSource(dbSource) {newData ->
             setValue(BaseResponse.error(response.errorMessage, newData))
           }

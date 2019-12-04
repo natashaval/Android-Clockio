@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Matrix
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,7 +15,6 @@ import androidx.core.content.ContextCompat
 
 import com.natasha.clockio.R
 import com.natasha.clockio.presence.ui.PresenceActivity
-import com.natasha.clockio.presence.viewModel.CameraViewModel
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.lang.Exception
@@ -32,7 +30,6 @@ class CameraFragment : Fragment() {
     private val TAG = CameraFragment::class.java.simpleName
   }
 
-  private lateinit var viewModel: CameraViewModel
   private var lensFacing = CameraX.LensFacing.FRONT
   private val screenAspectRatio = AspectRatio.RATIO_4_3
   private lateinit var outputDirectory: File
@@ -46,8 +43,6 @@ class CameraFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProviders.of(this).get(CameraViewModel::class.java)
-    // TODO: Use the ViewModel
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

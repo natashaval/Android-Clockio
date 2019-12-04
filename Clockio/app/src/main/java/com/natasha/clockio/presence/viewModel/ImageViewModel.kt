@@ -18,6 +18,11 @@ class ImageViewModel @Inject constructor(private val imageRepository: ImageRepos
   val events: LiveData<Int>
     get() = _events
 
+  private val _resultUrl = MutableLiveData<String>()
+  val resultUrl: LiveData<String>
+    get() = _resultUrl
+
+
   companion object {
     val STATUS_CODE_STARTING = 15
     val STATUS_CODE_UPLOAD_ERROR = 16
@@ -40,6 +45,7 @@ class ImageViewModel @Inject constructor(private val imageRepository: ImageRepos
         _events.value = STATUS_CODE_FINISHED
         _progressValue.value = 1.0
         Log.d(TAG, "Result in ViewModel $resultData")
+        _resultUrl.value = resultData?.get("url") as String
       }
 
       override fun onProgress(progress: Double) {
