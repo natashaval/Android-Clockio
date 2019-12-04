@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent" android:layout_width="match_parent">
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emotions"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <ProgressBar
+            android:id="@+id/emotionProgress"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/genderAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/genderage"
+            android:textSize="18sp"
+            android:textStyle="italic"/>
+
+        <TextView
+            android:id="@+id/anger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Anger" />
+
+        <ProgressBar
+            android:id="@+id/angerProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/contempt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Contempt" />
+
+        <ProgressBar
+            android:id="@+id/contemptProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/disgust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Disgust" />
+
+        <ProgressBar
+            android:id="@+id/disgustProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/fear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Fear" />
+
+        <ProgressBar
+            android:id="@+id/fearProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/happiness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Happiness" />
+
+        <ProgressBar
+            android:id="@+id/happinessProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/neutral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Neutral" />
+
+        <ProgressBar
+            android:id="@+id/neutralProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/sadness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Sadness" />
+
+        <ProgressBar
+            android:id="@+id/sadnessProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/surprise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Surprise" />
+
+        <ProgressBar
+            android:id="@+id/surpriseProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="10"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+    </LinearLayout>
+</ScrollView>

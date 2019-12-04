@@ -118,4 +118,7 @@ dependencies {
     // Circle Image View
     implementation "de.hdodenhof:circleimageview:$circle_image_view"
 
+    // Face Microsoft Azure
+//    implementation "com.microsoft.projectoxford:face:1.4.4"
+
 }

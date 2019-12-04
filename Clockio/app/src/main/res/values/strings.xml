@@ -57,4 +57,15 @@
     <!--    Permission-->
     <string name="camera_permission">Camera Permission not granted!</string>
     <string name="location_permission">Location permission not granted!</string>
+
+<!--    Emotion-->
+    <string name="genderage">Gender: %s Age: %.1f </string>
+    <string name="anger" >Anger: %.3f </string>
+    <string name="contempt">Contempt: %.3f</string>
+    <string name="disgust">Disgust: %.3f </string>
+    <string name="fear" >Fear: %.3f </string>
+    <string name="happiness" >Happiness: %.3f </string>
+    <string name="neutral">Neutral: %.3f </string>
+    <string name="sadness" >Sadness: %.3f </string>
+    <string name="surprise">Surprise: %.3f </string>
 </resources>

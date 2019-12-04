@@ -2,6 +2,7 @@ package com.natasha.clockio.base.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.natasha.clockio.base.di.qualifier.ViewModelKey
+import com.natasha.clockio.presence.viewModel.EmotionViewModel
 import com.natasha.clockio.presence.viewModel.ImageViewModel
 import com.natasha.clockio.presence.viewModel.PresenceViewModel
 import dagger.Binds
@@ -21,4 +22,9 @@ abstract class PresenceViewModelModule {
   @IntoMap
   @ViewModelKey(PresenceViewModel::class)
   abstract fun bindPresenceViewModel(viewModel: PresenceViewModel): ViewModel
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(EmotionViewModel::class)
+  abstract fun bindEmotionViewModel(viewModel: EmotionViewModel): ViewModel
 }

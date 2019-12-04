@@ -5,6 +5,7 @@ import com.natasha.clockio.home.service.EmployeeApi
 import com.natasha.clockio.presence.repository.ImageRepository
 import com.natasha.clockio.presence.repository.ImageRepositoryImpl
 import com.natasha.clockio.presence.repository.PresenceRepository
+import com.natasha.clockio.presence.service.EmotionApi
 import com.natasha.clockio.presence.service.PresenceApi
 import dagger.Module
 import dagger.Provides
@@ -22,6 +23,12 @@ class ImageModule {
   @ActivityScope
   fun providePresenceApi(retrofit: Retrofit): PresenceApi {
     return retrofit.create(PresenceApi::class.java)
+  }
+
+  @Provides
+  @ActivityScope
+  fun provideEmotionApi(retrofit: Retrofit): EmotionApi {
+    return retrofit.create(EmotionApi::class.java)
   }
 
   @Provides
