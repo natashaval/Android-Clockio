@@ -45,6 +45,7 @@ class ImageFragment : Fragment() {
   private lateinit var presenceViewModel: PresenceViewModel
   private lateinit var imagePath: String
   private var employeeId: String? = null
+  var location: LocationModel = LocationModel(0.0, 0.0)
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -92,7 +93,7 @@ class ImageFragment : Fragment() {
   //    https://cloudinary.com/documentation/image_upload_api_reference
   private fun sendImage(imagePath: String) {
     imageCheck.setOnClickListener {
-      imageViewModel.uploadImage(employeeId!!, imagePath)
+      imageViewModel.uploadImage(employeeId + "_" + UUID.randomUUID().toString(), imagePath)
     }
   }
 
@@ -147,7 +148,6 @@ class ImageFragment : Fragment() {
   }
 
   private fun doCheckIn() {
-    var location: LocationModel = LocationModel(0.0, 0.0)
     locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
       location.latitude = it.latitude
       location.longitude = it.longitude
