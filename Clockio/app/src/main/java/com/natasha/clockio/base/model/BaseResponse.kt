@@ -4,6 +4,7 @@ package com.natasha.clockio.base.model
 data class BaseResponse<out T>(val status: Status, val success: Boolean, val data: T?, val message: String?) {
     enum class Status {
         SUCCESS,
+        FAILED,
         ERROR,
         LOADING
     }
@@ -14,7 +15,7 @@ data class BaseResponse<out T>(val status: Status, val success: Boolean, val dat
         }
 
         fun <T> failed(data: T?) : BaseResponse<T> { // in retrofit onResponse but notSuccessful
-            return BaseResponse(Status.SUCCESS, false, data, null)
+            return BaseResponse(Status.FAILED, false, data, null)
         }
 
         fun<T> error(msg: String?, data: T?) : BaseResponse<T> {

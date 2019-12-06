@@ -11,15 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.model.BaseResponse
+import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.location.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import com.natasha.clockio.presence.service.request.CheckinRequest
 import com.natasha.clockio.presence.viewModel.ImageViewModel
 import com.natasha.clockio.presence.viewModel.PresenceViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_image.*
+import okhttp3.ResponseBody
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -32,11 +38,13 @@ class ImageFragment : Fragment() {
   }
 
   @Inject lateinit var sharedPref: SharedPreferences
+//  @Inject lateinit var gson: Gson
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var imageViewModel: ImageViewModel
   private lateinit var locationViewModel: LocationViewModel
   private lateinit var presenceViewModel: PresenceViewModel
   private lateinit var imagePath: String
+  private var employeeId: String? = null
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -62,6 +70,7 @@ class ImageFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    employeeId = sharedPref.getString("id", null)
     imagePath = arguments?.getString("imagePath", "").toString()
     Log.d(TAG, imagePath)
     Glide.with(this)
@@ -81,9 +90,9 @@ class ImageFragment : Fragment() {
 
   //    https://cloudinary.com/documentation/android_image_and_video_upload
   //    https://cloudinary.com/documentation/image_upload_api_reference
-  private fun sendImage(path: String) {
+  private fun sendImage(imagePath: String) {
     imageCheck.setOnClickListener {
-      imageViewModel.uploadImage(UUID.randomUUID().toString(), imagePath)
+      imageViewModel.uploadImage(employeeId!!, imagePath)
     }
   }
 
@@ -138,13 +147,17 @@ class ImageFragment : Fragment() {
   }
 
   private fun doCheckIn() {
-    val employeeId = sharedPref.getString("id", null)
-//    locationViewModel.getLocationData()
+    var location: LocationModel = LocationModel(0.0, 0.0)
+    locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
+      location.latitude = it.latitude
+      location.longitude = it.longitude
+      Log.d(TAG, "presence $location")
+    })
     imageViewModel.resultUrl.observe(this, androidx.lifecycle.Observer { url ->
       url?.let {
         Log.d(TAG, "url is exists $url")
-        var request = CheckinRequest(employeeId!!, url, Date(), 12.3, 45.6)
-        presenceViewModel.sendCheckIn(employeeId, request)
+        var request = CheckinRequest(employeeId!!, url, Date(), location.latitude, location.longitude)
+        presenceViewModel.sendCheckIn(employeeId!!, request)
       }
     })
   }
@@ -152,6 +165,38 @@ class ImageFragment : Fragment() {
   private fun observeCheckInResult() {
     presenceViewModel.presenceResult.observe(this, androidx.lifecycle.Observer {
       Log.d(TAG, "checkin in ImageFragment ${it.data}")
+      when(it.status) {
+        BaseResponse.Status.LOADING -> {
+          SweetAlertDialog(activity, SweetAlertDialog.PROGRESS_TYPE)
+            .setTitleText("Loading ...");
+        }
+        BaseResponse.Status.SUCCESS -> {
+          it.data?.let { result ->
+            var presenceSucces = result as DataResponse
+            Log.d(TAG, "checkin success $presenceSucces")
+            SweetAlertDialog(activity, SweetAlertDialog.SUCCESS_TYPE)
+              .setTitleText("Check In!")
+              .setContentText(presenceSucces.message)
+              .show()
+          }
+        }
+        BaseResponse.Status.FAILED -> {
+          it.data?.let { result ->
+            var presenceFailed = result as DataResponse
+            Log.d(TAG, "checkin failed $presenceFailed")
+            SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE)
+              .setTitleText("Failed!")
+              .setContentText(presenceFailed.message)
+              .show()
+          }
+        }
+        BaseResponse.Status.ERROR -> {
+          SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+            .setTitleText("Error!")
+            .setContentText(it.data.toString())
+            .show()
+        }
+      }
     })
   }
 }

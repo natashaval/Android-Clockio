@@ -51,6 +51,7 @@ ext {
     glide = "4.10.0"
     cloudinary_android = "1.26.0"
     circle_image_view = "3.0.1"
+    sweet_alert = "1.6.2"
 }
 
 dependencies {
@@ -118,4 +119,6 @@ dependencies {
     // Circle Image View
     implementation "de.hdodenhof:circleimageview:$circle_image_view"
 
+    // Sweet Alert
+    implementation "com.github.f0ris.sweetalert:library:$sweet_alert"
 }
