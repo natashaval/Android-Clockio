@@ -69,6 +69,7 @@ class ImageFragment : Fragment() {
     imageViewModel = ViewModelProvider(this, factory).get(ImageViewModel::class.java)
     locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
     presenceViewModel = ViewModelProvider(this, factory).get(PresenceViewModel::class.java)
+    observeLocation()
     observeProgress()
     observeEvents()
     observeCheckInResult()
@@ -160,22 +161,21 @@ class ImageFragment : Fragment() {
 
   private fun doCheckIn() {
     imageViewModel.resultUrl.observe(this, androidx.lifecycle.Observer { url ->
-
-      locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
-        //      location.latitude = it.latitude
-//      location.longitude = it.longitude
-        location = it
-        Log.d(TAG, "presence image $location")
-      })
-
       url?.let {
-        Log.d(TAG, "url is exists $url")
+        Log.d(TAG, "url is exists $url; location from Fragment $location")
         var request = CheckinRequest(employeeId!!, url, Date(), location.latitude, location.longitude)
         presenceViewModel.sendCheckIn(employeeId!!, request)
       }
     })
+  }
 
-
+  private fun observeLocation() {
+    locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
+      //      location.latitude = it.latitude
+//      location.longitude = it.longitude
+      location = it
+      Log.d(TAG, "presence image $location")
+    })
   }
 
   private fun observeCheckInResult() {
@@ -222,14 +222,14 @@ class ImageFragment : Fragment() {
       val file: File = File(imagePath)
       var o = BitmapFactory.Options()
       o.inJustDecodeBounds = true;
-      o.inSampleSize = 6;
+      o.inSampleSize = 8;
 
-      var inputStream: FileInputStream = FileInputStream(file)
+      var inputStream = FileInputStream(file)
       BitmapFactory.decodeStream(inputStream, null, o);
       inputStream.close()
 
       // size to scale
-      val REQUIRED_SIZE = 75;
+      val REQUIRED_SIZE = 64
 
       var scale = 1;
       while(o.outWidth/scale/2 >= REQUIRED_SIZE &&
