@@ -45,6 +45,7 @@
     <string name="camera_switch_button_alt">Switch Camera</string>
 
     <!--    Cloudinary Image Upload-->
+    <string name="cloudinary_unsigned">zmfwv7yt</string>
     <string name="cloudinary_default">Default</string>
     <string name="cloudinary_start">Upload Start</string>
     <string name="cloudinary_error">Upload Error</string>
@@ -57,4 +58,7 @@
     <!--    Permission-->
     <string name="camera_permission">Camera Permission not granted!</string>
     <string name="location_permission">Location permission not granted!</string>
+
+<!--    Shared Pref-->
+    <string name="employee_id_key">id</string>
 </resources>

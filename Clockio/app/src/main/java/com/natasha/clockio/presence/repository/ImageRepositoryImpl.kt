@@ -1,20 +1,23 @@
 package com.natasha.clockio.presence.repository
 
+import android.content.Context
 import android.util.Log
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
+import com.natasha.clockio.R
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
 import com.natasha.clockio.presence.util.CallbackAggregator
 import java.util.*
+import javax.inject.Inject
 
-class ImageRepositoryImpl: ImageRepository {
+class ImageRepositoryImpl @Inject constructor(private val context: Context): ImageRepository {
 
   private val TAG: String = "ImageRepository"
 
   override fun uploadImage(userId: String, imagePath: String) {
     MediaManager.get().upload(imagePath)
-        .unsigned("zmfwv7yt")
+        .unsigned(context.resources.getString(R.string.cloudinary_unsigned))
         .option("public_id", userId)
         .option("folder", "Android")
         .callback(object : UploadCallback {

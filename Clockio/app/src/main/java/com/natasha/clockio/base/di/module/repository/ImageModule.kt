@@ -1,5 +1,6 @@
 package com.natasha.clockio.base.di.module.repository
 
+import android.content.Context
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.service.EmployeeApi
 import com.natasha.clockio.presence.repository.ImageRepository
@@ -14,8 +15,8 @@ import retrofit2.Retrofit
 class ImageModule {
   @Provides
   @ActivityScope
-  fun provideImageRepository(): ImageRepository {
-    return ImageRepositoryImpl()
+  fun provideImageRepository(context: Context): ImageRepository {
+    return ImageRepositoryImpl(context)
   }
 
   @Provides

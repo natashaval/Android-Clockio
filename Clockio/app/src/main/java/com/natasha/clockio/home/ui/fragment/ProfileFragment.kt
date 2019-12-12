@@ -85,6 +85,11 @@ class ProfileFragment : Fragment() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    invokeLocationAction()
+  }
+
   private fun getEmployee() {
     var employeeId = sharedPref.getString("id", null);
     Log.d(TAG, "sharedPref id $employeeId")

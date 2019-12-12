@@ -2,6 +2,8 @@ package com.natasha.clockio.presence.ui.fragment
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +29,9 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_image.*
 import okhttp3.ResponseBody
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -71,13 +76,10 @@ class ImageFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    employeeId = sharedPref.getString("id", null)
+    employeeId = sharedPref.getString(getString(R.string.employee_id_key), null)
     imagePath = arguments?.getString("imagePath", "").toString()
     Log.d(TAG, imagePath)
-    Glide.with(this)
-        .load(Uri.fromFile(File(imagePath)))
-        .into(imageResult)
-
+    showImage(imagePath)
     closeImage()
     sendImage(imagePath)
   }
@@ -89,11 +91,20 @@ class ImageFragment : Fragment() {
     }
   }
 
+  private fun showImage(imagePath: String) {
+    Glide.with(this)
+      .load(Uri.fromFile(File(imagePath)))
+      .into(imageResult)
+  }
+
   //    https://cloudinary.com/documentation/android_image_and_video_upload
   //    https://cloudinary.com/documentation/image_upload_api_reference
   private fun sendImage(imagePath: String) {
     imageCheck.setOnClickListener {
-      imageViewModel.uploadImage(employeeId + "_" + UUID.randomUUID().toString(), imagePath)
+      val compressedPath: String? = compressImageFile(imagePath)
+      Log.d(TAG, "compressed photo Path $compressedPath")
+      showImage(compressedPath!!)
+      imageViewModel.uploadImage(employeeId + "_" + UUID.randomUUID().toString(), compressedPath!!)
     }
   }
 
@@ -148,18 +159,23 @@ class ImageFragment : Fragment() {
   }
 
   private fun doCheckIn() {
-    locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
-      location.latitude = it.latitude
-      location.longitude = it.longitude
-      Log.d(TAG, "presence $location")
-    })
     imageViewModel.resultUrl.observe(this, androidx.lifecycle.Observer { url ->
+
+      locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
+        //      location.latitude = it.latitude
+//      location.longitude = it.longitude
+        location = it
+        Log.d(TAG, "presence image $location")
+      })
+
       url?.let {
         Log.d(TAG, "url is exists $url")
         var request = CheckinRequest(employeeId!!, url, Date(), location.latitude, location.longitude)
         presenceViewModel.sendCheckIn(employeeId!!, request)
       }
     })
+
+
   }
 
   private fun observeCheckInResult() {
@@ -198,5 +214,43 @@ class ImageFragment : Fragment() {
         }
       }
     })
+  }
+
+//  https://stackoverflow.com/questions/18573774/how-to-reduce-an-image-file-size-before-uploading-to-a-server
+  private fun compressImageFile(imagePath: String): String? {
+    try {
+      val file: File = File(imagePath)
+      var o = BitmapFactory.Options()
+      o.inJustDecodeBounds = true;
+      o.inSampleSize = 6;
+
+      var inputStream: FileInputStream = FileInputStream(file)
+      BitmapFactory.decodeStream(inputStream, null, o);
+      inputStream.close()
+
+      // size to scale
+      val REQUIRED_SIZE = 75;
+
+      var scale = 1;
+      while(o.outWidth/scale/2 >= REQUIRED_SIZE &&
+              o.outHeight/scale/2 >= REQUIRED_SIZE) {
+        scale *= 2;
+      }
+
+      val o2 = BitmapFactory.Options()
+      o2.inSampleSize = scale
+      inputStream = FileInputStream(file)
+
+      val selectedBitmap: Bitmap? = BitmapFactory.decodeStream(inputStream, null, o2)
+      inputStream.close()
+
+      file.createNewFile()
+      val outputStream: FileOutputStream = FileOutputStream(file)
+      selectedBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+
+      return file.absolutePath
+    } catch (e: Exception) {
+      return null
+    }
   }
 }
