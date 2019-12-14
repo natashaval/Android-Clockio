@@ -42,17 +42,17 @@ class LoginRepository @Inject constructor(private val dataSource: LoginDataSourc
 
     suspend fun getProfile(): BaseResponse<Any> {
         val response = dataSource.profile()
-        try {
+        return try {
             if (response.isSuccessful) {
                 Log.d(TAG, "profileSuccess ${response.body()}")
-                return BaseResponse.success(response.body())
+                BaseResponse.success(response.body())
             } else {
                 Log.d(TAG, "profileFailed ${response.errorBody()}")
-                return BaseResponse.failed(response.errorBody())
+                BaseResponse.failed(response.errorBody())
             }
         }catch (t: Throwable) {
             Log.d(TAG, "profileError ${t.message}")
-            return BaseResponse.error(t.message, null)
+            BaseResponse.error(t.message, null)
         }
     }
 

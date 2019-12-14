@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.natasha.clockio.MainActivity
-import com.natasha.clockio.home.ui.viewmodel.HomeViewModel
+import com.natasha.clockio.home.viewmodel.HomeViewModel
 import com.natasha.clockio.presence.ui.PresenceActivity
 import com.natasha.clockio.presence.ui.fragment.LockFragment
 import dagger.android.AndroidInjection

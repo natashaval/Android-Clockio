@@ -6,6 +6,7 @@ import com.natasha.clockio.base.di.module.viewmodel.LocationViewModelModule
 import com.natasha.clockio.base.di.module.viewmodel.PresenceViewModelModule
 import com.natasha.clockio.base.di.module.viewmodel.ProfileViewModelModule
 import com.natasha.clockio.base.di.scope.ActivityScope
+import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
 import dagger.Module
@@ -27,4 +28,10 @@ abstract class BuilderFragmentModule {
     ProfileModule::class])
   @ActivityScope
   abstract fun profileFragment(): ProfileFragment
+
+  @ContributesAndroidInjector(modules = [
+    ProfileViewModelModule::class,
+    ProfileModule::class])
+  @ActivityScope
+  abstract fun activityFragment(): ActivityFragment
 }

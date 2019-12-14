@@ -20,7 +20,7 @@ import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
 import com.natasha.clockio.home.entity.Employee
-import com.natasha.clockio.home.ui.viewmodel.ProfileViewModel
+import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.GpsUtils
 import com.natasha.clockio.location.LocationViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -56,7 +56,8 @@ class ProfileFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+    profileViewModel = ViewModelProvider(this, factory).get(
+        ProfileViewModel::class.java)
     locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
     // TODO: Use the ViewModel
     GpsUtils(context!!).turnOnGps(object : GpsUtils.OnGpsListener {
