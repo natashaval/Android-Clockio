@@ -53,7 +53,7 @@ class ActivityFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
 
-//    getStatus()
+    getStatus()
     getEmployee()
     observeEmployee()
   }
