@@ -27,4 +27,16 @@ class ActivityViewModel @Inject constructor(private val employeeRepository: Empl
     }
   }
 
+  fun updateStatus(id: String, status: String) {
+    viewModelScope.launch {
+      val response = employeeRepository.updateStatus(id, status)
+//      _employee.value = response
+      when(response.status) {
+        BaseResponse.Status.SUCCESS -> {
+          Log.d(TAG, "status ${response.data}")
+        }
+      }
+    }
+  }
+
 }

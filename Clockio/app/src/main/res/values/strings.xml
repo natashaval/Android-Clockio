@@ -71,6 +71,7 @@
     <string name="status">Status</string>
     <string-array name="status_array">
         <item>Online</item>
+        <item>Meeting</item>
         <item>Away</item>
         <item>Offline</item>
     </string-array>
