@@ -59,9 +59,6 @@
     <string name="camera_permission">Camera Permission not granted!</string>
     <string name="location_permission">Location permission not granted!</string>
 
-    <!--    Shared Pref-->
-    <string name="employee_id_key">id</string>
-
     <!--    Hint-->
     <string name="employee_name">Full Name</string>
     <string name="employee_dept">Department</string>

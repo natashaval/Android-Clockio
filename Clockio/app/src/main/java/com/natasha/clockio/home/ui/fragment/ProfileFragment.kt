@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.GpsUtils
@@ -92,7 +93,7 @@ class ProfileFragment : Fragment() {
   }
 
   private fun getEmployee() {
-    var employeeId = sharedPref.getString("id", null);
+    var employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, null);
     Log.d(TAG, "sharedPref id $employeeId")
     profileViewModel.setId(employeeId)
 

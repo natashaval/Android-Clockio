@@ -16,12 +16,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.viewmodel.ActivityViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.item_profile.*
 import org.apache.commons.lang3.StringUtils
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class ActivityFragment : Fragment() {
@@ -87,7 +89,7 @@ class ActivityFragment : Fragment() {
   }
 
   private fun getEmployee() {
-    employeeId = sharedPref.getString(getString(R.string.employee_id_key), "")
+    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     viewModel.getEmployee(employeeId!!)
   }
 
@@ -102,7 +104,8 @@ class ActivityFragment : Fragment() {
           val response = it.data as Employee
           employeeName.text = response.firstName + " " + response.lastName
           employeeDept.text = response.department.name
-          employeeLastCheckin.text = getString(R.string.employee_last_checkin, response.checkIn)
+          val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+          employeeLastCheckin.text = getString(R.string.employee_last_checkin, dateFormat.format(response.checkIn))
           response.status?.let {
             employeeStatus = it.toLowerCase()
             // https://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position:

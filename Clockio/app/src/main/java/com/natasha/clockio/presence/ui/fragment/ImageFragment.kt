@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.location.LocationModel
@@ -77,7 +78,7 @@ class ImageFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    employeeId = sharedPref.getString(getString(R.string.employee_id_key), null)
+    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, null)
     imagePath = arguments?.getString("imagePath", "").toString()
     Log.d(TAG, imagePath)
     showImage(imagePath)

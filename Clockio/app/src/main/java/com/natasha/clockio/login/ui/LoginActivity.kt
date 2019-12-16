@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.base.util.RetrofitInterceptor
@@ -65,17 +66,14 @@ class LoginActivity : DaggerAppCompatActivity() {
       loading.visibility = View.GONE
 
       Log.d(TAG, "login is called from login result $loginResult")
-      /*when(loginResult.status) {
-          BaseResponse.Status.SUCCESS -> {
-              Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
-          }
-          BaseResponse.Status.LOADING -> showLoading()
-          BaseResponse.Status.ERROR -> {
-              showError(loginResult.message!!)
-          }
-      }*/
       Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
-      interceptor.setToken(loginResult.data!!.accessToken)
+      loginResult.data?.let { token ->
+        interceptor.setToken(token.accessToken)
+        val editor = sharedPref.edit()
+        editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
+        editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
+        editor.apply()
+      }
       setResult(Activity.RESULT_OK)
 
       loginViewModel.loadProfile()
@@ -101,7 +99,7 @@ class LoginActivity : DaggerAppCompatActivity() {
             Log.d(TAG, "profile Success ${result.data}")
             val loggedInUser: LoggedInUser = result.data as LoggedInUser
             val editor = sharedPref.edit()
-            editor.putString("id", loggedInUser.employeeId)
+            editor.putString(PreferenceConst.EMPLOYEE_ID_KEY, loggedInUser.employeeId)
             Log.d(TAG, "employee-id ${loggedInUser.employeeId}")
             editor.apply()
           }

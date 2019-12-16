@@ -23,10 +23,11 @@ import com.natasha.clockio.home.viewmodel.HomeViewModel
 import com.natasha.clockio.presence.ui.PresenceActivity
 import com.natasha.clockio.presence.ui.fragment.LockFragment
 import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : DaggerAppCompatActivity() {
 
 //    @Inject lateinit var factory: ViewModelProvider.Factory
 //    private lateinit var viewModel: HomeViewModel
