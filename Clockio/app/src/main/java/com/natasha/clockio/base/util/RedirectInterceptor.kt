@@ -20,7 +20,7 @@ class RedirectInterceptor @Inject constructor(private val context: Context) : In
         val response: Response = chain.proceed(request)
         Log.d(TAG, "response code ${response.code}")
         if (response.code == 401) {
-            response.close()
+            Log.d(TAG, "response redirect ${response.body}")
             val intent = Intent(context, LoginActivity::class.java)
             context.startActivity(intent)
             return response

@@ -1,6 +1,7 @@
 package com.natasha.clockio.base.di.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -68,8 +69,8 @@ public class RetrofitModule {
 //    https://stackoverflow.com/questions/54159012/dagger-2-get-old-token-when-token-is-refreshed
     @Provides
     @ApplicationScope
-    RetrofitInterceptor provideRetrofitInterceptor() {
-        return new RetrofitInterceptor();
+    RetrofitInterceptor provideRetrofitInterceptor(SharedPreferences sharedPreferences) {
+        return new RetrofitInterceptor(sharedPreferences);
     }
 
     @Provides

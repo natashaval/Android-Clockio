@@ -3,6 +3,8 @@ package com.natasha.clockio.home.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.natasha.clockio.MainActivity
+import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.home.viewmodel.HomeViewModel
 import com.natasha.clockio.presence.ui.PresenceActivity
 import com.natasha.clockio.presence.ui.fragment.LockFragment
@@ -27,10 +30,9 @@ import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 
-class HomeActivity : DaggerAppCompatActivity() {
+class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
 
-//    @Inject lateinit var factory: ViewModelProvider.Factory
-//    private lateinit var viewModel: HomeViewModel
+    private val TAG: String = HomeActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,10 +77,10 @@ class HomeActivity : DaggerAppCompatActivity() {
 
     private fun addSpaceNavigation(savedInstanceState: Bundle?) {
         spaceNavigation.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigation.addSpaceItem(SpaceItem("Home", R.drawable.ic_dashboard_black_24dp))
-        spaceNavigation.addSpaceItem(SpaceItem("Contact", R.drawable.ic_perm_contact_calendar_black_24dp))
-        spaceNavigation.addSpaceItem(SpaceItem("Notif", R.drawable.ic_notifications_black_24dp))
-        spaceNavigation.addSpaceItem(SpaceItem("Profile", R.drawable.ic_person_black_24dp))
+        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_black_24dp))
+        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_friend), R.drawable.ic_perm_contact_calendar_black_24dp))
+        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_notification), R.drawable.ic_notifications_black_24dp))
+        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_profile), R.drawable.ic_person_black_24dp))
 
         spaceNavigation.showIconOnly()
         spaceNavigation.setSpaceOnClickListener(mSpaceOnClickListener)
@@ -97,11 +99,11 @@ class HomeActivity : DaggerAppCompatActivity() {
         override fun onItemClick(itemIndex: Int, itemName: String) {
 //            Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
             when(itemName) {
-                "Home" -> {
+                getString(R.string.navigation_activity) -> {
                     val fragment = ActivityFragment.newInstance()
                     addFragment(fragment)
                 }
-                "Profile" -> {
+                getString(R.string.navigation_profile) -> {
                     val fragment = ProfileFragment.newInstance()
                     addFragment(fragment)
                 }
@@ -112,4 +114,15 @@ class HomeActivity : DaggerAppCompatActivity() {
             Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
         }
     }
+
+    override fun onOpen() {
+        Log.d(TAG, "space onOpen")
+        spaceNavigation.visibility = View.GONE
+    }
+
+    override fun onClose() {
+        Log.d(TAG, "space onClose")
+        spaceNavigation.visibility = View.VISIBLE
+    }
+
 }

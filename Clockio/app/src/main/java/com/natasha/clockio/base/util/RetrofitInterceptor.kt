@@ -1,7 +1,9 @@
 package com.natasha.clockio.base.util
 
+import android.content.SharedPreferences
 import android.text.TextUtils
 import android.util.Log
+import com.natasha.clockio.base.constant.PreferenceConst
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -13,11 +15,12 @@ import java.io.IOException
 
 //https://jakewharton.com/making-retrofit-work-for-you/
 @Singleton
-class RetrofitInterceptor @Inject constructor() : Interceptor {
+class RetrofitInterceptor @Inject constructor(private val sharedPref: SharedPreferences) : Interceptor {
 
     private var token = ""
     private var clientId: String? = null
     private var clientSecret: String? = null
+    private var existToken = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
 
     fun setToken(token: String) {
         this.token = token
@@ -38,8 +41,14 @@ class RetrofitInterceptor @Inject constructor() : Interceptor {
                 .addHeader("Content-Type", "application/json")
                 .build()
             Log.d(TAG, "retrofit add header basic $basic")
+        } else if (!TextUtils.isEmpty(existToken)) {
+            Log.d(TAG, "retrofit add header token from Shared Pref")
+            request = request.newBuilder()
+                .addHeader("Authorization", "Bearer $existToken")
+                .addHeader("Content-Type", "application/json")
+                .build()
         } else if (!TextUtils.isEmpty(token)) {
-            Log.d(TAG, "retrofit add header token")
+            Log.d(TAG, "retrofit add header token from Login")
             request = request.newBuilder()
                 .addHeader("Authorization", "Bearer $token")
                 .addHeader("Content-Type", "application/json")
