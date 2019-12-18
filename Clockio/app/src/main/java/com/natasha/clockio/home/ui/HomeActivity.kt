@@ -91,9 +91,6 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
             Toast.makeText(applicationContext, "onCenterButtonClick", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@HomeActivity, PresenceActivity::class.java)
             startActivity(intent)
-
-//            val dialogFragment = LockFragment.newInstance()
-//            showDialog(dialogFragment)
         }
 
         override fun onItemClick(itemIndex: Int, itemName: String) {
@@ -106,6 +103,12 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
                 getString(R.string.navigation_profile) -> {
                     val fragment = ProfileFragment.newInstance()
                     addFragment(fragment)
+                }
+                getString(R.string.navigation_friend) -> {
+                    onOpen()
+                }
+                getString(R.string.navigation_notification) -> {
+                    onClose()
                 }
             }
         }

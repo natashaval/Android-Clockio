@@ -42,6 +42,7 @@ ext {
     dagger_android = "2.24"
     room = "2.2.0"
     commons_lang3 = "3.9"
+    preference = "1.1.0"
 
     // UI
     space_navigation_view = "1.6.0"
@@ -121,6 +122,8 @@ dependencies {
 
     // Sweet Alert
     implementation "com.github.f0ris.sweetalert:library:$sweet_alert"
+
+    implementation "androidx.preference:preference:$preference"
 
     implementation "org.apache.commons:commons-lang3:$commons_lang3"
 }

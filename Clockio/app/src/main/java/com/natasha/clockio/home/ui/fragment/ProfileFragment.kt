@@ -8,10 +8,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,6 +45,7 @@ class ProfileFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
+    activity!!.actionBar?.setTitle(R.string.navigation_profile)
     return inflater.inflate(R.layout.fragment_profile, container, false)
   }
 
@@ -60,7 +59,7 @@ class ProfileFragment : Fragment() {
     profileViewModel = ViewModelProvider(this, factory).get(
         ProfileViewModel::class.java)
     locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
-    // TODO: Use the ViewModel
+    setHasOptionsMenu(true)
     GpsUtils(context!!).turnOnGps(object : GpsUtils.OnGpsListener {
       override fun gpsStatus(isGpsEnable: Boolean) {
         isGps = isGpsEnable
@@ -90,6 +89,25 @@ class ProfileFragment : Fragment() {
   override fun onResume() {
     super.onResume()
     invokeLocationAction()
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.settings, menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when(item.itemId) {
+      R.id.action_settings -> {
+        Log.d(TAG, "Settings icon clicked!")
+        fragmentManager?.
+          beginTransaction()?.
+          replace(R.id.content, SettingsFragment())?.
+          addToBackStack(null)?.
+          commit()
+        return true
+      }
+    }
+    return false
   }
 
   private fun getEmployee() {

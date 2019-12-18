@@ -44,7 +44,6 @@ class ImageFragment : Fragment() {
   }
 
   @Inject lateinit var sharedPref: SharedPreferences
-//  @Inject lateinit var gson: Gson
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var imageViewModel: ImageViewModel
   private lateinit var locationViewModel: LocationViewModel
@@ -113,7 +112,6 @@ class ImageFragment : Fragment() {
   private fun observeProgress(){
     imageViewModel.progressValue.observe(this, androidx.lifecycle.Observer {
       var prog = (it * 100).toInt()
-//      Log.d(TAG, "progressImage $prog")
       progressImage.progress = prog
     })
   }
@@ -136,7 +134,6 @@ class ImageFragment : Fragment() {
           Toast.makeText(activity, descriptionFromCode(it), Toast.LENGTH_SHORT).show()
         }
         ImageViewModel.STATUS_CODE_FINISHED -> {
-          imageCheck.visibility = View.VISIBLE
           imageClose.visibility = View.VISIBLE
           progressImage.visibility = View.INVISIBLE
           Toast.makeText(activity, descriptionFromCode(it), Toast.LENGTH_SHORT).show()

@@ -9,6 +9,7 @@ import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
+import com.natasha.clockio.presence.ui.fragment.LockFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -34,4 +35,8 @@ abstract class BuilderFragmentModule {
     ProfileModule::class])
   @ActivityScope
   abstract fun activityFragment(): ActivityFragment
+
+  @ContributesAndroidInjector
+  @ActivityScope
+  abstract fun lockFragment(): LockFragment
 }

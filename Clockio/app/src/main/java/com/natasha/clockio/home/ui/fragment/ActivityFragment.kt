@@ -50,6 +50,7 @@ class ActivityFragment : Fragment() {
     statusIconArray = arrayOf(
         R.drawable.ic_status_online_24dp, R.drawable.ic_status_meeting_24dp,
         R.drawable.ic_status_away_24dp, R.drawable.ic_status_offline_24dp)
+    activity!!.actionBar?.setTitle(R.string.navigation_activity)
     return inflater.inflate(R.layout.fragment_activity, container, false)
   }
 

@@ -73,4 +73,11 @@
         <item>Offline</item>
     </string-array>
 
+<!--    Settings-->
+    <string name="settings_pin_key">pin_key</string>
+    <string name="settings_pin_default_value">1234</string>
+    <string name="settings_pin_title">Set Pin Lock</string>
+    <string name="settings_pin_dialog">Edit your pin lock</string>
+    <string name="settings_pin_dialog_desc">Format: 4 numbers only</string>
+    
 </resources>

@@ -1,5 +1,7 @@
 package com.natasha.clockio.presence.ui.fragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -18,20 +20,20 @@ import java.util.concurrent.Executor
 import androidx.biometric.BiometricManager
 import androidx.fragment.app.Fragment
 import com.natasha.clockio.R
-import com.natasha.clockio.presence.viewModel.LockViewModel
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.lock_fragment.*
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
 
 class LockFragment : Fragment() {
 
     private val TAG: String? = LockFragment::class.java.simpleName
+    @Inject lateinit var sharedPref: SharedPreferences
 
     companion object {
         fun newInstance() = LockFragment()
     }
-
-    private lateinit var viewModel: LockViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,10 +51,9 @@ class LockFragment : Fragment() {
 //        d.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 //    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LockViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     //        https://stackoverflow.com/questions/33469159/android-fragment-and-null-object-reference
@@ -60,8 +61,6 @@ class LockFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         helloPresence.setOnClickListener {
-//            Toast.makeText(activity, "Text clicked!", Toast.LENGTH_SHORT).show()
-//            activity!!.finish()
             activity!!.supportFragmentManager.beginTransaction()
                 .replace(R.id.presenceContent, CameraFragment.newInstance())
                 .commit()
@@ -102,10 +101,10 @@ class LockFragment : Fragment() {
         blurLockView.setTitle(getString(R.string.biometric_title))
         blurLockView.setLeftButton(getString(R.string.blurlock_left_button))
         blurLockView.setRightButton(getString(R.string.blurlock_right_button))
-        blurLockView.setCorrectPassword(password.text.toString())
+        blurLockView.setCorrectPassword(sharedPref.getString(
+            getString(R.string.settings_pin_key), getString(R.string.settings_pin_default_value)))
 
         blurLockView.setType(Password.NUMBER, false)
-//        blurLockView.setOnLeftButtonClickListener(mOnLeftButtonClickListener)
         blurLockView.setOnPasswordInputListener(mOnPasswordInputListener)
     }
 
