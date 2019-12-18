@@ -12,21 +12,9 @@ import retrofit2.Retrofit
 @Module
 class ProfileModule {
 
-  //    @Provides
-  //    @ActivityScope
-  //    fun provideEmployeeRepository(employeeDao: EmployeeDao): ProfileRepository {
-  //        return ProfileRepository(employeeDao)
-  //    }
-
   @Provides
   @ActivityScope
   fun provideEmployeeDao(database: AppDatabase) = database.employeeDao()
-
-  //    @Provides
-  //    @ActivityScope
-  //    fun provideEmployeeRepository(database: AppDatabase): ProfileRepository {
-  //        return ProfileRepository(database)
-  //    }
 
   @Provides
   @ActivityScope

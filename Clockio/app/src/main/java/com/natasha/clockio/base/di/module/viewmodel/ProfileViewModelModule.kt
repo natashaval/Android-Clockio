@@ -2,9 +2,8 @@ package com.natasha.clockio.base.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.natasha.clockio.base.di.qualifier.ViewModelKey
-import com.natasha.clockio.home.viewmodel.ActivityViewModel
+import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import com.natasha.clockio.home.viewmodel.ProfileViewModel
-import com.natasha.clockio.location.LocationViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -18,6 +17,6 @@ abstract class ProfileViewModelModule {
 
   @Binds
   @IntoMap
-  @ViewModelKey(ActivityViewModel::class)
-  abstract fun bindActivityViewModel(viewModel: ActivityViewModel): ViewModel
+  @ViewModelKey(EmployeeViewModel::class)
+  abstract fun bindEmployeeViewModel(viewModel: EmployeeViewModel): ViewModel
 }

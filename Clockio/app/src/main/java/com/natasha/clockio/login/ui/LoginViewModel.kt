@@ -45,7 +45,6 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
 
     fun loadProfile() =
         viewModelScope.launch {
-
             Log.d(TAG, "getProfile is called in view model")
             _profile.value = loginRepository.getProfile()
         }

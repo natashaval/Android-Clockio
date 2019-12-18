@@ -3,10 +3,8 @@ package com.natasha.clockio.base.di.module
 import com.natasha.clockio.MainActivity
 import com.natasha.clockio.base.di.module.activity.LoginActivityModule
 import com.natasha.clockio.base.di.module.activity.MainActivityModule
-import com.natasha.clockio.base.di.module.repository.ProfileModule
 import com.natasha.clockio.base.di.module.repository.LoginModule
 import com.natasha.clockio.base.di.module.repository.TestModule
-import com.natasha.clockio.base.di.module.viewmodel.HomeViewModelModule
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.base.di.module.viewmodel.LoginViewModelModule
 import com.natasha.clockio.base.di.module.viewmodel.MainViewModelModule

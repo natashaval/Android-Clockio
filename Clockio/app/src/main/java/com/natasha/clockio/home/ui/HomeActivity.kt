@@ -1,16 +1,12 @@
 package com.natasha.clockio.home.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.luseen.spacenavigation.SpaceItem
-import com.luseen.spacenavigation.SpaceNavigationView
 import com.luseen.spacenavigation.SpaceOnClickListener
 import com.natasha.clockio.R
 import com.natasha.clockio.home.ui.fragment.ActivityFragment
@@ -18,16 +14,10 @@ import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.natasha.clockio.MainActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
-import com.natasha.clockio.home.viewmodel.HomeViewModel
 import com.natasha.clockio.presence.ui.PresenceActivity
-import com.natasha.clockio.presence.ui.fragment.LockFragment
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
 
 
 class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
@@ -39,7 +29,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         setContentView(R.layout.activity_home)
 
         AndroidInjection.inject(this)
-//        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+//        viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val fragment = ActivityFragment.newInstance()

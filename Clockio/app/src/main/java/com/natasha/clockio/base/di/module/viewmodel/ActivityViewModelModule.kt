@@ -2,15 +2,17 @@ package com.natasha.clockio.base.di.module.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.natasha.clockio.base.di.qualifier.ViewModelKey
-import com.natasha.clockio.home.viewmodel.HomeViewModel
+import com.natasha.clockio.home.viewmodel.ActivityViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-abstract class HomeViewModelModule {
+abstract class ActivityViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    abstract fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
+    @ViewModelKey(ActivityViewModel::class)
+    abstract fun bindActivityViewModel(viewModel: ActivityViewModel): ViewModel
+
+
 }

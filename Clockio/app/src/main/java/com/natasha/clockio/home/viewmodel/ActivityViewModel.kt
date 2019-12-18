@@ -6,37 +6,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.base.model.BaseResponse
-import com.natasha.clockio.home.repository.EmployeeRepository
-import com.natasha.clockio.home.repository.ProfileRepository
+import com.natasha.clockio.home.repository.ActivityRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
-class ActivityViewModel @Inject constructor(private val employeeRepository: EmployeeRepository) : ViewModel() {
-  private val TAG: String = ActivityViewModel::class.java.simpleName
+class ActivityViewModel @Inject constructor(private val activityRepository: ActivityRepository): ViewModel() {
+    private val TAG: String = ActivityViewModel::class.java.simpleName
 
-  private val _employee = MutableLiveData<BaseResponse<Any>>()
-  val employee: LiveData<BaseResponse<Any>>
-  get() = _employee
+    private val _activity = MutableLiveData<BaseResponse<Any>>()
+    val activityToday: LiveData<BaseResponse<Any>>
+        get() = _activity
 
-  fun getEmployee(id: String) {
-    viewModelScope.launch {
-      _employee.value = BaseResponse.loading(null)
-      val response = employeeRepository.getEmployee(id)
-      Log.d(TAG, "employee get $response")
-      _employee.value = response
-    }
-  }
-
-  fun updateStatus(id: String, status: String) {
-    viewModelScope.launch {
-      val response = employeeRepository.updateStatus(id, status)
-//      _employee.value = response
-      when(response.status) {
-        BaseResponse.Status.SUCCESS -> {
-          Log.d(TAG, "status ${response.data}")
+    fun getActivityToday(id: String) {
+        viewModelScope.launch {
+            val queryDate = "2019-12-12 01:01:00"
+            val qDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(queryDate)
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val response = activityRepository.getActivityToday(id, formatter.format(qDate))
+            Log.d(TAG, "activityToday $response")
         }
-      }
     }
-  }
-
 }

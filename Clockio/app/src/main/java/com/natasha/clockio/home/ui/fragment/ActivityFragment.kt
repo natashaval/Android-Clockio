@@ -20,6 +20,7 @@ import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.viewmodel.ActivityViewModel
+import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.item_profile.*
 import org.apache.commons.lang3.StringUtils
@@ -35,7 +36,8 @@ class ActivityFragment : Fragment() {
   private val TAG: String = ActivityFragment::class.java.simpleName
   @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
-  private lateinit var viewModel: ActivityViewModel
+  private lateinit var employeeViewModel: EmployeeViewModel
+  private lateinit var activityViewModel: ActivityViewModel
   private lateinit var statusArray: Array<String>
   private lateinit var statusIconArray: Array<Int>
   private var employeeId: String? = ""
@@ -61,11 +63,14 @@ class ActivityFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
+    employeeViewModel = ViewModelProvider(this, factory).get(EmployeeViewModel::class.java)
+    activityViewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
 
     getEmployee()
-    observeEmployee()
     getStatus()
+    getActivityToday()
+
+    observeEmployee()
   }
 
   private fun getStatus() {
@@ -82,7 +87,7 @@ class ActivityFragment : Fragment() {
         Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
         if (employeeStatus!= null && !employeeStatus.equals(status.toLowerCase())) {
           Log.d(TAG, "status changed! $status")
-          viewModel.updateStatus(employeeId!!, status)
+          employeeViewModel.updateStatus(employeeId!!, status)
         }
       }
 
@@ -91,11 +96,15 @@ class ActivityFragment : Fragment() {
 
   private fun getEmployee() {
     employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
-    viewModel.getEmployee(employeeId!!)
+    employeeViewModel.getEmployee(employeeId!!)
+  }
+
+  private fun getActivityToday() {
+    activityViewModel.getActivityToday(employeeId!!)
   }
 
   private fun observeEmployee() {
-    viewModel.employee.observe(this, Observer {
+    employeeViewModel.employee.observe(this, Observer {
       when(it.status) {
         BaseResponse.Status.LOADING -> {
           statusProgressBar.visibility = View.VISIBLE

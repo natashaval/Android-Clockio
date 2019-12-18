@@ -73,10 +73,10 @@ class LoginActivity : DaggerAppCompatActivity() {
         editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
         editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
         editor.apply()
+
+        loginViewModel.loadProfile()
       }
       setResult(Activity.RESULT_OK)
-
-      loginViewModel.loadProfile()
 
       //Complete and destroy login activity once successful
       finish()

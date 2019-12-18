@@ -11,6 +11,7 @@ class SettingsFragment: PreferenceFragmentCompat(){
     private val mListener: OnViewOpenedInterface? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        activity!!.actionBar?.setTitle(R.string.action_settings)
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
