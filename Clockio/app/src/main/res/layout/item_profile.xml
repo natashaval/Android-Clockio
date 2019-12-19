@@ -47,6 +47,12 @@
         app:layout_constraintStart_toEndOf="@+id/employeeProfile"
         app:layout_constraintTop_toBottomOf="@+id/employeeDept" />
 
+    <View
+        style="@style/Divider"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/employeeProfile" />
+
     <Spinner
         android:id="@+id/statusSpinner"
         android:layout_width="wrap_content"

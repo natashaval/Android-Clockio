@@ -12,16 +12,21 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
+import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.entity.Employee
+import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.home.viewmodel.ActivityViewModel
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_activity.*
+import kotlinx.android.synthetic.main.fragment_activity.view.*
 import kotlinx.android.synthetic.main.item_profile.*
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
@@ -44,6 +49,10 @@ class ActivityFragment : Fragment() {
   private var employeeStatus: String? = null
   private lateinit var adapter: StatusSpinnerAdapter
 
+  private var activities: List<Activity>? = null
+  private lateinit var activityAdapter: ActivityAdapter
+  private lateinit var linearLayoutManager: LinearLayoutManager
+
   override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?
@@ -53,7 +62,17 @@ class ActivityFragment : Fragment() {
         R.drawable.ic_status_online_24dp, R.drawable.ic_status_meeting_24dp,
         R.drawable.ic_status_away_24dp, R.drawable.ic_status_offline_24dp)
     activity!!.actionBar?.setTitle(R.string.navigation_activity)
-    return inflater.inflate(R.layout.fragment_activity, container, false)
+
+    val rootView = inflater.inflate(R.layout.fragment_activity, container, false)
+
+    activityAdapter = ActivityAdapter(activities)
+    linearLayoutManager = LinearLayoutManager(activity)
+    rootView.activityRecyclerView.apply {
+      layoutManager = linearLayoutManager
+      adapter = activityAdapter
+    }
+
+    return rootView
   }
 
   override fun onAttach(context: Context) {
@@ -71,6 +90,7 @@ class ActivityFragment : Fragment() {
     getActivityToday()
 
     observeEmployee()
+    observeActivity()
   }
 
   private fun getStatus() {
@@ -127,6 +147,17 @@ class ActivityFragment : Fragment() {
         }
         BaseResponse.Status.ERROR, BaseResponse.Status.FAILED -> {
           statusProgressBar.visibility = View.INVISIBLE
+        }
+      }
+    })
+  }
+
+  private fun observeActivity() {
+    activityViewModel.activityToday.observe(this, Observer {
+      when(it.status) {
+        BaseResponse.Status.SUCCESS -> {
+          var data = it.data as List<Activity>
+          activities = data
         }
       }
     })
