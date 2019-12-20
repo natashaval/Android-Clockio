@@ -11,16 +11,14 @@ import com.natasha.clockio.home.entity.Activity
 import kotlinx.android.synthetic.main.item_activity.view.*
 
 //https://www.raywenderlich.com/1560485-android-recyclerview-tutorial-with-kotlin
-class ActivityAdapter(private val activities: List<Activity>?):
+class ActivityAdapter(private val activities: List<Activity>):
     RecyclerView.Adapter<ActivityAdapter.ActivityHolder>() {
 
     private val TAG: String = ActivityAdapter::class.java.simpleName
 
     override fun onBindViewHolder(holder: ActivityHolder, position: Int) {
-        activities?.let {
-            val itemActivity = it[position]
-            holder.bind(itemActivity)
-        }
+        val itemActivity = activities[position]
+        holder.bind(itemActivity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -29,12 +27,7 @@ class ActivityAdapter(private val activities: List<Activity>?):
         return ActivityHolder(inflatedView)
     }
 
-    override fun getItemCount(): Int {
-        activities?.let {
-            return it.size
-        }
-        return 0
-    }
+    override fun getItemCount(): Int = activities.size
 
     class ActivityHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         private val TAG: String = ActivityHolder::class.java.simpleName

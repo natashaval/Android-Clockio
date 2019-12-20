@@ -25,6 +25,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import okhttp3.internal.lockAndWaitNanos
 import javax.inject.Inject
 
 class LoginActivity : DaggerAppCompatActivity() {
@@ -62,7 +63,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     loginViewModel.loginResult.observe(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
-
+      var isLogin = false
       loading.visibility = View.GONE
 
       Log.d(TAG, "login is called from login result $loginResult")
@@ -73,15 +74,17 @@ class LoginActivity : DaggerAppCompatActivity() {
         editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
         editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
         editor.apply()
-
-        loginViewModel.loadProfile()
+        isLogin = true
       }
       setResult(Activity.RESULT_OK)
 
       //Complete and destroy login activity once successful
       finish()
-      val intent = Intent(this, HomeActivity::class.java)
-      startActivity(intent)
+      if (isLogin) {
+        loginViewModel.loadProfile()
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+      }
     })
 
     loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
@@ -142,7 +145,6 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun updateUiWithUser(model: LoggedInUserView) {
     val welcome = getString(R.string.welcome)
     val displayName = model.displayName
-    // TODO : initiate successful logged in experience
     Toast.makeText(
         applicationContext,
         "$welcome $displayName",

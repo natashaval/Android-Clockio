@@ -25,7 +25,7 @@ class ActivityViewModel @Inject constructor(private val activityRepository: Acti
       val qDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(queryDate)
       val formatter = SimpleDateFormat("yyyy-MM-dd")
       val response = activityRepository.getActivityToday(id, formatter.format(qDate))
-      Log.d(TAG, "activityToday $response")
+      _activity.value = response
     }
   }
 }

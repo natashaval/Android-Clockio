@@ -49,7 +49,6 @@ class ActivityFragment : Fragment() {
   private var employeeStatus: String? = null
   private lateinit var adapter: StatusSpinnerAdapter
 
-  private var activities: List<Activity>? = null
   private lateinit var activityAdapter: ActivityAdapter
   private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -63,16 +62,7 @@ class ActivityFragment : Fragment() {
         R.drawable.ic_status_away_24dp, R.drawable.ic_status_offline_24dp)
     activity!!.actionBar?.setTitle(R.string.navigation_activity)
 
-    val rootView = inflater.inflate(R.layout.fragment_activity, container, false)
-
-    activityAdapter = ActivityAdapter(activities)
-    linearLayoutManager = LinearLayoutManager(activity)
-    rootView.activityRecyclerView.apply {
-      layoutManager = linearLayoutManager
-      adapter = activityAdapter
-    }
-
-    return rootView
+    return inflater.inflate(R.layout.fragment_activity, container, false)
   }
 
   override fun onAttach(context: Context) {
@@ -103,7 +93,7 @@ class ActivityFragment : Fragment() {
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val status: String = statusSpinner.selectedItem.toString()
-        Toast.makeText(activity!!, "Status selected: $status", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(activity!!, "Status selected: $status", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
         if (employeeStatus!= null && !employeeStatus.equals(status.toLowerCase())) {
           Log.d(TAG, "status changed! $status")
@@ -157,7 +147,8 @@ class ActivityFragment : Fragment() {
       when(it.status) {
         BaseResponse.Status.SUCCESS -> {
           var data = it.data as List<Activity>
-          activities = data
+          Log.d(TAG, "activity $data")
+          showActivity(data)
         }
       }
     })
@@ -166,6 +157,16 @@ class ActivityFragment : Fragment() {
   private fun selectStatus() {
     val statusPosition: Int = adapter.getPosition(StringUtils.capitalize(employeeStatus))
     statusSpinner.setSelection(statusPosition)
+  }
+
+  private fun showActivity(activities: List<Activity>) {
+    Log.d(TAG, "show Activity $activities")
+    activityAdapter = ActivityAdapter(activities)
+    linearLayoutManager = LinearLayoutManager(activity)
+    activityRecyclerView.apply {
+      layoutManager = linearLayoutManager
+      adapter = activityAdapter
+    }
   }
 
 }

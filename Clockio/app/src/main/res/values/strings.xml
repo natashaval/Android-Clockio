@@ -27,7 +27,6 @@
     <string name="login_failed">"Login failed"</string>
 
     <string name="title_activity_maps">Maps</string>
-
     <string name="title_activity_presence">Check In</string>
 
     <!--    Biometric Prompt-->
@@ -62,7 +61,7 @@
     <!--    Hint-->
     <string name="employee_name">Full Name</string>
     <string name="employee_dept">Department</string>
-    <string name="employee_last_checkin">Last Check In: %s</string>
+    <string name="employee_last_checkin">Check In: %s</string>
 
     <!--    Status-->
     <string name="status">Status</string>
@@ -80,5 +79,8 @@
     <string name="settings_pin_title">Set Pin Lock</string>
     <string name="settings_pin_dialog">Edit your pin lock</string>
     <string name="settings_pin_dialog_desc">Format: 4 numbers only</string>
+
+<!--    Activity-->
+    <string name="activity_title">Activity Today</string>
     
 </resources>
