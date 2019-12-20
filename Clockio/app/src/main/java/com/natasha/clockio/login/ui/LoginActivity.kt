@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -74,13 +75,14 @@ class LoginActivity : DaggerAppCompatActivity() {
         editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
         editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
         editor.apply()
-        isLogin = true
+        if (!TextUtils.isEmpty(token.accessToken)) isLogin = true
       }
       setResult(Activity.RESULT_OK)
 
       //Complete and destroy login activity once successful
       finish()
       if (isLogin) {
+        Log.d(TAG, "isLogin getProfile triggered")
         loginViewModel.loadProfile()
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)

@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.home.entity.Employee
+import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.GpsUtils
 import com.natasha.clockio.location.LocationViewModel
@@ -45,7 +46,8 @@ class ProfileFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    activity!!.actionBar?.setTitle(R.string.navigation_profile)
+    val act = activity as HomeActivity
+    act.supportActionBar?.setTitle(R.string.navigation_profile)
     return inflater.inflate(R.layout.fragment_profile, container, false)
   }
 

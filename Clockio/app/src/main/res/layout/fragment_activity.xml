@@ -21,7 +21,8 @@
         android:layout_marginLeft="8dp"
         android:text="@string/activity_title"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activityRecyclerView"
@@ -31,5 +32,17 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:scrollbars="vertical"
         tools:listitem="@layout/item_activity" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activityAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        android:src="@drawable/ic_add_white_24dp" />
 
 </RelativeLayout>

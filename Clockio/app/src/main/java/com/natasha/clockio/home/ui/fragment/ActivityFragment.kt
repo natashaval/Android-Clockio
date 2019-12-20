@@ -17,13 +17,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.activity.ui.ActivityAddFragment
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.entity.Employee
+import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.home.viewmodel.ActivityViewModel
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
+import com.natasha.clockio.presence.ui.fragment.CameraFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
 import kotlinx.android.synthetic.main.fragment_activity.view.*
@@ -56,11 +59,12 @@ class ActivityFragment : Fragment() {
       inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?
   ): View? {
-    statusArray = activity!!.resources.getStringArray(R.array.status_array)
+    val act = activity as HomeActivity
+    statusArray = act!!.resources.getStringArray(R.array.status_array)
     statusIconArray = arrayOf(
         R.drawable.ic_status_online_24dp, R.drawable.ic_status_meeting_24dp,
         R.drawable.ic_status_away_24dp, R.drawable.ic_status_offline_24dp)
-    activity!!.actionBar?.setTitle(R.string.navigation_activity)
+    act.supportActionBar?.setTitle(R.string.navigation_activity)
 
     return inflater.inflate(R.layout.fragment_activity, container, false)
   }
@@ -81,6 +85,8 @@ class ActivityFragment : Fragment() {
 
     observeEmployee()
     observeActivity()
+
+    addActivityClick()
   }
 
   private fun getStatus() {
@@ -166,6 +172,16 @@ class ActivityFragment : Fragment() {
     activityRecyclerView.apply {
       layoutManager = linearLayoutManager
       adapter = activityAdapter
+    }
+  }
+
+  private fun addActivityClick() {
+    activityAddButton.setOnClickListener {
+      Log.d(TAG, "FAB activity clicked!")
+      fragmentManager?.beginTransaction()?.
+        replace(R.id.content, ActivityAddFragment.newInstance())?.
+        addToBackStack(null)?.
+        commit()
     }
   }
 
