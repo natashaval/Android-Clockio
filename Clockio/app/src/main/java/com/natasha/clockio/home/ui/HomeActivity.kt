@@ -37,6 +37,14 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         addSpaceNavigation(savedInstanceState)
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId) {
             R.id.navigation_activity -> {

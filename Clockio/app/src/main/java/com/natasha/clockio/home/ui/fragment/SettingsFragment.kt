@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.preference.PreferenceFragmentCompat
 import com.natasha.clockio.R
+import com.natasha.clockio.home.ui.HomeActivity
 
 class SettingsFragment: PreferenceFragmentCompat(){
 
@@ -11,7 +12,8 @@ class SettingsFragment: PreferenceFragmentCompat(){
     private val mListener: OnViewOpenedInterface? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        activity!!.actionBar?.setTitle(R.string.action_settings)
+        val act = activity as HomeActivity
+        act.supportActionBar?.setTitle(R.string.action_settings)
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 

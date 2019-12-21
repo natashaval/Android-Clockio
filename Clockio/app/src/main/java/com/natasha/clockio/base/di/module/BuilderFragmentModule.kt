@@ -1,5 +1,6 @@
 package com.natasha.clockio.base.di.module
 
+import com.natasha.clockio.activity.ui.ActivityAddFragment
 import com.natasha.clockio.base.di.module.repository.ActivityModule
 import com.natasha.clockio.base.di.module.repository.ImageModule
 import com.natasha.clockio.base.di.module.repository.ProfileModule
@@ -37,6 +38,11 @@ abstract class BuilderFragmentModule {
     ProfileModule::class, ActivityModule::class])
   @ActivityScope
   abstract fun activityFragment(): ActivityFragment
+
+  @ContributesAndroidInjector(modules = [
+  ActivityViewModelModule::class, ActivityModule::class])
+  @ActivityScope
+  abstract fun activityAddFragment(): ActivityAddFragment
 
   @ContributesAndroidInjector
   @ActivityScope

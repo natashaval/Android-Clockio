@@ -180,7 +180,7 @@ class ActivityFragment : Fragment() {
       Log.d(TAG, "FAB activity clicked!")
       fragmentManager?.beginTransaction()?.
         replace(R.id.content, ActivityAddFragment.newInstance())?.
-        addToBackStack(null)?.
+        addToBackStack("activity_create")?.
         commit()
     }
   }
