@@ -21,6 +21,7 @@ import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.location.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import com.natasha.clockio.presence.service.request.CheckinRequest
@@ -168,9 +169,7 @@ class ImageFragment : Fragment() {
   }
 
   private fun observeLocation() {
-    locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
-      //      location.latitude = it.latitude
-//      location.longitude = it.longitude
+    locationViewModel.getLocationData().observeOnce(this, androidx.lifecycle.Observer {
       location = it
       Log.d(TAG, "presence image $location")
     })

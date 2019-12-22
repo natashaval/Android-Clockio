@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Clockio</string>
 
-    <string name="client_id">client</string>
-    <string name="client_secret">SuperSecret</string>
-
     <string name="base_save">Save</string>
     <string name="base_cancel">Cancel</string>
     <string name="base_update">Update</string>

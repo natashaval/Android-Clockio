@@ -40,7 +40,7 @@ abstract class BuilderFragmentModule {
   abstract fun activityFragment(): ActivityFragment
 
   @ContributesAndroidInjector(modules = [
-  ActivityViewModelModule::class, ActivityModule::class])
+  ActivityViewModelModule::class, ActivityModule::class, LocationViewModelModule::class])
   @ActivityScope
   abstract fun activityAddFragment(): ActivityAddFragment
 

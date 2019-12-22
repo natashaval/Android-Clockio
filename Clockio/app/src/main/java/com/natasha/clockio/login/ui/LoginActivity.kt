@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UrlConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.base.util.RetrofitInterceptor
@@ -43,9 +44,9 @@ class LoginActivity : DaggerAppCompatActivity() {
     setContentView(R.layout.activity_login)
     AndroidInjection.inject(this)
 
-    interceptor.setBasic(getString(R.string.client_id), getString(R.string.client_secret))
+    interceptor.setBasic(UrlConst.CLIENT_ID, UrlConst.CLIENT_SECRET)
     loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-
+    sharedPref.edit().clear().apply()
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer

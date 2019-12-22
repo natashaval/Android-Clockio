@@ -28,7 +28,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsFragment"
+            android:name=".location.ui.MapsFragment"
             android:label="@string/title_activity_maps"></activity>
         <activity
             android:name=".presence.ui.PresenceActivity"
