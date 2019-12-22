@@ -167,7 +167,7 @@ class ActivityFragment : Fragment() {
 
   private fun showActivity(activities: List<Activity>) {
     Log.d(TAG, "show Activity $activities")
-    activityAdapter = ActivityAdapter(activities)
+    activityAdapter = ActivityAdapter(context!!, activities)
     linearLayoutManager = LinearLayoutManager(activity)
     activityRecyclerView.apply {
       layoutManager = linearLayoutManager
@@ -180,7 +180,7 @@ class ActivityFragment : Fragment() {
       Log.d(TAG, "FAB activity clicked!")
       fragmentManager?.beginTransaction()?.
         replace(R.id.content, ActivityAddFragment.newInstance())?.
-        addToBackStack("activity_create")?.
+        addToBackStack(null)?.
         commit()
     }
   }

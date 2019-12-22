@@ -20,8 +20,7 @@
         android:layout_below="@id/profileActivity"
         android:layout_marginLeft="8dp"
         android:text="@string/activity_title"
-        android:textSize="20dp"
-        android:textStyle="bold"
+        style="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/colorPrimaryDark" />
 
     <androidx.recyclerview.widget.RecyclerView

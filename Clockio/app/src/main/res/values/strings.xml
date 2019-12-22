@@ -6,6 +6,8 @@
 
     <string name="base_save">Save</string>
     <string name="base_cancel">Cancel</string>
+    <string name="base_update">Update</string>
+    <string name="base_delete">Delete</string>
 
     <!--    Navigation-->
     <string name="navigation_activity">Activity</string>
@@ -87,6 +89,5 @@
     <string name="activity_content_hint">Content</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
-
 
 </resources>

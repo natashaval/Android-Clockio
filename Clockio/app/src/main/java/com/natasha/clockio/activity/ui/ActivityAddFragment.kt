@@ -71,7 +71,6 @@ class ActivityAddFragment : Fragment() {
     super.onStop()
     val i: OnViewOpenedInterface = activity as OnViewOpenedInterface
     i.onClose()
-    if (tp?.isShowing!!) tp?.dismiss()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

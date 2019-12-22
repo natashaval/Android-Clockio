@@ -38,10 +38,12 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            super.onBackPressed()
-        } else {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            Log.d(TAG, "fragment backstack pop")
             supportFragmentManager.popBackStack()
+        } else {
+            Log.d(TAG, "fragment backpressed")
+            super.onBackPressed()
         }
     }
 
@@ -61,10 +63,18 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         false
     }
 
-    private fun addFragment(fragment: Fragment) {
+    fun addFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.content, fragment, fragment::class.java.simpleName)
+            .commit()
+    }
+
+    fun addFragmentBackstack(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.content, fragment, fragment::class.java.simpleName)
+            .addToBackStack(null)
             .commit()
     }
 
