@@ -100,13 +100,12 @@ class ActivityFragment : Fragment() {
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val status: String = statusSpinner.selectedItem.toString()
 //        Toast.makeText(activity!!, "Status selected: $status", Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
+//        Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
         if (employeeStatus!= null && !employeeStatus.equals(status.toLowerCase())) {
           Log.d(TAG, "status changed! $status")
           employeeViewModel.updateStatus(employeeId!!, status)
         }
       }
-
     }
   }
 

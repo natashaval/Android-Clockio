@@ -1,7 +1,6 @@
 package com.natasha.clockio.activity.ui
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,6 +11,8 @@ import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
+import com.natasha.clockio.location.LocationModel
+import com.natasha.clockio.location.ui.MapsFragment
 import kotlinx.android.synthetic.main.fragment_activity_details.*
 
 class ActivityDetailsFragment : Fragment() {
@@ -23,7 +24,6 @@ class ActivityDetailsFragment : Fragment() {
     val TAG: String = ActivityDetailsFragment::class.java.simpleName
   }
 
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
   }
@@ -34,6 +34,7 @@ class ActivityDetailsFragment : Fragment() {
       act = arguments!!.getParcelable(ParcelableConst.ITEM_ACTIVITY)
       Log.d(TAG, "details received $act")
     }
+    setHasOptionsMenu(true)
     return inflater.inflate(R.layout.fragment_activity_details, container, false)
   }
 
@@ -66,11 +67,31 @@ class ActivityDetailsFragment : Fragment() {
     }
   }
 
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return super.onOptionsItemSelected(item)
+  }
+
   private fun setDetails(act: Activity) {
     Log.d(TAG, "set in Activity $act")
     activityTitleDetails.text = act.title
     activityContentDetails.text = act.content.toString()
     activityStartDetails.text = act.startTime.toString()
     activityEndDetails.text = act.endTime.toString()
+    if (act.latitude != null && act.longitude != null) {
+      setMap(LocationModel(act.latitude, act.longitude))
+    }
+  }
+
+  private fun setMap(loc: LocationModel) {
+    Log.d(TAG, "location details $loc")
+    val frag = MapsFragment.newInstance()
+    val bundle = Bundle().apply {
+      putParcelable(ParcelableConst.LOCATION, loc)
+      putBoolean(ParcelableConst.LOCATION_SAVE, false)
+    }
+    frag.arguments = bundle
+    fragmentManager?.beginTransaction()
+        ?.replace(R.id.activityMapDetails, frag, TAG)
+        ?.commit()
   }
 }

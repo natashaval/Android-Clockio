@@ -12,5 +12,7 @@ data class Activity (
     val content: String?,
     val date: Date,
     val startTime: String?,
-    val endTime: String?
+    val endTime: String?,
+    val latitude: Double?,
+    val longitude: Double?
 ): Parcelable
