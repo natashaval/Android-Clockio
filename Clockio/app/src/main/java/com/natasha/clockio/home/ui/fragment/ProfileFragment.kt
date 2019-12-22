@@ -23,6 +23,7 @@ import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.GpsUtils
 import com.natasha.clockio.location.LocationViewModel
+import com.natasha.clockio.login.ui.LoginActivity
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.item_location.*
@@ -69,6 +70,7 @@ class ProfileFragment : Fragment() {
     })
 
     getEmployee()
+    logout()
   }
 
   override fun onStart() {
@@ -130,6 +132,15 @@ class ProfileFragment : Fragment() {
     })
   }
 
+  private fun logout() {
+    logout.setOnClickListener {
+      sharedPref.edit().clear().apply()
+      activity?.finish()
+      val intent = Intent(activity, LoginActivity::class.java)
+      startActivity(intent)
+    }
+  }
+
   private fun invokeLocationAction() {
     Log.d(TAG, "permissionGranted = ${isPermissionGranted()} && permissionRationale = ${shouldShowPermissionRationale()}")
     when {
@@ -139,7 +150,6 @@ class ProfileFragment : Fragment() {
       }
 
       isPermissionGranted() -> startLocationUpdate()
-
       shouldShowPermissionRationale() -> latLong.text = getString(R.string.location_permission)
 
       else -> {

@@ -10,6 +10,9 @@ import com.natasha.clockio.login.data.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
@@ -33,14 +36,19 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     //    https://medium.com/@cesarmcferreira/how-to-use-the-new-android-viewmodelscope-in-clean-architecture-2a33aac959ee
 //    https://proandroiddev.com/coroutines-with-architecture-components-4c223a51b112
     fun login(username: String, password: String) {
-        viewModelScope.launch {
-            Log.d(TAG, "login is called in view model")
-            loginRepository.login(username, password,
-                { accessToken -> _loginResult.value = accessToken},
-                { err -> _loginFailed.value = err },
-                {t -> Log.e(TAG, "onFailure: ", t)})
-            Log.d(TAG, "Login view model has changed " + loginResult.value.toString())
-        }
+        loginRepository.login(username, password).enqueue(object: Callback<AccessToken> {
+            override fun onFailure(call: Call<AccessToken>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
+                if (response.isSuccessful) {
+                    _loginResult.value = BaseResponse.success(response.body())
+                } else {
+                    _loginFailed.value = response.errorBody()
+                }
+            }
+
+        })
     }
 
     fun loadProfile() =

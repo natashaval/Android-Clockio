@@ -110,7 +110,6 @@ class LoginActivity : DaggerAppCompatActivity() {
           }
           else {
             val errorBody = result.data as ResponseBody
-//            Log.d(TAG, "profile Failed ${errorBody.string()}")
             Toast.makeText(this, errorBody.string(), Toast.LENGTH_SHORT).show()
           }
         }
