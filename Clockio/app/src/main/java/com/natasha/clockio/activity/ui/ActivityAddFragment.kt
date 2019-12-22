@@ -9,11 +9,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import cn.pedant.SweetAlert.SweetAlertDialog
+import com.natasha.clockio.MapsFragment
 
 import com.natasha.clockio.R
 import com.natasha.clockio.activity.entity.ActivityCreateRequest
-import com.natasha.clockio.base.constant.AlertConst
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
@@ -41,10 +40,9 @@ class ActivityAddFragment : Fragment() {
   private var tp: TimePickerDialog? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
+                            savedInstanceState: Bundle?): View? {
     val act = activity as HomeActivity
     act.supportActionBar?.setTitle(R.string.activity_create_title)
-//    act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     return inflater.inflate(R.layout.fragment_activity_add, container, false)
   }
 
@@ -52,6 +50,8 @@ class ActivityAddFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     activityViewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
     setHasOptionsMenu(true)
+
+    setMap()
     setTime()
     observeCreateActivityResult()
   }
@@ -94,7 +94,7 @@ class ActivityAddFragment : Fragment() {
       if (tp == null) {
         val ft = fragmentManager!!.beginTransaction()
         val startTime: DialogFragment = TimePickerFragment(
-            activityStartInput)
+          activityStartInput)
         startTime.show(ft, "TimePicker")
       }
     }
@@ -104,7 +104,7 @@ class ActivityAddFragment : Fragment() {
       if (tp == null) {
         val ft = fragmentManager!!.beginTransaction()
         val endTime: DialogFragment = TimePickerFragment(
-            activityEndInput)
+          activityEndInput)
         endTime.show(ft, "TimePicker")
       }
     }
@@ -145,4 +145,10 @@ class ActivityAddFragment : Fragment() {
     })
   }
 
+  private fun setMap() {
+    Log.d(TAG, "addFragment setMap")
+    fragmentManager?.beginTransaction()
+      ?.replace(R.id.activityMapInput, MapsFragment.newInstance(), MapsFragment.TAG)
+      ?.commit()
+  }
 }

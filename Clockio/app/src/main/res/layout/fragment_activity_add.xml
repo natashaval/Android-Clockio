@@ -84,4 +84,37 @@
             android:overScrollMode="ifContentScrolls" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/activityLocationLabel"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/base_location"
+        android:layout_marginTop="@dimen/input_margin"
+        android:layout_marginLeft="@dimen/input_margin"
+        app:layout_constraintTop_toBottomOf="@id/activityContentLayout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/activityMapInput"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/input_margin"
+        android:background="@color/colorPrimaryLight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activityLocationLabel" />
+
+<!--    <include-->
+<!--        android:id="@+id/activityLocationInput"-->
+<!--        layout="@layout/item_map"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_margin="@dimen/input_margin"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/activityLocationLabel" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
