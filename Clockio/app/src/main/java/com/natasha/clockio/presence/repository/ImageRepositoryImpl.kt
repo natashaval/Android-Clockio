@@ -6,6 +6,7 @@ import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.CloudinaryConst
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
 import com.natasha.clockio.presence.util.CallbackAggregator
 import java.util.*
@@ -17,9 +18,9 @@ class ImageRepositoryImpl @Inject constructor(private val context: Context): Ima
 
   override fun uploadImage(userId: String, imagePath: String) {
     MediaManager.get().upload(imagePath)
-        .unsigned(context.resources.getString(R.string.cloudinary_unsigned))
+        .unsigned(CloudinaryConst.UNSIGNED)
         .option("public_id", userId)
-        .option("folder", "Android")
+        .option("folder", CloudinaryConst.UPLOAD_FOLDER)
         .callback(object : UploadCallback {
           override fun onSuccess(
               requestId: String?,
@@ -56,9 +57,9 @@ class ImageRepositoryImpl @Inject constructor(private val context: Context): Ima
     val callbackAggregator = CallbackAggregator(callback, imagePath)
     MediaManager.get()
         .upload(imagePath)
-        .unsigned("zmfwv7yt")
+        .unsigned(CloudinaryConst.UNSIGNED)
         .option("public_id", userId)
-        .option("folder", "Android")
+        .option("folder", CloudinaryConst.UPLOAD_FOLDER)
         .callback(callbackAggregator)
         .dispatch()
   }

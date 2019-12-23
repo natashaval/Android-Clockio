@@ -46,7 +46,6 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     interceptor.setBasic(UrlConst.CLIENT_ID, UrlConst.CLIENT_SECRET)
     loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-    sharedPref.edit().clear().apply()
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer
@@ -75,7 +74,7 @@ class LoginActivity : DaggerAppCompatActivity() {
         val editor = sharedPref.edit()
         editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
         editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
-        editor.apply()
+        editor.commit()
         if (!TextUtils.isEmpty(token.accessToken)) isLogin = true
       }
       setResult(Activity.RESULT_OK)
@@ -83,7 +82,8 @@ class LoginActivity : DaggerAppCompatActivity() {
       //Complete and destroy login activity once successful
       finish()
       if (isLogin) {
-        Log.d(TAG, "isLogin getProfile triggered")
+        var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
+        Log.d(TAG, "isLogin getProfile triggered $tkn")
         loginViewModel.loadProfile()
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
@@ -140,6 +140,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     login.setOnClickListener {
       loading.visibility = View.VISIBLE
       Log.d(TAG, "login is called from activity")
+      clearSharedPref()
       loginViewModel.login(username.text.toString(), password.text.toString())
     }
   }
@@ -165,6 +166,10 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun showError(message: String?) {
     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     Log.d(TAG, "login return response error")
+  }
+
+  private fun clearSharedPref() {
+    sharedPref.edit().clear().commit()
   }
 }
 
