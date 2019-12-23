@@ -4,6 +4,7 @@ import java.io.Serializable
 
 class LoggedInUser(
     val id: String,
+    val employeeId: String,
     val username: String,
     val role: Role
 ) : Serializable

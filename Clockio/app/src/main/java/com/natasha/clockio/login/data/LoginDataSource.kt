@@ -1,6 +1,7 @@
 package com.natasha.clockio.login.data
 
 import com.natasha.clockio.base.model.AccessToken
+import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.login.service.AuthApi
 import retrofit2.Response
 import javax.inject.Inject
@@ -16,5 +17,7 @@ class LoginDataSource @Inject constructor(private val authApi: AuthApi) {
     fun logout() {
         // TODO: revoke authentication
     }
+
+    suspend fun profile(): Response<LoggedInUser> = authApi.getProfile()
 }
 

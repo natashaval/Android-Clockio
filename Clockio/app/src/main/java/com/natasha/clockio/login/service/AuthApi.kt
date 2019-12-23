@@ -37,7 +37,7 @@ interface AuthApi {
     suspend fun refreshToken(
         @Field("refresh_token") refreshToken: String,
         @Field("grant_type") grant: String
-    ): Call<AccessToken>
+    ): Response<AccessToken>
 
     //    https://proandroiddev.com/suspend-what-youre-doing-retrofit-has-now-coroutines-support-c65bd09ba067
     @GET("/api/profile")

@@ -2,10 +2,8 @@ package com.natasha.clockio.base.di.component;
 
 import com.natasha.clockio.base.di.application.MyApplication;
 import com.natasha.clockio.base.di.module.ApiModule;
-import com.natasha.clockio.base.di.module.BuilderModule;
+import com.natasha.clockio.base.di.module.BuilderActivityModule;
 import com.natasha.clockio.base.di.module.ContextModule;
-import com.natasha.clockio.base.di.module.RetrofitModule;
-import com.natasha.clockio.base.di.module.SharedPrefModule;
 import com.natasha.clockio.base.di.module.ViewModelFactoryModule;
 import com.natasha.clockio.base.di.scope.ApplicationScope;
 import dagger.BindsInstance;
@@ -20,7 +18,7 @@ import javax.inject.Named;
         AndroidInjectionModule.class,
         ContextModule.class,
         ViewModelFactoryModule.class,
-        BuilderModule.class,
+        BuilderActivityModule.class,
         ApiModule.class
 })
 public interface ApplicationComponent extends AndroidInjector<MyApplication> {

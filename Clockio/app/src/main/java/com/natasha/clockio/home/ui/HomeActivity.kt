@@ -16,16 +16,27 @@ import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.natasha.clockio.MainActivity
+import com.natasha.clockio.home.ui.viewmodel.HomeViewModel
 import com.natasha.clockio.presence.ui.PresenceActivity
 import com.natasha.clockio.presence.ui.fragment.LockFragment
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 class HomeActivity : AppCompatActivity() {
 
+//    @Inject lateinit var factory: ViewModelProvider.Factory
+//    private lateinit var viewModel: HomeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        AndroidInjection.inject(this)
+//        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val fragment = ActivityFragment.newInstance()

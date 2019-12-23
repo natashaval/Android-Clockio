@@ -4,24 +4,18 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Matrix
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Environment
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Rational
-import android.util.Size
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.natasha.clockio.MainActivity
 
 import com.natasha.clockio.R
 import com.natasha.clockio.presence.ui.PresenceActivity
-import kotlinx.android.synthetic.main.camera_fragment.*
+import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.lang.Exception
 import java.util.concurrent.Executors
@@ -36,7 +30,6 @@ class CameraFragment : Fragment() {
     private val TAG = CameraFragment::class.java.simpleName
   }
 
-  private lateinit var viewModel: CameraViewModel
   private var lensFacing = CameraX.LensFacing.FRONT
   private val screenAspectRatio = AspectRatio.RATIO_4_3
   private lateinit var outputDirectory: File
@@ -45,13 +38,11 @@ class CameraFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.camera_fragment, container, false)
+    return inflater.inflate(R.layout.fragment_camera, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProviders.of(this).get(CameraViewModel::class.java)
-    // TODO: Use the ViewModel
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

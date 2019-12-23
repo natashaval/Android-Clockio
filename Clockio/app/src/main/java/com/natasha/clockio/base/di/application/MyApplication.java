@@ -2,6 +2,8 @@ package com.natasha.clockio.base.di.application;
 
 import android.app.Application;
 import android.util.Log;
+
+import com.cloudinary.android.MediaManager;
 import com.natasha.clockio.base.di.component.ApplicationComponent;
 import com.natasha.clockio.base.di.component.DaggerApplicationComponent;
 import com.natasha.clockio.base.di.constant.UrlConstantKt;
@@ -27,6 +29,8 @@ public class MyApplication extends Application implements HasAndroidInjector {
                 .contextModule(this)
                 .retrofitModule(UrlConstantKt.BASE_URL)
                 .build();
+
+        MediaManager.init(this);
 
         applicationComponent.injectApplication(this);
         Log.d(TAG, "application component init on create");

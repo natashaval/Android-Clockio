@@ -44,9 +44,21 @@
     <string name="camera_capture">Capture</string>
     <string name="camera_switch_button_alt">Switch Camera</string>
 
-    <!--    Permission-->
-    <string name="camera_permission">Camera Permissions not granted!</string>
+    <!--    Cloudinary Image Upload-->
+    <string name="cloudinary_unsigned">zmfwv7yt</string>
+    <string name="cloudinary_default">Default</string>
+    <string name="cloudinary_start">Upload Start</string>
+    <string name="cloudinary_error">Upload Error</string>
+    <string name="cloudinary_success">Upload Success!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    Location-->
+    <string name="enable_gps">Please enable your GPS!</string>
+    <string name="latLong">Latitude: %.3f, Longitude: %.3f</string>
+
+    <!--    Permission-->
+    <string name="camera_permission">Camera Permission not granted!</string>
+    <string name="location_permission">Location permission not granted!</string>
+
+<!--    Shared Pref-->
+    <string name="employee_id_key">id</string>
 </resources>
