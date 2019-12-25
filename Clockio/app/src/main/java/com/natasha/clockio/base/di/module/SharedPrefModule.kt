@@ -2,7 +2,7 @@ package com.natasha.clockio.base.di.module
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.natasha.clockio.base.di.application.MyApplication
 import com.natasha.clockio.base.di.scope.ApplicationScope
 import dagger.Binds

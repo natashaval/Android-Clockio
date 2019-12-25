@@ -15,6 +15,11 @@ import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.natasha.clockio.MainActivity
+import com.natasha.clockio.home.ui.viewmodel.HomeViewModel
+import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.PresenceActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -29,9 +34,6 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         setContentView(R.layout.activity_home)
 
         AndroidInjection.inject(this)
-//        viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
         val fragment = ActivityFragment.newInstance()
         addFragment(fragment)
         addSpaceNavigation(savedInstanceState)
@@ -59,6 +61,11 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
                 addFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.navigation_notif -> {
+                val fragment = NotifFragment.newInstance()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -70,24 +77,11 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
             .commit()
     }
 
-    fun addFragmentBackstack(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.content, fragment, fragment::class.java.simpleName)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun showDialog(dialogFragment: DialogFragment) {
-        val ft = supportFragmentManager.beginTransaction()
-        dialogFragment.show(ft, dialogFragment::class.java.simpleName)
-    }
-
     private fun addSpaceNavigation(savedInstanceState: Bundle?) {
         spaceNavigation.initWithSaveInstanceState(savedInstanceState);
         spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_black_24dp))
         spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_friend), R.drawable.ic_perm_contact_calendar_black_24dp))
-        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_notification), R.drawable.ic_notifications_black_24dp))
+        spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_notif), R.drawable.ic_notifications_black_24dp))
         spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_profile), R.drawable.ic_person_black_24dp))
 
         spaceNavigation.showIconOnly()
@@ -102,7 +96,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         }
 
         override fun onItemClick(itemIndex: Int, itemName: String) {
-//            Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
             when(itemName) {
                 getString(R.string.navigation_activity) -> {
                     val fragment = ActivityFragment.newInstance()
@@ -112,11 +106,9 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
                     val fragment = ProfileFragment.newInstance()
                     addFragment(fragment)
                 }
-                getString(R.string.navigation_friend) -> {
-                    onOpen()
-                }
-                getString(R.string.navigation_notification) -> {
-                    onClose()
+                getString(R.string.navigation_notif) -> {
+                    val fragment = NotifFragment.newInstance()
+                    addFragment(fragment)
                 }
             }
         }

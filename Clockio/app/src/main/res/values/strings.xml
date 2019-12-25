@@ -13,7 +13,7 @@
     <string name="navigation_friend">Friend</string>
     <string name="navigation_checkin">Check In</string>
     <string name="navigation_checkout">Check Out</string>
-    <string name="navigation_notification">Notification</string>
+    <string name="navigation_notif">Notification</string>
     <string name="navigation_profile">Profile</string>
 
     <!--    Login-->
