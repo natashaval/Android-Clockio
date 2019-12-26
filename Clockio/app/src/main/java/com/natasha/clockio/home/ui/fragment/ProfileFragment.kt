@@ -8,10 +8,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,10 +17,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.home.entity.Employee
-import com.natasha.clockio.home.ui.viewmodel.ProfileViewModel
+import com.natasha.clockio.home.ui.HomeActivity
+import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.GpsUtils
 import com.natasha.clockio.location.LocationViewModel
+import com.natasha.clockio.login.ui.LoginActivity
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.item_location.*
@@ -46,6 +47,8 @@ class ProfileFragment : Fragment() {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
+    val act = activity as HomeActivity
+    act.supportActionBar?.setTitle(R.string.navigation_profile)
     return inflater.inflate(R.layout.fragment_profile, container, false)
   }
 
@@ -56,9 +59,10 @@ class ProfileFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+    profileViewModel = ViewModelProvider(this, factory).get(
+        ProfileViewModel::class.java)
     locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
-    // TODO: Use the ViewModel
+    setHasOptionsMenu(true)
     GpsUtils(context!!).turnOnGps(object : GpsUtils.OnGpsListener {
       override fun gpsStatus(isGpsEnable: Boolean) {
         isGps = isGpsEnable
@@ -66,6 +70,7 @@ class ProfileFragment : Fragment() {
     })
 
     getEmployee()
+    logout()
   }
 
   override fun onStart() {
@@ -90,8 +95,27 @@ class ProfileFragment : Fragment() {
     invokeLocationAction()
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.settings, menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when(item.itemId) {
+      R.id.action_settings -> {
+        Log.d(TAG, "Settings icon clicked!")
+        fragmentManager?.
+          beginTransaction()?.
+          replace(R.id.content, SettingsFragment())?.
+          addToBackStack(null)?.
+          commit()
+        return true
+      }
+    }
+    return false
+  }
+
   private fun getEmployee() {
-    var employeeId = sharedPref.getString("id", null);
+    var employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, null);
     Log.d(TAG, "sharedPref id $employeeId")
     profileViewModel.setId(employeeId)
 
@@ -108,6 +132,15 @@ class ProfileFragment : Fragment() {
     })
   }
 
+  private fun logout() {
+    logout.setOnClickListener {
+      sharedPref.edit().clear().apply()
+      activity?.finish()
+      val intent = Intent(activity, LoginActivity::class.java)
+      startActivity(intent)
+    }
+  }
+
   private fun invokeLocationAction() {
     Log.d(TAG, "permissionGranted = ${isPermissionGranted()} && permissionRationale = ${shouldShowPermissionRationale()}")
     when {
@@ -117,7 +150,6 @@ class ProfileFragment : Fragment() {
       }
 
       isPermissionGranted() -> startLocationUpdate()
-
       shouldShowPermissionRationale() -> latLong.text = getString(R.string.location_permission)
 
       else -> {

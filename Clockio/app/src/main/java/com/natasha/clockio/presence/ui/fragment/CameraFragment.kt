@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.presence.ui.PresenceActivity
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
@@ -47,10 +48,6 @@ class CameraFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-//    cameraTextView.setOnClickListener {
-//      Toast.makeText(activity, "Camera clicked!", Toast.LENGTH_SHORT).show()
-//      activity!!.finish()
-//    }
 
     outputDirectory = PresenceActivity.getOutputDirectory(requireContext())
     viewFinder = activity!!.findViewById(R.id.cameraTexture)
@@ -60,7 +57,7 @@ class CameraFragment : Fragment() {
       ActivityCompat.requestPermissions(activity!!, CAMERA_REQUIRED_PERMISSIONS, CAMERA_REQUEST_CODE_PERMISSIONS)
     }
 
-    viewFinder.addOnLayoutChangeListener { view, i, i2, i3, i4, i5, i6, i7, i8 ->
+    viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _->
       updateTransform()
     }
     switchCamera()
@@ -82,7 +79,6 @@ class CameraFragment : Fragment() {
     val previewConfig = PreviewConfig.Builder().apply {
       setLensFacing(lensFacing)
       setTargetAspectRatio(screenAspectRatio)
-//      setTargetResolution(Size(640, 480))
       setTargetRotation(viewFinder.display.rotation)
     }.build()
 
@@ -116,7 +112,7 @@ class CameraFragment : Fragment() {
             val msg = "Photo capture succeeded: ${file.absolutePath}"
             Log.d(TAG, msg)
             viewFinder.post {
-              Toast.makeText(activity!!, msg, Toast.LENGTH_SHORT).show()
+//              Toast.makeText(activity!!, msg, Toast.LENGTH_SHORT).show()
               sendImagePathToFragment(file.absolutePath)
             }
           }
@@ -199,7 +195,7 @@ class CameraFragment : Fragment() {
   private fun sendImagePathToFragment(path: String) {
     val frag = ImageFragment.newInstance()
     var bundle = Bundle().apply {
-      putString("imagePath", path)
+      putString(ParcelableConst.IMAGE_PATH, path)
     }
     frag.arguments = bundle
 

@@ -43,6 +43,16 @@
         app:layout_constraintTop_toBottomOf="@+id/profileNameTextView"
         app:layout_constraintVertical_bias="0.03" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="172dp"
+        android:text="@string/action_sign_out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <include
         android:id="@+id/include"
         layout="@layout/item_location"

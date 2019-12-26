@@ -14,7 +14,4 @@ interface TestApi {
 //    @GET("/bins/n3g1g")
     @GET("/test")
     suspend fun getTestAutomatically() : Response<Test>
-
-    @GET("/api/getProfile")
-    fun getProfile() : Call<LoggedInUser>
 }

@@ -37,18 +37,4 @@
         app:space_item_icon_only_size="20dp"
     />
 
-    <!--com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:itemIconTint="@color/colorIcon"
-        app:itemTextColor="@color/colorIcon"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="@+id/content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/navigation" / -->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

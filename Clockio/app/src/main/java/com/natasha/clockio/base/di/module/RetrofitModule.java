@@ -1,5 +1,7 @@
 package com.natasha.clockio.base.di.module;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -9,6 +11,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import com.natasha.clockio.base.di.scope.ApplicationScope;
 import com.natasha.clockio.base.util.LiveDataCallAdapterFactory;
+import com.natasha.clockio.base.util.RedirectInterceptor;
 import com.natasha.clockio.base.util.RetrofitInterceptor;
 
 import java.util.Date;
@@ -45,9 +48,12 @@ public class RetrofitModule {
 
     @Provides
     @ApplicationScope
-    OkHttpClient provideOkHttpClient(HttpLoggingInterceptor interceptor, RetrofitInterceptor retrofitInterceptor) {
+    OkHttpClient provideOkHttpClient(HttpLoggingInterceptor interceptor,
+                                     RetrofitInterceptor retrofitInterceptor,
+                                     RedirectInterceptor redirectInterceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
+                .addInterceptor(redirectInterceptor)
                 .addInterceptor(retrofitInterceptor)
                 .build();
     }
@@ -63,8 +69,14 @@ public class RetrofitModule {
 //    https://stackoverflow.com/questions/54159012/dagger-2-get-old-token-when-token-is-refreshed
     @Provides
     @ApplicationScope
-    RetrofitInterceptor provideRetrofitInterceptor() {
-        return new RetrofitInterceptor();
+    RetrofitInterceptor provideRetrofitInterceptor(SharedPreferences sharedPreferences) {
+        return new RetrofitInterceptor(sharedPreferences);
+    }
+
+    @Provides
+    @ApplicationScope
+    RedirectInterceptor provideRedirectInterceptor(Context context) {
+        return new RedirectInterceptor(context);
     }
 
 //    https://stackoverflow.com/questions/41979086/how-to-serialize-date-to-long-using-gson

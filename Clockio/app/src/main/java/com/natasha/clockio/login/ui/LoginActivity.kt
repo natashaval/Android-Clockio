@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -15,6 +16,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UrlConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.base.util.RetrofitInterceptor
@@ -24,6 +27,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import okhttp3.internal.lockAndWaitNanos
 import javax.inject.Inject
 
 class LoginActivity : DaggerAppCompatActivity() {
@@ -40,9 +44,8 @@ class LoginActivity : DaggerAppCompatActivity() {
     setContentView(R.layout.activity_login)
     AndroidInjection.inject(this)
 
-    interceptor.setBasic(getString(R.string.client_id), getString(R.string.client_secret))
+    interceptor.setBasic(UrlConst.CLIENT_ID, UrlConst.CLIENT_SECRET)
     loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
       val loginState = it ?: return@Observer
@@ -61,29 +64,30 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     loginViewModel.loginResult.observe(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
-
+      var isLogin = false
       loading.visibility = View.GONE
 
       Log.d(TAG, "login is called from login result $loginResult")
-      /*when(loginResult.status) {
-          BaseResponse.Status.SUCCESS -> {
-              Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
-          }
-          BaseResponse.Status.LOADING -> showLoading()
-          BaseResponse.Status.ERROR -> {
-              showError(loginResult.message!!)
-          }
-      }*/
       Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
-      interceptor.setToken(loginResult.data!!.accessToken)
+      loginResult.data?.let { token ->
+        interceptor.setToken(token.accessToken)
+        val editor = sharedPref.edit()
+        editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
+        editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
+        editor.commit()
+        if (!TextUtils.isEmpty(token.accessToken)) isLogin = true
+      }
       setResult(Activity.RESULT_OK)
-
-      loginViewModel.loadProfile()
 
       //Complete and destroy login activity once successful
       finish()
-      val intent = Intent(this, HomeActivity::class.java)
-      startActivity(intent)
+      if (isLogin) {
+        var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
+        Log.d(TAG, "isLogin getProfile triggered $tkn")
+        loginViewModel.loadProfile()
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+      }
     })
 
     loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
@@ -101,13 +105,12 @@ class LoginActivity : DaggerAppCompatActivity() {
             Log.d(TAG, "profile Success ${result.data}")
             val loggedInUser: LoggedInUser = result.data as LoggedInUser
             val editor = sharedPref.edit()
-            editor.putString("id", loggedInUser.employeeId)
+            editor.putString(PreferenceConst.EMPLOYEE_ID_KEY, loggedInUser.employeeId)
             Log.d(TAG, "employee-id ${loggedInUser.employeeId}")
             editor.apply()
           }
           else {
             val errorBody = result.data as ResponseBody
-//            Log.d(TAG, "profile Failed ${errorBody.string()}")
             Toast.makeText(this, errorBody.string(), Toast.LENGTH_SHORT).show()
           }
         }
@@ -137,6 +140,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     login.setOnClickListener {
       loading.visibility = View.VISIBLE
       Log.d(TAG, "login is called from activity")
+      clearSharedPref()
       loginViewModel.login(username.text.toString(), password.text.toString())
     }
   }
@@ -144,7 +148,6 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun updateUiWithUser(model: LoggedInUserView) {
     val welcome = getString(R.string.welcome)
     val displayName = model.displayName
-    // TODO : initiate successful logged in experience
     Toast.makeText(
         applicationContext,
         "$welcome $displayName",
@@ -163,6 +166,10 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun showError(message: String?) {
     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     Log.d(TAG, "login return response error")
+  }
+
+  private fun clearSharedPref() {
+    sharedPref.edit().clear().commit()
   }
 }
 

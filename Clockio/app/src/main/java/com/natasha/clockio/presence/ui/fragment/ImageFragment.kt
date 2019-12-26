@@ -18,8 +18,13 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.AlertConst
+import com.natasha.clockio.base.constant.CloudinaryConst
+import com.natasha.clockio.base.constant.ParcelableConst
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.location.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import com.natasha.clockio.presence.service.request.CheckinRequest
@@ -43,7 +48,6 @@ class ImageFragment : Fragment() {
   }
 
   @Inject lateinit var sharedPref: SharedPreferences
-//  @Inject lateinit var gson: Gson
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var imageViewModel: ImageViewModel
   private lateinit var locationViewModel: LocationViewModel
@@ -77,8 +81,8 @@ class ImageFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    employeeId = sharedPref.getString(getString(R.string.employee_id_key), null)
-    imagePath = arguments?.getString("imagePath", "").toString()
+    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, null)
+    imagePath = arguments?.getString(ParcelableConst.IMAGE_PATH, "").toString()
     Log.d(TAG, imagePath)
     showImage(imagePath)
     closeImage()
@@ -112,7 +116,6 @@ class ImageFragment : Fragment() {
   private fun observeProgress(){
     imageViewModel.progressValue.observe(this, androidx.lifecycle.Observer {
       var prog = (it * 100).toInt()
-//      Log.d(TAG, "progressImage $prog")
       progressImage.progress = prog
     })
   }
@@ -135,7 +138,6 @@ class ImageFragment : Fragment() {
           Toast.makeText(activity, descriptionFromCode(it), Toast.LENGTH_SHORT).show()
         }
         ImageViewModel.STATUS_CODE_FINISHED -> {
-          imageCheck.visibility = View.VISIBLE
           imageClose.visibility = View.VISIBLE
           progressImage.visibility = View.INVISIBLE
           Toast.makeText(activity, descriptionFromCode(it), Toast.LENGTH_SHORT).show()
@@ -147,16 +149,15 @@ class ImageFragment : Fragment() {
   }
 
   private fun descriptionFromCode(status: Int): String {
-    var resId: Int = R.string.cloudinary_default
-    when(status) {
+    return when(status) {
       ImageViewModel.STATUS_CODE_STARTING ->
-        resId = R.string.cloudinary_start
+        CloudinaryConst.UPLOAD_START
       ImageViewModel.STATUS_CODE_UPLOAD_ERROR ->
-        resId = R.string.cloudinary_error
+        CloudinaryConst.UPLOAD_ERROR
       ImageViewModel.STATUS_CODE_FINISHED ->
-        resId = R.string.cloudinary_success
+        CloudinaryConst.UPLOAD_SUCCESS
+      else -> CloudinaryConst.UPLOAD_DEFAULT
     }
-    return getString(resId)
   }
 
   private fun doCheckIn() {
@@ -170,9 +171,7 @@ class ImageFragment : Fragment() {
   }
 
   private fun observeLocation() {
-    locationViewModel.getLocationData().observe(this, androidx.lifecycle.Observer {
-      //      location.latitude = it.latitude
-//      location.longitude = it.longitude
+    locationViewModel.getLocationData().observeOnce(this, androidx.lifecycle.Observer {
       location = it
       Log.d(TAG, "presence image $location")
     })
@@ -191,7 +190,7 @@ class ImageFragment : Fragment() {
             var presenceSucces = result as DataResponse
             Log.d(TAG, "checkin success $presenceSucces")
             SweetAlertDialog(activity, SweetAlertDialog.SUCCESS_TYPE)
-              .setTitleText("Check In!")
+              .setTitleText(AlertConst.CHECKIN)
               .setContentText(presenceSucces.message)
               .show()
           }
@@ -201,14 +200,14 @@ class ImageFragment : Fragment() {
             var presenceFailed = result as DataResponse
             Log.d(TAG, "checkin failed $presenceFailed")
             SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE)
-              .setTitleText("Failed!")
+              .setTitleText(AlertConst.FAILED)
               .setContentText(presenceFailed.message)
               .show()
           }
         }
         BaseResponse.Status.ERROR -> {
           SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText("Error!")
+            .setTitleText(AlertConst.ERROR)
             .setContentText(it.data.toString())
             .show()
         }

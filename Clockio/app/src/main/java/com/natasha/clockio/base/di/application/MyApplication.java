@@ -4,9 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import com.cloudinary.android.MediaManager;
+import com.natasha.clockio.base.constant.UrlConst;
 import com.natasha.clockio.base.di.component.ApplicationComponent;
 import com.natasha.clockio.base.di.component.DaggerApplicationComponent;
-import com.natasha.clockio.base.di.constant.UrlConstantKt;
+
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
@@ -27,7 +28,7 @@ public class MyApplication extends Application implements HasAndroidInjector {
 
         applicationComponent = DaggerApplicationComponent.builder()
                 .contextModule(this)
-                .retrofitModule(UrlConstantKt.BASE_URL)
+                .retrofitModule(UrlConst.BASE_URL)
                 .build();
 
         MediaManager.init(this);
