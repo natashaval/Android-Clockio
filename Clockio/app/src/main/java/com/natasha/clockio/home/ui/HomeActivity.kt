@@ -13,12 +13,7 @@ import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.natasha.clockio.MainActivity
-import com.natasha.clockio.home.ui.viewmodel.HomeViewModel
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.PresenceActivity
 import dagger.android.AndroidInjection
@@ -74,6 +69,14 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.content, fragment, fragment::class.java.simpleName)
+            .commit()
+    }
+
+    fun addFragmentBackstack(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.content, fragment, fragment::class.java.simpleName)
+            .addToBackStack(null)
             .commit()
     }
 

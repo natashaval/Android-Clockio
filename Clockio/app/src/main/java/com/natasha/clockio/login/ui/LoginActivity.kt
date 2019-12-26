@@ -21,6 +21,7 @@ import com.natasha.clockio.base.constant.UrlConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.base.util.RetrofitInterceptor
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.ui.HomeActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -62,13 +63,13 @@ class LoginActivity : DaggerAppCompatActivity() {
     })
 
 
-    loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+    loginViewModel.loginResult.observeOnce(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
       var isLogin = false
       loading.visibility = View.GONE
 
       Log.d(TAG, "login is called from login result $loginResult")
-      Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
+      Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data?.accessToken}")
       loginResult.data?.let { token ->
         interceptor.setToken(token.accessToken)
         val editor = sharedPref.edit()

@@ -82,4 +82,7 @@
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
 
+<!--    Notification-->
+    <string name="notif_no_result">No Results</string>
+
 </resources>

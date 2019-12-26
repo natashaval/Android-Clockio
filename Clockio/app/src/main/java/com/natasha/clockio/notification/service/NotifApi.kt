@@ -1,12 +1,14 @@
 package com.natasha.clockio.notification.service
 
+import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.notification.entity.Notif
+import retrofit2.Call
 import retrofit2.http.*
 
 interface NotifApi {
   @GET("/api/notification")
-  fun getAllNotification(@Query("page") page: Long,
-      @Query("size") size: Long)
+  fun getAllNotification(@Query("page") page: Int,
+      @Query("size") size: Int): Call<PageResponse<Notif>>
 
   @GET("/api/notification/{id}")
   fun findById(@Path("id") id: Long)
