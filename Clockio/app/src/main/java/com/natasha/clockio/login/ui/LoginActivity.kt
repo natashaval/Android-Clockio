@@ -46,6 +46,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     AndroidInjection.inject(this)
 
     interceptor.setBasic(UrlConst.CLIENT_ID, UrlConst.CLIENT_SECRET)
+    clearSharedPref()
     loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -80,8 +81,6 @@ class LoginActivity : DaggerAppCompatActivity() {
       }
       setResult(Activity.RESULT_OK)
 
-      //Complete and destroy login activity once successful
-      finish()
       if (isLogin) {
         var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
         Log.d(TAG, "isLogin getProfile triggered $tkn")
@@ -89,6 +88,9 @@ class LoginActivity : DaggerAppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
       }
+
+      //Complete and destroy login activity once successful
+      finish()
     })
 
     loginViewModel.loginFailed.observe(this@LoginActivity, Observer {

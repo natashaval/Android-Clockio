@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".notification.ui.NotifDetailsFragment">
+
+    <TextView
+        android:id="@+id/notifTitleDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:hint="@string/notif_title_hint"
+        android:layout_marginHorizontal="@dimen/input_margin"
+        android:layout_marginTop="@dimen/input_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notifPostTimeDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/input_margin"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintTop_toBottomOf="@id/notifTitleDetails"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="@string/notif_post_time" />
+
+    <include
+        android:id="@+id/notifTimeDetails"
+        layout="@layout/item_start_end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notifPostTimeDetails" />
+
+    <TextView
+        android:id="@+id/notifLocationLabelDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/input_margin"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:textStyle="bold"
+        android:hint="@string/notif_location_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notifTimeDetails" />
+
+    <TextView
+        android:id="@+id/notifLocationDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/input_margin"
+        app:layout_constraintTop_toBottomOf="@id/notifTimeDetails"
+        app:layout_constraintStart_toEndOf="@id/notifLocationLabelDetails"
+        android:hint="@string/notif_location_hint" />
+
+    <TextView
+        android:id="@+id/notifContentDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        app:layout_constraintTop_toBottomOf="@id/notifLocationLabelDetails"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="@string/notif_content_hint" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

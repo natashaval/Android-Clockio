@@ -77,12 +77,16 @@
     <!--    Activity-->
     <string name="activity_title">Activity Today</string>
     <string name="activity_create_title">What have you done today?</string>
-    <string name="activity_title_hint">Title</string>
+    <string name="activity_title_hint">Title</string>"
     <string name="activity_content_hint">Content</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
 
-<!--    Notification-->
+    <!--    Notification-->
     <string name="notif_no_result">No Results</string>
+    <string name="notif_title_hint">Notif Title</string>
+    <string name="notif_content_hint">Notif Contents</string>
+    <string name="notif_location_hint">Location: </string>
+    <string name="notif_post_time">Post Time %s by %s</string>
 
 </resources>

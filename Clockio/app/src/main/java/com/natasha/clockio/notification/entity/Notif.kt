@@ -14,6 +14,7 @@ data class Notif(
     val content: String,
     val latitude: Double?,
     val longitude: Double?,
+    val location: String?,
     val startDate: Date?,
     val endDate: Date?,
     val isOpen: Boolean = false,
