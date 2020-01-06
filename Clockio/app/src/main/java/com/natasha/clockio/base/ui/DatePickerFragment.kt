@@ -16,14 +16,16 @@ class DatePickerFragment constructor(editText: EditText): DialogFragment(), Date
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val year = myCalendar.get(Calendar.YEAR)
-        val month = myCalendar.get(Calendar.MONTH) + 1
+        val month = myCalendar.get(Calendar.MONTH)
         val day = myCalendar.get(Calendar.DAY_OF_MONTH)
         Log.d(TAG, "calendar on focus change $day-$month-$year")
         return DatePickerDialog(activity!!, this, year, month, day)
     }
 
-    override fun onDateSet(p0: DatePicker?, yyyy: Int, mm: Int, dd: Int) {
-        Log.d(TAG, "datepicker $dd-$mm-$yyyy")
+    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val yyyy = year.toString()
+        val mm = String.format("%02d", month+1)
+        val dd = String.format("%02d", dayOfMonth)
         this.editText.setText("$dd-$mm-$yyyy")
     }
 }

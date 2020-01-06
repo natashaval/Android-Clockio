@@ -7,15 +7,21 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.natasha.clockio.R
-import com.natasha.clockio.base.ui.DatePickerFragment
-import com.natasha.clockio.base.ui.TimePickerFragment
+import com.natasha.clockio.base.model.BaseResponse
+import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.ui.*
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
+import com.natasha.clockio.notification.entity.NotifRequest
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_notif_add.*
 import kotlinx.android.synthetic.main.item_start_end_input.*
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class NotifAddFragment : Fragment() {
@@ -42,6 +48,7 @@ class NotifAddFragment : Fragment() {
     viewModel = ViewModelProvider(this, factory).get(NotifViewModel::class.java)
     setHasOptionsMenu(true)
     setDate()
+    observeNotifAdd()
   }
 
   override fun onAttach(context: Context) {
@@ -69,6 +76,7 @@ class NotifAddFragment : Fragment() {
     when(item.itemId) {
       R.id.action_save -> {
         Log.d(TAG, "notif saved clicked!")
+        createNotif()
         return true
       }
     }
@@ -103,5 +111,41 @@ class NotifAddFragment : Fragment() {
     val ft = fragmentManager!!.beginTransaction()
     val timeFragment = TimePickerFragment(editText)
     timeFragment.show(ft, "TimePicker")
+  }
+
+  private fun createNotif() {
+    val title = notifTitleInput.text.toString()
+    val content = notifContentInput.text.toString()
+    val dateFormatter = SimpleDateFormat("dd-MM-yyyy HH:mm")
+    val startDate = dateFormatter.parse(startDateInput.text.toString() + " " + startTimeInput.text.toString())
+    val endDate = dateFormatter.parse(endDateInput.text.toString() + " " + endTimeInput.text.toString())
+    val request = NotifRequest(title, content, startDate, endDate, 0.0, 0.0)
+    Log.d(TAG, "create notif $request")
+    viewModel.createNotif(request)
+  }
+
+  private fun observeNotifAdd() {
+    viewModel.notifAddResult.observe(this, Observer {
+      when(it.status) {
+        BaseResponse.Status.SUCCESS -> {
+          it.data?.let {result ->
+            Log.d(TAG, "create notif success $result")
+            val response = result as DataResponse
+            alertSuccess(activity!!,response.message)
+          }
+        }
+        BaseResponse.Status.FAILED -> {
+          it.data?.let {result->
+            Log.d(TAG, "create notif failed $result")
+            val response = result as DataResponse
+            alertFailed(activity!!,response.message)
+          }
+        }
+        BaseResponse.Status.ERROR -> {
+          Log.d(TAG, "create notif error ${it.data}")
+          alertError(activity!!, it.data.toString())
+        }
+      }
+    })
   }
 }

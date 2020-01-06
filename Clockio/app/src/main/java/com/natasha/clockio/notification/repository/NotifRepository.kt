@@ -2,9 +2,12 @@ package com.natasha.clockio.notification.repository
 
 import android.util.Log
 import androidx.paging.LivePagedListBuilder
+import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.PageResponse
+import com.natasha.clockio.base.util.ResponseUtils
 import com.natasha.clockio.notification.dao.NotifLocalCache
 import com.natasha.clockio.notification.entity.Notif
+import com.natasha.clockio.notification.entity.NotifRequest
 import com.natasha.clockio.notification.entity.NotifResult
 import com.natasha.clockio.notification.service.NotifApi
 import retrofit2.Call
@@ -33,5 +36,10 @@ class NotifRepository @Inject constructor(
 
     companion object {
         const val DATABASE_PAGE_SIZE = 2
+    }
+
+    suspend fun createNotif(req: NotifRequest): BaseResponse<Any> {
+        val response = networkSource.createNotif(req)
+        return ResponseUtils.convertResponse(response)
     }
 }

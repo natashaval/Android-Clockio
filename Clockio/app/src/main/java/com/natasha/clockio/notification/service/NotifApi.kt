@@ -1,8 +1,11 @@
 package com.natasha.clockio.notification.service
 
+import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.notification.entity.Notif
+import com.natasha.clockio.notification.entity.NotifRequest
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface NotifApi {
@@ -14,7 +17,7 @@ interface NotifApi {
   fun findById(@Path("id") id: Long)
 
   @POST("/api/notification")
-  fun createNotif(@Body notif: Notif)
+  suspend fun createNotif(@Body notif: NotifRequest) : Response<DataResponse>
 
   @PUT("/api/notification/{id}")
   fun updateNotif(@Path("id") id: Long, @Body notif: Notif)

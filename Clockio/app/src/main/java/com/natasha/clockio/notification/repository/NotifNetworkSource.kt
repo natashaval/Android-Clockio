@@ -1,8 +1,10 @@
 package com.natasha.clockio.notification.repository
 
 import android.util.Log
+import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.notification.entity.Notif
+import com.natasha.clockio.notification.entity.NotifRequest
 import com.natasha.clockio.notification.service.NotifApi
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,5 +39,9 @@ class NotifNetworkSource @Inject constructor(private val notifApi: NotifApi) {
             }
 
         })
+    }
+
+    suspend fun createNotif(notif: NotifRequest): Response<DataResponse> {
+        return notifApi.createNotif(notif)
     }
 }
