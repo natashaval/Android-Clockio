@@ -36,6 +36,11 @@ class NotifViewModel @Inject constructor(private val notifRepository: NotifRepos
       Log.d(TAG, "notif add view model $response")
       _notifAddResult.value = response
     }
+  }
 
+  fun deleteNotif(notif: Notif) {
+    viewModelScope.launch {
+      notifRepository.deleteNotif(notif)
+    }
   }
 }

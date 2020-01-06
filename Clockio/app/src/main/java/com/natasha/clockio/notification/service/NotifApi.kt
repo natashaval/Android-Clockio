@@ -23,5 +23,5 @@ interface NotifApi {
   fun updateNotif(@Path("id") id: Long, @Body notif: Notif)
 
   @DELETE("/api/notification/{id}")
-  fun deleteNotif(@Path("id") id:Long)
+  suspend fun deleteNotif(@Path("id") id:Long) : Response<DataResponse>
 }

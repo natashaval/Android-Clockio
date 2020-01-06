@@ -2,6 +2,7 @@ package com.natasha.clockio.notification.repository
 
 import android.util.Log
 import androidx.paging.LivePagedListBuilder
+import com.google.gson.Gson
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.base.util.ResponseUtils
@@ -17,7 +18,9 @@ import javax.inject.Inject
 
 class NotifRepository @Inject constructor(
     private val networkSource: NotifNetworkSource,
-    private val localCache: NotifLocalCache) {
+    private val localCache: NotifLocalCache,
+    private val gson: Gson
+) {
 
     private val TAG: String = NotifRepository::class.java.simpleName
 
@@ -41,5 +44,13 @@ class NotifRepository @Inject constructor(
     suspend fun createNotif(req: NotifRequest): BaseResponse<Any> {
         val response = networkSource.createNotif(req)
         return ResponseUtils.convertResponse(response)
+    }
+
+    suspend fun deleteNotif(notif: Notif) {
+        localCache.delete(notif) {
+            Log.d(TAG, "repository local delete")
+        }
+        val response = networkSource.deleteNotif(notif.id)
+        Log.d(TAG, "repository network delete $response")
     }
 }

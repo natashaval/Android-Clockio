@@ -18,6 +18,12 @@ class NotifAdapter: PagedListAdapter<Notif, RecyclerView.ViewHolder>(REPO_COMPAR
         }
     }
 
+    fun removeItem(position: Int) {
+        notifyItemRemoved(position)
+    }
+
+    fun getNotif(position: Int) = getItem(position)
+
     companion object {
         private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<Notif>() {
             override fun areItemsTheSame(oldItem: Notif, newItem: Notif): Boolean =

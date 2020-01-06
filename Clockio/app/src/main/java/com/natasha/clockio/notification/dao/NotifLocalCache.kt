@@ -11,7 +11,7 @@ class NotifLocalCache(
 ) {
     private val TAG: String = NotifLocalCache::class.java.simpleName
 
-    fun insert(notifs: List<Notif>, insertFinished: () -> Unit) {
+    fun insertAll(notifs: List<Notif>, insertFinished: () -> Unit) {
         ioExecutor.execute {
             Log.d(TAG, "inserting notif in local ${notifs.size}")
             notifDao.insertAll(notifs)
@@ -21,5 +21,21 @@ class NotifLocalCache(
 
     fun getAll(): DataSource.Factory<Int, Notif> {
         return notifDao.findAllNotif()
+    }
+
+    fun delete(notif: Notif, deleteFinished: () -> Unit) {
+        ioExecutor.execute {
+            Log.d(TAG, "delete notif in local")
+            notifDao.delete(notif)
+            deleteFinished()
+        }
+    }
+
+    fun insert(notif: Notif, insertFinished: () -> Unit) {
+        ioExecutor.execute {
+            Log.d(TAG, "insert notif $notif")
+            notifDao.insert(notif)
+            insertFinished()
+        }
     }
 }

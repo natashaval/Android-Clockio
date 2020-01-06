@@ -1,6 +1,8 @@
 package com.natasha.clockio.notification.ui
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 
 import com.natasha.clockio.R
 import com.natasha.clockio.home.ui.HomeActivity
@@ -39,11 +43,13 @@ class NotifFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(NotifViewModel::class.java)
 
-//    val decoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-//    notifRecyclerView.addItemDecoration(decoration)
+    //    val decoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
+    //    notifRecyclerView.addItemDecoration(decoration)
 
     observeAdapter()
     addNotifClick()
+    swipeDelete()
+    swipeRefresh()
   }
 
   override fun onAttach(context: Context) {
@@ -60,7 +66,7 @@ class NotifFragment : Fragment() {
       adapter.submitList(it)
     })
     viewModel.networkErrors.observe(this, Observer {
-      Toast.makeText(activity, "Whoops Notif Network Errors", Toast.LENGTH_SHORT).show()
+      Toast.makeText(activity, "Whoops Notif Errors", Toast.LENGTH_SHORT).show()
     })
   }
 
@@ -78,10 +84,36 @@ class NotifFragment : Fragment() {
     notifAddButton.setOnClickListener {
       Log.d(TAG, "FAB notif clicked!")
       fragmentManager?.beginTransaction()?.
-        replace(R.id.content, NotifAddFragment.newInstance())?.
-        addToBackStack(null)?.
-        commit()
+          replace(R.id.content, NotifAddFragment.newInstance())?.
+          addToBackStack(null)?.
+          commit()
     }
+  }
+
+  private fun swipeRefresh() {
+    notifSwipeRefresh.setOnRefreshListener {
+      notifSwipeRefresh.isRefreshing = false
+    }
+  }
+
+  private fun swipeDelete() {
+    //  https://stackoverflow.com/questions/49827752/how-to-implement-drag-and-drop-and-swipe-to-delete-in-recyclerview
+//    https://demonuts.com/kotlin-recyclerview-swipe-to-delete/
+
+    val swipeHandler = object: SwipeToDeleteCallback(activity!!) {
+      override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val deleteNotif = adapter.getNotif(viewHolder.adapterPosition)
+        Log.d(TAG, "to be deleted $deleteNotif")
+        deleteNotif?.let {
+          viewModel.deleteNotif(it)
+          adapter.removeItem(viewHolder.adapterPosition)
+          Toast.makeText(activity, "Notif Deleted!", Toast.LENGTH_SHORT).show()
+        }
+      }
+    }
+
+    val itemTouchHelper = ItemTouchHelper(swipeHandler)
+    itemTouchHelper.attachToRecyclerView(notifRecyclerView)
   }
 
 }

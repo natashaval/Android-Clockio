@@ -44,4 +44,8 @@ class NotifNetworkSource @Inject constructor(private val notifApi: NotifApi) {
     suspend fun createNotif(notif: NotifRequest): Response<DataResponse> {
         return notifApi.createNotif(notif)
     }
+
+    suspend fun deleteNotif(id: Long): Response<DataResponse> {
+        return notifApi.deleteNotif(id)
+    }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.natasha.clockio.notification.dao.NotifLocalCache
 import com.natasha.clockio.notification.entity.Notif
-import javax.inject.Inject
 
 class NotifBoundaryCallback(
     private val networkSource: NotifNetworkSource,
@@ -36,7 +35,7 @@ class NotifBoundaryCallback(
         if (isRequestInProgress) return
         isRequestInProgress = true
         networkSource.getAll(lastRequestedPage, NETWORK_PAGE_SIZE, { notifs ->
-            localCache.insert(notifs) {
+            localCache.insertAll(notifs) {
                 lastRequestedPage++
                 isRequestInProgress = false
             }
