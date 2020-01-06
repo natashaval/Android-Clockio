@@ -13,6 +13,8 @@ import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.PresenceActivity
@@ -32,6 +34,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
         val fragment = ActivityFragment.newInstance()
         addFragment(fragment)
         addSpaceNavigation(savedInstanceState)
+        firebaseInstance()
     }
 
     override fun onBackPressed() {
@@ -129,6 +132,18 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     override fun onClose() {
         Log.d(TAG, "space onClose")
         spaceNavigation.visibility = View.VISIBLE
+    }
+
+    private fun firebaseInstance() {
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
+                val token = task.result?.token
+                Log.d(TAG, "firebase token $token")
+            })
     }
 
 }

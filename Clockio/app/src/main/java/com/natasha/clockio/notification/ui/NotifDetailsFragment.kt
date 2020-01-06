@@ -13,7 +13,9 @@ import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.entity.Notif
 import kotlinx.android.synthetic.main.fragment_notif_details.*
+import kotlinx.android.synthetic.main.item_start_end_date.*
 import kotlinx.android.synthetic.main.item_start_end_time.*
+import java.text.SimpleDateFormat
 
 class NotifDetailsFragment : Fragment() {
 
@@ -67,10 +69,12 @@ class NotifDetailsFragment : Fragment() {
   private fun setDetail(notif: Notif) {
     notifTitleDetails.text = notif.title
     notifContentDetails.text = notif.content
-    startDetails.text = notif.startDate.toString()
-    endDetails.text = notif.endDate.toString()
+    val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+    startDateDetails.text = dateFormat.format(notif.startDate)
+    endDateDetails.text = dateFormat.format(notif.endDate)
     notifLocationDetails.text = notif.location
-    notifPostTimeDetails.text = resources.getString(R.string.notif_post_time, notif.updatedAt, notif.updatedBy)
+    val postFormat = SimpleDateFormat("d MMM yyyy")
+    notifPostTimeDetails.text = resources.getString(R.string.notif_post_time, postFormat.format(notif.updatedAt), notif.updatedBy)
   }
 
 }

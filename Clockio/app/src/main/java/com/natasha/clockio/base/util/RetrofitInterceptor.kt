@@ -42,13 +42,13 @@ class RetrofitInterceptor @Inject constructor(private val sharedPref: SharedPref
                 .build()
             Log.d(TAG, "retrofit add header basic $basic")
         } else if (!TextUtils.isEmpty(existToken)) {
-            Log.d(TAG, "retrofit add header token from Shared Pref")
+            Log.d(TAG, "retrofit add header token from Shared Pref $existToken")
             request = request.newBuilder()
                 .addHeader("Authorization", "Bearer $existToken")
                 .addHeader("Content-Type", "application/json")
                 .build()
         } else if (!TextUtils.isEmpty(token)) {
-            Log.d(TAG, "retrofit add header token from Login")
+            Log.d(TAG, "retrofit add header token from Login $token")
             request = request.newBuilder()
                 .addHeader("Authorization", "Bearer $token")
                 .addHeader("Content-Type", "application/json")

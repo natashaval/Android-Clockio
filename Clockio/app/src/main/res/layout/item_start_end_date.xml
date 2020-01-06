@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:text="@string/notif_start_hint" />
+
+    <TextView
+        android:id="@+id/startDateDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/notif_start_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:text="@string/notif_end_hint" />
+
+    <TextView
+        android:id="@+id/endDateDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/notif_end_hint"/>
+</LinearLayout>

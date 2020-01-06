@@ -29,7 +29,7 @@
 
     <include
         android:id="@+id/notifTimeDetails"
-        layout="@layout/item_start_end_time"
+        layout="@layout/item_start_end_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"

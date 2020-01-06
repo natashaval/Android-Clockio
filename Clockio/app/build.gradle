@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -55,6 +56,10 @@ ext {
     cloudinary_android = "1.26.0"
     circle_image_view = "3.0.1"
     sweet_alert = "1.6.2"
+
+    // Google Firebase
+    firebase_analytics = "17.2.1"
+    firebase_messaging = "20.1.0"
 }
 
 dependencies {
@@ -133,4 +138,8 @@ dependencies {
     implementation "androidx.preference:preference:$preference"
 
     implementation "org.apache.commons:commons-lang3:$commons_lang3"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-analytics:$firebase_analytics"
+    implementation "com.google.firebase:firebase-messaging:$firebase_messaging"
 }

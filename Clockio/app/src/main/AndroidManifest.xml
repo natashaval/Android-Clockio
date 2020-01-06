@@ -45,6 +45,12 @@
         <activity android:name=".MainActivity">
         </activity>
 
+        <service android:name=".notification.firebase.MyFirebaseMessage">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://@jengsusy" />

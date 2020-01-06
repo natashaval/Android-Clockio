@@ -87,6 +87,8 @@
     <string name="notif_title_hint">Notif Title</string>
     <string name="notif_content_hint">Notif Contents</string>
     <string name="notif_location_hint">Location: </string>
-    <string name="notif_post_time">Post Time %s by %s</string>
+    <string name="notif_start_hint">Start Date</string>
+    <string name="notif_end_hint">End Date</string>
+    <string name="notif_post_time">Posted: %s by %s</string>
 
 </resources>
