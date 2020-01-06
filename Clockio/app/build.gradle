@@ -136,7 +136,6 @@ dependencies {
     implementation "com.github.f0ris.sweetalert:library:$sweet_alert"
 
     implementation "androidx.preference:preference:$preference"
-
     implementation "org.apache.commons:commons-lang3:$commons_lang3"
 
     // Firebase

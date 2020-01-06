@@ -17,6 +17,7 @@ import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.ui.TimePickerFragment
 import com.natasha.clockio.base.ui.alertError
 import com.natasha.clockio.base.ui.alertFailed
 import com.natasha.clockio.base.ui.alertSuccess
@@ -101,7 +102,8 @@ class ActivityAddFragment : Fragment() {
       if (tp == null) {
         val ft = fragmentManager!!.beginTransaction()
         val startTime: DialogFragment = TimePickerFragment(
-            activityStartInput)
+            activityStartInput
+        )
         startTime.show(ft, "TimePicker")
       }
     }
@@ -111,7 +113,8 @@ class ActivityAddFragment : Fragment() {
       if (tp == null) {
         val ft = fragmentManager!!.beginTransaction()
         val endTime: DialogFragment = TimePickerFragment(
-            activityEndInput)
+            activityEndInput
+        )
         endTime.show(ft, "TimePicker")
       }
     }

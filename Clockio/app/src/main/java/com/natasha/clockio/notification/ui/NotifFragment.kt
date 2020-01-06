@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 
 import com.natasha.clockio.R
 import com.natasha.clockio.home.ui.HomeActivity
@@ -44,6 +43,7 @@ class NotifFragment : Fragment() {
 //    notifRecyclerView.addItemDecoration(decoration)
 
     observeAdapter()
+    addNotifClick()
   }
 
   override fun onAttach(context: Context) {
@@ -71,6 +71,16 @@ class NotifFragment : Fragment() {
     } else {
       notifNoResult.visibility = View.GONE
       notifRecyclerView.visibility = View.VISIBLE
+    }
+  }
+
+  private fun addNotifClick() {
+    notifAddButton.setOnClickListener {
+      Log.d(TAG, "FAB notif clicked!")
+      fragmentManager?.beginTransaction()?.
+        replace(R.id.content, NotifAddFragment.newInstance())?.
+        addToBackStack(null)?.
+        commit()
     }
   }
 

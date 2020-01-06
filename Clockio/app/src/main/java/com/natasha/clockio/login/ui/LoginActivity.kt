@@ -172,7 +172,8 @@ class LoginActivity : DaggerAppCompatActivity() {
   }
 
   private fun clearSharedPref() {
-    sharedPref.edit().clear().commit()
+    sharedPref.edit().clear().apply()
+    Log.d(TAG, "sharedPref cleared")
   }
 }
 

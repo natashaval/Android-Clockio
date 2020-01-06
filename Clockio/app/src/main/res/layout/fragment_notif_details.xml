@@ -37,31 +37,11 @@
         app:layout_constraintTop_toBottomOf="@id/notifPostTimeDetails" />
 
     <TextView
-        android:id="@+id/notifLocationLabelDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/input_margin"
-        style="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:textStyle="bold"
-        android:hint="@string/notif_location_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notifTimeDetails" />
-
-    <TextView
-        android:id="@+id/notifLocationDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/input_margin"
-        app:layout_constraintTop_toBottomOf="@id/notifTimeDetails"
-        app:layout_constraintStart_toEndOf="@id/notifLocationLabelDetails"
-        android:hint="@string/notif_location_hint" />
-
-    <TextView
         android:id="@+id/notifContentDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"
-        app:layout_constraintTop_toBottomOf="@id/notifLocationLabelDetails"
+        app:layout_constraintTop_toBottomOf="@id/notifTimeDetails"
         app:layout_constraintStart_toStartOf="parent"
         android:hint="@string/notif_content_hint" />
 

@@ -13,6 +13,7 @@ import com.natasha.clockio.base.di.module.viewmodel.ProfileViewModelModule
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.ui.fragment.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
+import com.natasha.clockio.notification.ui.NotifAddFragment
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
 import com.natasha.clockio.presence.ui.fragment.LockFragment
@@ -55,4 +56,9 @@ abstract class BuilderFragmentModule {
   NotifViewModelModule::class, NotifModule::class])
   @ActivityScope
   abstract fun notifFragment(): NotifFragment
+
+  @ContributesAndroidInjector(modules = [
+    NotifViewModelModule::class, NotifModule::class])
+  @ActivityScope
+  abstract fun notifAddFragment(): NotifAddFragment
 }

@@ -52,7 +52,8 @@ class MyFirebaseMessage: FirebaseMessagingService() {
             .setContentText(notifBody)
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_clockio_24px)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
         notificationManager.notify(1000, notificationBuilder.build())

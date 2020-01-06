@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         style="@style/TextAppearance.MaterialComponents.Overline"
         android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:text="@string/notif_start_hint" />
 
@@ -21,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textSize="14sp"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:text="@string/notif_end_hint" />

@@ -72,7 +72,6 @@ class NotifDetailsFragment : Fragment() {
     val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
     startDateDetails.text = dateFormat.format(notif.startDate)
     endDateDetails.text = dateFormat.format(notif.endDate)
-    notifLocationDetails.text = notif.location
     val postFormat = SimpleDateFormat("d MMM yyyy")
     notifPostTimeDetails.text = resources.getString(R.string.notif_post_time, postFormat.format(notif.updatedAt), notif.updatedBy)
   }
