@@ -26,7 +26,8 @@ class MyFirebaseMessage: FirebaseMessagingService() {
     override fun onMessageReceived(remote: RemoteMessage) {
         Log.d(TAG, "From: ${remote.from}")
         val notifBody = remote.notification?.body
-        Log.d(TAG, "Notif Msg Body: $notifBody")
+        val notifTitle = remote.notification?.title
+        Log.d(TAG, "Notif Title: $notifTitle Msg Body: $notifBody")
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val NOTIFICATION_CHANNEL_ID = "notif_channel"
@@ -48,7 +49,7 @@ class MyFirebaseMessage: FirebaseMessagingService() {
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
         notificationBuilder
             .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-            .setContentTitle(getString(R.string.app_name))
+            .setContentTitle(notifTitle)
             .setContentText(notifBody)
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())

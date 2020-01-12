@@ -10,7 +10,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 @Module(includes = [
-    SharedPrefModule::class, DatabaseModule::class])
+    SharedPrefModule::class, DatabaseModule::class, FirebaseModule::class])
 class ContextModule {
 
     @Provides
