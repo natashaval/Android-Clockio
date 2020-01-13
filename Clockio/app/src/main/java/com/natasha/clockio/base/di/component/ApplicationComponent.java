@@ -5,6 +5,7 @@ import com.natasha.clockio.base.di.module.ApiModule;
 import com.natasha.clockio.base.di.module.BuilderActivityModule;
 import com.natasha.clockio.base.di.module.ContextModule;
 import com.natasha.clockio.base.di.module.ViewModelFactoryModule;
+import com.natasha.clockio.base.di.module.worker.WorkerFactoryModule;
 import com.natasha.clockio.base.di.scope.ApplicationScope;
 import dagger.BindsInstance;
 import dagger.Component;
@@ -18,6 +19,7 @@ import javax.inject.Named;
         AndroidInjectionModule.class,
         ContextModule.class,
         ViewModelFactoryModule.class,
+        WorkerFactoryModule.class,
         BuilderActivityModule.class,
         ApiModule.class
 })

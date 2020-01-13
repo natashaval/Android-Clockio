@@ -5,6 +5,7 @@ import com.natasha.clockio.base.service.TestApi
 import com.natasha.clockio.base.util.LiveDataCallAdapterFactory
 import com.natasha.clockio.home.service.ActivityApi
 import com.natasha.clockio.home.service.EmployeeApi
+import com.natasha.clockio.location.service.LocationApi
 import com.natasha.clockio.notification.service.NotifApi
 import dagger.Module
 import dagger.Provides
@@ -31,5 +32,10 @@ class ApiModule {
     @Provides
     fun provideActivityApi(retrofit: Retrofit): ActivityApi {
         return retrofit.create(ActivityApi::class.java)
+    }
+
+    @Provides
+    fun provideLocationApi(retrofit: Retrofit): LocationApi {
+        return retrofit.create(LocationApi::class.java)
     }
 }

@@ -51,6 +51,12 @@
             </intent-filter>
         </service>
 
+        <provider
+            android:authorities="com.natasha.clockio.workmanager-init"
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:enabled="false"
+            android:exported="false" />
+
         <meta-data
             android:name="CLOUDINARY_URL"
             android:value="cloudinary://@jengsusy" />

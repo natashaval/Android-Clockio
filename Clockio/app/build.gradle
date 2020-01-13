@@ -60,6 +60,7 @@ ext {
     // Google Firebase
     firebase_analytics = "17.2.1"
     firebase_messaging = "20.1.0"
+    work_runtime = "2.2.0"
 }
 
 dependencies {
@@ -141,4 +142,8 @@ dependencies {
     // Firebase
     implementation "com.google.firebase:firebase-analytics:$firebase_analytics"
     implementation "com.google.firebase:firebase-messaging:$firebase_messaging"
+
+    // Work Manager
+    implementation "androidx.work:work-runtime-ktx:$work_runtime"
+
 }
