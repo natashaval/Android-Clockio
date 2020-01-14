@@ -52,8 +52,8 @@
         </service>
 
         <provider
-            android:authorities="com.natasha.clockio.workmanager-init"
             android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="com.natasha.clockio.workmanager-init"
             android:enabled="false"
             android:exported="false" />
 

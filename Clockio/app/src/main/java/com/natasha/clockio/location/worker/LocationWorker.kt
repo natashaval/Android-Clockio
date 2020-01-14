@@ -6,12 +6,14 @@ import androidx.work.*
 import com.natasha.clockio.base.di.application.MyApplication
 import com.natasha.clockio.location.entity.Location
 import com.natasha.clockio.location.service.LocationApi
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LocationWorker(
-    context: Context,
-    private val params: WorkerParameters,
+class LocationWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted private val params: WorkerParameters,
     private val locationApi: LocationApi):
     Worker(context, params){
 
@@ -53,12 +55,16 @@ class LocationWorker(
   }
   //    https://android.jlelse.eu/injecting-into-workers-android-workmanager-and-dagger-948193c17684
   //    https://proandroiddev.com/dagger-2-setup-with-workmanager-a-complete-step-by-step-guild-bb9f474bde37
-  class Factory @Inject constructor(
+  /*class Factory @Inject constructor(
       val locationApi: LocationApi
   ): ChildWorkerFactory {
     override fun create(appContext: Context, params: WorkerParameters): Worker {
       return LocationWorker(appContext, params, locationApi)
     }
-  }
+  }*/
+
+//    https://medium.com/@neonankiti/how-to-use-dagger2-withworkmanager-bae3a5fb7dd3
+    @AssistedInject.Factory
+    interface Factory: ChildWorkerFactory
 
 }

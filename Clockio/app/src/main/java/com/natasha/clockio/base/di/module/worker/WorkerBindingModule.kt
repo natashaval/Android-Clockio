@@ -12,10 +12,10 @@ import kotlin.reflect.KClass
 
 //https://proandroiddev.com/dagger-2-setup-with-workmanager-a-complete-step-by-step-guild-bb9f474bde37
 @Module
-abstract class LocationWorkerModule {
+interface WorkerBindingModule {
   @Binds
   @IntoMap
   @WorkerKey(LocationWorker::class)
-  abstract fun bindLocationWorker(worker: LocationWorker.Factory): ChildWorkerFactory
+  fun bindLocationWorker(worker: LocationWorker.Factory): ChildWorkerFactory
 
 }

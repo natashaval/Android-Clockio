@@ -39,7 +39,9 @@ public class MyApplication extends Application implements HasAndroidInjector {
                 .build();
 
         MediaManager.init(this);
-//        WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(mWorkerFactory).build());
+
+        DaggerWorkerFactory factory = applicationComponent.factory();
+        WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(factory).build());
 
         applicationComponent.injectApplication(this);
         Log.d(TAG, "application component init on create");

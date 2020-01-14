@@ -9,8 +9,9 @@ import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider
 
+//https://medium.com/@neonankiti/how-to-use-dagger2-withworkmanager-bae3a5fb7dd3
 class DaggerWorkerFactory @Inject constructor(
-    private val workerFactories: Map<Class<out Worker>, @JvmSuppressWildcards Provider<ChildWorkerFactory>>
+    private val workerFactories: Map<Class<out ListenableWorker>, @JvmSuppressWildcards Provider<ChildWorkerFactory>>
 ): WorkerFactory() {
   override fun createWorker(appContext: Context, workerClassName: String,
       workerParameters: WorkerParameters): ListenableWorker? {
