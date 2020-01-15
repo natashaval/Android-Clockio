@@ -63,8 +63,6 @@ ext {
 
     // WorkManager
     work_runtime = "2.2.0"
-//    assisted_inject = "0.5.0"
-    assisted_inject = "0.3.2"
 }
 
 dependencies {
@@ -149,7 +147,4 @@ dependencies {
 
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:$work_runtime"
-    compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:$assisted_inject"
-    kapt "com.squareup.inject:assisted-inject-annotations-dagger2:$assisted_inject"
-
 }

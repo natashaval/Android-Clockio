@@ -26,7 +26,7 @@ public class MyApplication extends Application implements HasAndroidInjector {
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
 //    @Inject
-//    DaggerWorkerFactory mWorkerFactory;
+//    DaggerWorkerFactory factory;
 
     @Override
     public void onCreate() {
