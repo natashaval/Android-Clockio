@@ -1,10 +1,10 @@
-package com.natasha.clockio.location.worker
+package com.natasha.clockio.base.di.factory
 
 import android.content.Context
 import androidx.work.ListenableWorker
-import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.natasha.clockio.location.worker.ChildWorkerFactory
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider

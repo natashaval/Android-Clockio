@@ -1,14 +1,11 @@
-package com.natasha.clockio.base.di.viewmodel
+package com.natasha.clockio.base.di.factory
 
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-import com.natasha.clockio.base.di.scope.ApplicationScope
-
 import javax.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
 
 //https://android.jlelse.eu/android-mvvm-with-dagger-2-retrofit-rxjava-architecture-components-6f5da1a75135
 //https://proandroiddev.com/android-architecture-starring-kotlin-coroutines-jetpack-mvvm-room-paging-retrofit-and-dagger-7749b2bae5f7

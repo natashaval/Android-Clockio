@@ -3,7 +3,8 @@ package com.natasha.clockio.base.di.module.worker
 import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Module
 
-@Module(includes = [AssistedInject_AppAssistedInjectModule::class])
+//@Module(includes = [AssistedInject_AppAssistedInjectModule::class])
+@Module
 @AssistedModule
 interface AppAssistedInjectModule
 

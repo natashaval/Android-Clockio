@@ -1,10 +1,12 @@
 package com.natasha.clockio.base.di.module.worker
 
 import androidx.work.WorkerFactory
-import com.natasha.clockio.location.worker.DaggerWorkerFactory
+import com.natasha.clockio.base.di.factory.DaggerWorkerFactory
 import dagger.Binds
 import dagger.Module
-//
-//interface SampleComponent {
-//  fun factory(): DaggerWorkerFactory
-//}
+
+@Module
+abstract class WorkerFactoryModule {
+    @Binds
+    abstract fun bindDaggerWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
+}

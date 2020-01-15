@@ -8,7 +8,8 @@ import com.natasha.clockio.base.di.module.ViewModelFactoryModule
 import com.natasha.clockio.base.di.module.worker.AppAssistedInjectModule
 import com.natasha.clockio.base.di.module.worker.WorkerBindingModule
 import com.natasha.clockio.base.di.scope.ApplicationScope
-import com.natasha.clockio.location.worker.DaggerWorkerFactory
+import com.natasha.clockio.base.di.factory.DaggerWorkerFactory
+import com.natasha.clockio.base.di.module.worker.WorkerFactoryModule
 
 import dagger.BindsInstance
 import dagger.Component
@@ -25,6 +26,7 @@ import javax.inject.Named
   BuilderActivityModule::class,
   ApiModule::class,
   AppAssistedInjectModule::class,
+  WorkerFactoryModule::class,
   WorkerBindingModule::class])
 interface ApplicationComponent : AndroidInjector<MyApplication> {
 

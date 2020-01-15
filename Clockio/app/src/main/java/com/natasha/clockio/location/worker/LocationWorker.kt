@@ -10,6 +10,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Provider
 
 class LocationWorker @AssistedInject constructor(
     @Assisted private val context: Context,
@@ -55,16 +56,16 @@ class LocationWorker @AssistedInject constructor(
   }
   //    https://android.jlelse.eu/injecting-into-workers-android-workmanager-and-dagger-948193c17684
   //    https://proandroiddev.com/dagger-2-setup-with-workmanager-a-complete-step-by-step-guild-bb9f474bde37
-  /*class Factory @Inject constructor(
-      val locationApi: LocationApi
+  class Factory @Inject constructor(
+      val locationApi: Provider<LocationApi>
   ): ChildWorkerFactory {
     override fun create(appContext: Context, params: WorkerParameters): Worker {
-      return LocationWorker(appContext, params, locationApi)
+      return LocationWorker(appContext, params, locationApi.get())
     }
-  }*/
+  }
 
 //    https://medium.com/@neonankiti/how-to-use-dagger2-withworkmanager-bae3a5fb7dd3
-    @AssistedInject.Factory
-    interface Factory: ChildWorkerFactory
+//    @AssistedInject.Factory
+//    interface Factory: ChildWorkerFactory
 
 }

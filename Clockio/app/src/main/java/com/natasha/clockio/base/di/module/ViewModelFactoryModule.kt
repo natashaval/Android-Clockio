@@ -1,8 +1,7 @@
 package com.natasha.clockio.base.di.module
 
 import androidx.lifecycle.ViewModelProvider
-import com.natasha.clockio.base.di.scope.ApplicationScope
-import com.natasha.clockio.base.di.viewmodel.ViewModelFactory
+import com.natasha.clockio.base.di.factory.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 
