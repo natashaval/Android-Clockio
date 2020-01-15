@@ -51,7 +51,7 @@ class ProfileFragment : Fragment() {
 
   private var isGps: Boolean = false
   var employeeId: String? = null
-  private val workManager = WorkManager.getInstance(context!!)
+  lateinit var workManager: WorkManager
 
   override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
@@ -78,6 +78,7 @@ class ProfileFragment : Fragment() {
         isGps = isGpsEnable
       }
     })
+    workManager = WorkManager.getInstance(context!!)
 
     getEmployee()
     logout()
@@ -210,7 +211,7 @@ class ProfileFragment : Fragment() {
 //    val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
 //    Log.d(TAG, "worker inputData before emp $employeeId ($latitude, $longitude)")
     Log.d(TAG, "worker inputData before location $loc")
-    val inputData = Data.Builder()
+    /*val inputData = Data.Builder()
         .putString(LocationWorker.LOCATION_WORKER_EMP, employeeId)
         .putDouble(LocationWorker.LOCATION_WORKER_LATITUDE, loc.latitude)
         .putDouble(LocationWorker.LOCATION_WORKER_LONGITUDE, loc.longitude)
@@ -227,13 +228,15 @@ class ProfileFragment : Fragment() {
         .setConstraints(constraints)
         .setInputData(inputData)
         .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
-        .build()
+        .build()*/
+    val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
 
     val workerId = simpleWorkRequest.id
+    workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.REPLACE, simpleWorkRequest)
 
     workManager.getWorkInfoByIdLiveData(workerId).observeOnce(this, Observer { workInfo ->
       workInfo?.let {
-        Log.d("FragmentWork", "Locationworker ${it.state}")
+        Log.d("FragmentWork", "LocationWorker observe once ${it.state}")
       }
     })
   }

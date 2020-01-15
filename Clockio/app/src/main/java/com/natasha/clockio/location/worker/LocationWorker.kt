@@ -52,10 +52,14 @@ class LocationWorker(
           .putDouble(LOCATION_WORKER_LONGITUDE, location.longitude)
           .build()
 
+      Log.d(TAG, "worker inputData emp ${inputData.getString(LocationWorker.LOCATION_WORKER_EMP)} latitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LATITUDE, 0.0)} longitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LONGITUDE, 0.0)}")
+
       val constraints = Constraints.Builder()
           .setRequiredNetworkType(NetworkType.CONNECTED)
           .build()
+
       return OneTimeWorkRequest.Builder(LocationWorker::class.java)
+          .addTag(LOCATION_WORKER_TAG)
           .setInputData(inputData)
           .setConstraints(constraints)
           .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
