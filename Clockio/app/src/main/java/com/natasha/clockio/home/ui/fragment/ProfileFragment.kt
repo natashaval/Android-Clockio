@@ -82,7 +82,6 @@ class ProfileFragment : Fragment() {
 
     getEmployee()
     logout()
-    locationClick()
   }
 
   override fun onStart() {
@@ -178,28 +177,10 @@ class ProfileFragment : Fragment() {
     Log.d(TAG, "locationUpdate Happened")
     locationViewModel.getLocationData().observe(this, Observer {
       latLong.text = getString(R.string.latLong, it.latitude, it.longitude)
-    })
-  }
-
-  private fun observeOnceLocation() {
-    locationViewModel.getLocationData().observeOnce(this, Observer {
       val loc = Location(employeeId!!, it.latitude, it.longitude)
-//      Log.d(TAG, "worker observe once ($latitude, $longitude)")
-      Log.d(TAG, "worker observe once $loc")
       locationWorker(loc)
     })
-  }
 
-  private fun locationClick() {
-    locationWorkerButton.setOnClickListener {
-      Log.d(TAG, "send location button clicked!")
-      observeOnceLocation()
-//      workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.REPLACE, simpleWorkRequest)
-    }
-    locationWorkerCancelButton.setOnClickListener {
-      Log.d(TAG, "worker cancel button clicked!")
-      workManager.cancelUniqueWork(LocationWorker.LOCATION_WORKER_TAG)
-    }
     workManager.getWorkInfosForUniqueWorkLiveData(LocationWorker.LOCATION_WORKER_TAG).observe(this, Observer {workInfos ->
       for (info in workInfos) {
         Log.d(TAG, "worker observe ${info.state}")
@@ -208,37 +189,9 @@ class ProfileFragment : Fragment() {
   }
 
   private fun locationWorker(loc: Location) {
-//    val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
-//    Log.d(TAG, "worker inputData before emp $employeeId ($latitude, $longitude)")
-    Log.d(TAG, "worker inputData before location $loc")
-    /*val inputData = Data.Builder()
-        .putString(LocationWorker.LOCATION_WORKER_EMP, employeeId)
-        .putDouble(LocationWorker.LOCATION_WORKER_LATITUDE, loc.latitude)
-        .putDouble(LocationWorker.LOCATION_WORKER_LONGITUDE, loc.longitude)
-        .build()
-
-    Log.d(TAG, "worker inputData emp ${inputData.getString(LocationWorker.LOCATION_WORKER_EMP)} latitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LATITUDE, 0.0)} longitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LONGITUDE, 0.0)}")
-
-    val constraints = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
-
-    val simpleWorkRequest = OneTimeWorkRequest.Builder(LocationWorker::class.java)
-        .addTag(LocationWorker.LOCATION_WORKER_TAG)
-        .setConstraints(constraints)
-        .setInputData(inputData)
-        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
-        .build()*/
+//    Log.d(TAG, "worker inputData before location $loc")
     val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
-
-    val workerId = simpleWorkRequest.id
-    workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.REPLACE, simpleWorkRequest)
-
-    workManager.getWorkInfoByIdLiveData(workerId).observeOnce(this, Observer { workInfo ->
-      workInfo?.let {
-        Log.d("FragmentWork", "LocationWorker observe once ${it.state}")
-      }
-    })
+    workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.KEEP, simpleWorkRequest)
   }
 
   private fun isPermissionGranted() =

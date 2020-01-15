@@ -21,9 +21,8 @@ class LocationWorker(
     val latitude = params.inputData.getDouble(LOCATION_WORKER_LATITUDE, 0.0)
     val longitude = params.inputData.getDouble(LOCATION_WORKER_LONGITUDE, 0.0)
     val location = Location(empId!!, latitude, longitude)
-    Log.d(TAG, "Injected from Worker $location")
+//    Log.d(TAG, "Injected from Worker $location")
     val response = locationApi.sendLocation(location).execute()
-//      Log.d(TAG, "worker location code ${response.code()}")
     if (response.isSuccessful) {
       Log.d(TAG, "Worker Success")
         return Result.success()
@@ -44,15 +43,11 @@ class LocationWorker(
     const val LOCATION_WORKER_LONGITUDE = "location_worker_longitude"
 
     fun buildOneTimeRequest(location: Location): OneTimeWorkRequest {
-        Log.d(TAG, "worker build one time request $location")
-
       val inputData = Data.Builder()
           .putString(LOCATION_WORKER_EMP, location.employeeId)
           .putDouble(LOCATION_WORKER_LATITUDE, location.latitude)
           .putDouble(LOCATION_WORKER_LONGITUDE, location.longitude)
           .build()
-
-      Log.d(TAG, "worker inputData emp ${inputData.getString(LocationWorker.LOCATION_WORKER_EMP)} latitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LATITUDE, 0.0)} longitude ${inputData.getDouble(LocationWorker.LOCATION_WORKER_LONGITUDE, 0.0)}")
 
       val constraints = Constraints.Builder()
           .setRequiredNetworkType(NetworkType.CONNECTED)
