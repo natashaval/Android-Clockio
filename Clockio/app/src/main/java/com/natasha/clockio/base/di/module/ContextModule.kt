@@ -6,9 +6,11 @@ import com.natasha.clockio.base.di.qualifier.ApplicationContext
 import com.natasha.clockio.base.di.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 @Module(includes = [
-    SharedPrefModule::class, DatabaseModule::class])
+    SharedPrefModule::class, DatabaseModule::class, FirebaseModule::class])
 class ContextModule {
 
     @Provides
@@ -16,5 +18,11 @@ class ContextModule {
     @ApplicationContext
     fun provideContext(application: Application): Context {
         return application
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideExecutors(): Executor {
+        return Executors.newCachedThreadPool()
     }
 }

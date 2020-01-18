@@ -1,4 +1,4 @@
-package com.natasha.clockio.activity.ui
+package com.natasha.clockio.base.ui
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -25,6 +25,8 @@ class TimePickerFragment constructor(editText: EditText): DialogFragment(), Time
 
   override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
     Log.d(TAG, "calendar timepicker $hourOfDay:$minute")
-    this.editText.setText("$hourOfDay:$minute")
+    val hh = String.format("%02d", hourOfDay)
+    val mm = String.format("%02d", minute)
+    this.editText.setText("$hh:$mm")
   }
 }

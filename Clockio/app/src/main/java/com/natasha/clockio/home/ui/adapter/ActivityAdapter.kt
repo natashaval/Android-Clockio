@@ -62,7 +62,7 @@ class ActivityAdapter constructor(val context: Context, private val activities: 
 
     //    https://stackoverflow.com/questions/28984879/how-to-open-a-different-fragment-on-recyclerview-onclick
     private fun openFragment(activity: Activity) {
-      val mFragment = ActivityDetailsFragment()
+      val mFragment = ActivityDetailsFragment.newInstance()
       val mBundle = Bundle()
       mBundle.putParcelable(ParcelableConst.ITEM_ACTIVITY, activity)
       mFragment.arguments = mBundle

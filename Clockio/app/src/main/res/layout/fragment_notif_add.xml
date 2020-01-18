@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".notification.ui.NotifAddFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/notifTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/notif_title_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/notifTitleInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/float_transparent"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <include
+        android:id="@+id/notifTimeInput"
+        layout="@layout/item_start_end_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notifTitleLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/notifContentLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/notif_content_hint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notifTimeInput">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/notifContentInput"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/float_transparent"
+            android:inputType="textMultiLine"
+            android:overScrollMode="ifContentScrolls"
+            android:gravity="start"
+            android:scrollbars="vertical" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

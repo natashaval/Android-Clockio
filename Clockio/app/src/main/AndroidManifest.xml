@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.natasha.clockio">
 
     <!--
@@ -17,9 +18,9 @@
     <application
         android:name=".base.di.application.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_clockio_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_clockio_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -44,6 +45,19 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".MainActivity">
         </activity>
+
+        <service android:name=".notification.firebase.MyFirebaseMessage">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove"
+            android:enabled="false"
+            android:exported="false" />
 
         <meta-data
             android:name="CLOUDINARY_URL"

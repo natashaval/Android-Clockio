@@ -16,45 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TableLayout
+    <include
         android:id="@+id/activityTimeDetailsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
+        layout="@layout/item_start_end_time"
+        android:layout_margin="@dimen/input_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activityTitleDetails">
-        <TableRow>
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/activity_start_hint" />
-
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/activity_end_hint" />
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:id="@+id/activityStartDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/activity_start_hint" />
-
-            <TextView
-                android:id="@+id/activityEndDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/activity_end_hint" />
-        </TableRow>
-    </TableLayout>
+        app:layout_constraintTop_toBottomOf="@id/activityTitleDetails"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
     <TextView
         android:id="@+id/activityContentDetails"
@@ -64,7 +33,7 @@
         android:hint="@string/activity_content_hint"
         android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activityTimeDetailsLayout" />
+        app:layout_constraintTop_toBottomOf="@id/activityTimeDetailsLayout" />
 
     <FrameLayout
         android:id="@+id/activityMapDetails"

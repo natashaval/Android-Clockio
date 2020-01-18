@@ -19,8 +19,7 @@ class RedirectInterceptor @Inject constructor(private val context: Context) : In
         var request: Request = chain.request().newBuilder().build();
         val response: Response = chain.proceed(request)
         Log.d(TAG, "response code ${response.code}")
-        if (response.code == 401 && request.url.encodedPath != "/api/profile") {
-//        if (response.code == 401) {
+        if (response.code == 401) {
             Log.d(TAG, "response url ${request.url.encodedPath} redirect ${response.body}")
             val intent = Intent(context, LoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

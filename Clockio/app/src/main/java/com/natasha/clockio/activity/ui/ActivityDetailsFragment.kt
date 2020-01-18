@@ -14,6 +14,7 @@ import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.location.LocationModel
 import com.natasha.clockio.location.ui.MapsFragment
 import kotlinx.android.synthetic.main.fragment_activity_details.*
+import kotlinx.android.synthetic.main.item_start_end_time.*
 
 class ActivityDetailsFragment : Fragment() {
 
@@ -30,8 +31,8 @@ class ActivityDetailsFragment : Fragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    if(arguments!=null){
-      act = arguments!!.getParcelable(ParcelableConst.ITEM_ACTIVITY)
+    arguments?.let {
+      act = it.getParcelable(ParcelableConst.ITEM_ACTIVITY)
       Log.d(TAG, "details received $act")
     }
     setHasOptionsMenu(true)
@@ -75,8 +76,8 @@ class ActivityDetailsFragment : Fragment() {
     Log.d(TAG, "set in Activity $act")
     activityTitleDetails.text = act.title
     activityContentDetails.text = act.content.toString()
-    activityStartDetails.text = act.startTime.toString()
-    activityEndDetails.text = act.endTime.toString()
+    startDetails.text = act.startTime.toString()
+    endDetails.text = act.endTime.toString()
     if (act.latitude != null && act.longitude != null) {
       setMap(LocationModel(act.latitude, act.longitude))
     }

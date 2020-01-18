@@ -12,7 +12,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.SettingsClient
-import com.natasha.clockio.home.ui.fragment.GPS_REQUEST
+import com.natasha.clockio.home.ui.fragment.ProfileFragment.Companion.GPS_REQUEST
 
 //https://github.com/mayowa-egbewunmi/LocationUpdateWithLiveData/blob/master/app/src/main/java/com/mayowa/android/locationwithlivedata/GpsUtils.kt
 class GpsUtils(private val context: Context) {

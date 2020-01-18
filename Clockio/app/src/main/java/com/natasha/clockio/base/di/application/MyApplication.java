@@ -7,7 +7,10 @@ import com.cloudinary.android.MediaManager;
 import com.natasha.clockio.base.constant.UrlConst;
 import com.natasha.clockio.base.di.component.ApplicationComponent;
 import com.natasha.clockio.base.di.component.DaggerApplicationComponent;
+import com.natasha.clockio.base.di.factory.DaggerWorkerFactory;
 
+import androidx.work.Configuration;
+import androidx.work.WorkManager;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
@@ -22,6 +25,9 @@ public class MyApplication extends Application implements HasAndroidInjector {
     @Inject
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
+//    @Inject
+//    DaggerWorkerFactory factory;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,6 +38,9 @@ public class MyApplication extends Application implements HasAndroidInjector {
                 .build();
 
         MediaManager.init(this);
+
+        DaggerWorkerFactory factory = applicationComponent.factory();
+        WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(factory).build());
 
         applicationComponent.injectApplication(this);
         Log.d(TAG, "application component init on create");

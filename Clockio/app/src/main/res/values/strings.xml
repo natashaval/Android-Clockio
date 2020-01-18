@@ -13,7 +13,7 @@
     <string name="navigation_friend">Friend</string>
     <string name="navigation_checkin">Check In</string>
     <string name="navigation_checkout">Check Out</string>
-    <string name="navigation_notification">Notification</string>
+    <string name="navigation_notif">Notification</string>
     <string name="navigation_profile">Profile</string>
 
     <!--    Login-->
@@ -77,9 +77,19 @@
     <!--    Activity-->
     <string name="activity_title">Activity Today</string>
     <string name="activity_create_title">What have you done today?</string>
-    <string name="activity_title_hint">Title</string>
+    <string name="activity_title_hint">Title</string>"
     <string name="activity_content_hint">Content</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
+
+    <!--    Notification-->
+    <string name="notif_no_result">No Results</string>
+    <string name="notif_create_title">Create Notification</string>
+    <string name="notif_title_hint">Notif Title</string>
+    <string name="notif_content_hint">Notif Contents</string>
+    <string name="notif_location_hint">Location: </string>
+    <string name="notif_start_hint">Start Date</string>
+    <string name="notif_end_hint">End Date</string>
+    <string name="notif_post_time">Posted: %s by %s</string>
 
 </resources>

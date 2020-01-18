@@ -21,6 +21,7 @@ import com.natasha.clockio.base.constant.UrlConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.LoggedInUser
 import com.natasha.clockio.base.util.RetrofitInterceptor
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.ui.HomeActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -45,6 +46,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     AndroidInjection.inject(this)
 
     interceptor.setBasic(UrlConst.CLIENT_ID, UrlConst.CLIENT_SECRET)
+    clearSharedPref()
     loginViewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
 
     loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -62,13 +64,13 @@ class LoginActivity : DaggerAppCompatActivity() {
     })
 
 
-    loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+    loginViewModel.loginResult.observeOnce(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
       var isLogin = false
       loading.visibility = View.GONE
 
       Log.d(TAG, "login is called from login result $loginResult")
-      Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data}")
+      Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data?.accessToken}")
       loginResult.data?.let { token ->
         interceptor.setToken(token.accessToken)
         val editor = sharedPref.edit()
@@ -79,8 +81,6 @@ class LoginActivity : DaggerAppCompatActivity() {
       }
       setResult(Activity.RESULT_OK)
 
-      //Complete and destroy login activity once successful
-      finish()
       if (isLogin) {
         var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
         Log.d(TAG, "isLogin getProfile triggered $tkn")
@@ -88,6 +88,9 @@ class LoginActivity : DaggerAppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
       }
+
+      //Complete and destroy login activity once successful
+      finish()
     })
 
     loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
@@ -169,7 +172,8 @@ class LoginActivity : DaggerAppCompatActivity() {
   }
 
   private fun clearSharedPref() {
-    sharedPref.edit().clear().commit()
+    sharedPref.edit().clear().apply()
+    Log.d(TAG, "sharedPref cleared")
   }
 }
 
