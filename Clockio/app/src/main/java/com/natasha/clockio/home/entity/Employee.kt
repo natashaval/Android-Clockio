@@ -34,9 +34,8 @@ data class Employee(
     @Embedded(prefix = "dept_")
     val department: Department
 ) {
-  data class Department(
-      val id: String?,
-      val name: String,
-      val branchId: String?
+  constructor(): this(
+      "", "", "", "", "", "", "", 0.0, 0.0,
+      null,null,null,null,null,null, Department()
   )
 }

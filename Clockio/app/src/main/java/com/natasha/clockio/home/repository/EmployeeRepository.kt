@@ -2,8 +2,10 @@ package com.natasha.clockio.home.repository
 
 import android.util.Log
 import com.natasha.clockio.base.model.BaseResponse
+import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.base.util.ResponseUtils
 import com.natasha.clockio.home.dao.EmployeeDao
+import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.service.EmployeeApi
 import javax.inject.Inject
 
@@ -36,6 +38,22 @@ class EmployeeRepository @Inject constructor(private val employeeApi: EmployeeAp
     } catch (t: Throwable) {
       t.printStackTrace()
       BaseResponse.error(t.message, null)
+    }
+  }
+
+  suspend fun findAllEmployees(page: Int?, size: Int?,
+      onSuccess: (empList: PageResponse<Employee>) -> Unit,
+      onError: (error: String) -> Unit) {
+    val response = employeeApi.findAllEmployees(page, size)
+    try {
+      if (response.isSuccessful) {
+        response.body()?.let { onSuccess(it) }
+      } else {
+        onError(response.errorBody()?.toString() ?: "unkown error")
+      }
+    } catch (t: Throwable) {
+      Log.d(TAG, "emp GET ALL failed ${t.message}")
+      onError(t.message?: "unknown error")
     }
   }
 }
