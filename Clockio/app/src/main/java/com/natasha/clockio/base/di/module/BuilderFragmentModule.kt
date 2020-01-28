@@ -5,13 +5,10 @@ import com.natasha.clockio.base.di.module.repository.ActivityModule
 import com.natasha.clockio.base.di.module.repository.ImageModule
 import com.natasha.clockio.base.di.module.repository.NotifModule
 import com.natasha.clockio.base.di.module.repository.ProfileModule
-import com.natasha.clockio.base.di.module.viewmodel.ActivityViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.LocationViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.NotifViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.PresenceViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.ProfileViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.*
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.ui.fragment.ActivityFragment
+import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import com.natasha.clockio.notification.ui.NotifAddFragment
 import com.natasha.clockio.notification.ui.NotifFragment
@@ -61,4 +58,8 @@ abstract class BuilderFragmentModule {
     NotifViewModelModule::class, NotifModule::class])
   @ActivityScope
   abstract fun notifAddFragment(): NotifAddFragment
+
+  @ContributesAndroidInjector(modules = [FriendViewModelModule::class])
+  @ActivityScope
+  abstract fun friendFragment(): FriendFragment
 }

@@ -17,6 +17,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.FirebaseConst
+import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.PresenceActivity
@@ -49,27 +50,6 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
       Log.d(TAG, "fragment backpressed")
       super.onBackPressed()
     }
-  }
-
-  private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-    when(item.itemId) {
-      R.id.navigation_activity -> {
-        val fragment = ActivityFragment.newInstance()
-        addFragment(fragment)
-        return@OnNavigationItemSelectedListener true
-      }
-      R.id.navigation_profile -> {
-        val fragment = ProfileFragment.newInstance()
-        addFragment(fragment)
-        return@OnNavigationItemSelectedListener true
-      }
-      R.id.navigation_notif -> {
-        val fragment = NotifFragment.newInstance()
-        addFragment(fragment)
-        return@OnNavigationItemSelectedListener true
-      }
-    }
-    false
   }
 
   fun addFragment(fragment: Fragment) {
@@ -110,6 +90,10 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
       when(itemName) {
         getString(R.string.navigation_activity) -> {
           val fragment = ActivityFragment.newInstance()
+          addFragment(fragment)
+        }
+        getString(R.string.navigation_friend) -> {
+          val fragment = FriendFragment.newInstance()
           addFragment(fragment)
         }
         getString(R.string.navigation_profile) -> {
