@@ -86,7 +86,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     }
 
     override fun onItemClick(itemIndex: Int, itemName: String) {
-      Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+//      Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
       when(itemName) {
         getString(R.string.navigation_activity) -> {
           val fragment = ActivityFragment.newInstance()
@@ -108,7 +108,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     }
 
     override fun onItemReselected(itemIndex: Int, itemName: String) {
-      Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+//      Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
     }
   }
 

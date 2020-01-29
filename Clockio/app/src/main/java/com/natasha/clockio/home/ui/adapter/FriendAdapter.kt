@@ -25,6 +25,7 @@ class FriendAdapter constructor(val context: Context,
     RecyclerView.Adapter<FriendAdapter.ViewHolder>(), Filterable {
 
   private var isLoaderVisible: Boolean = false
+  private var listener: OnItemClickListener? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val layoutInflater = LayoutInflater.from(parent?.context)
@@ -146,15 +147,27 @@ class FriendAdapter constructor(val context: Context,
       setStatus(emp)
       view.friendPhone.setOnClickListener {
         Log.d(TAG, "phone clicked ${emp.phone}")
+        emp.phone?.let {
+          listener?.onPhoneClick(it)
+        }
       }
       view.friendEmail.setOnClickListener {
         Log.d(TAG, "email clicked ${emp.email}")
+        emp.email?.let {
+          listener?.onEmailClick(it)
+        }
       }
       view.friendWhatsapp.setOnClickListener {
         Log.d(TAG, "whatsapp clicked ${emp.phone} how to check??")
+        emp.phone?.let {
+          listener?.onWhatsappClick(it)
+        }
       }
       view.friendLocation.setOnClickListener {
         Log.d(TAG, "location clicked (${emp.latitude},${emp.longitude}")
+        if (emp.latitude != null && emp.longitude != null) {
+          listener?.onLocationClick(emp.latitude, emp.longitude)
+        }
       }
       Glide.with(context).load(emp.profileUrl)
           .apply(RequestOptions.circleCropTransform()).into(view.friendImage)
@@ -205,5 +218,16 @@ class FriendAdapter constructor(val context: Context,
       }
 
     }
+  }
+
+  fun setListener(listener: OnItemClickListener) {
+    this.listener = listener
+  }
+
+  interface OnItemClickListener {
+    fun onPhoneClick(phone: String)
+    fun onEmailClick(email: String)
+    fun onLocationClick(latitude: Double, longitude: Double)
+    fun onWhatsappClick(phone: String)
   }
 }

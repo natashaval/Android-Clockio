@@ -2,10 +2,14 @@ package com.natasha.clockio.home.ui.fragment
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -102,6 +106,51 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   fun showFriends(friends: MutableList<Employee>) {
     isLoading = false
     friendAdapter = FriendAdapter(context!!, friends, friends)
+    friendAdapter.setListener(object: FriendAdapter.OnItemClickListener {
+      override fun onPhoneClick(phone: String) {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+          data = Uri.parse("tel:$phone")
+        }
+        startActivity(intent)
+      }
+
+      override fun onEmailClick(email: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+          data = Uri.parse("mailto:$email")
+        }
+        if (intent.resolveActivity(activity!!.packageManager) != null) {
+          startActivity(intent)
+        }
+      }
+
+      override fun onLocationClick(latitude: Double, longitude: Double) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+          data = Uri.parse("geo:0,0?q=$latitude,$longitude()")
+        }
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(activity!!.packageManager) != null){
+          startActivity(intent)
+        }
+      }
+
+      override fun onWhatsappClick(phone: String) {
+//        https://stackoverflow.com/questions/38422300/how-to-open-whatsapp-using-an-intent-in-your-android-app
+        // use country code with phone number
+        val url = "https://api.whatsapp.com/send?phone=$phone"
+        try {
+          val packageManager = activity!!.packageManager
+          packageManager.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES)
+          val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(url)
+          }
+          startActivity(intent)
+        } catch (e: PackageManager.NameNotFoundException) {
+          Toast.makeText(activity, "Whatsapp not installed in your phone", Toast.LENGTH_SHORT).show()
+          e.printStackTrace()
+        }
+      }
+
+    })
     val linearLayoutManager = LinearLayoutManager(activity)
     friendRecyclerView.apply {
       layoutManager = linearLayoutManager
