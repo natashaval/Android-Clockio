@@ -1,15 +1,16 @@
 package com.natasha.clockio.home.ui.fragment
 
+import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -38,7 +39,6 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var viewModel: FriendViewModel
 
   private var isLoading: Boolean = false
-//  lateinit var listViewType: ArrayList<Int>
   private val PAGE_START = 0
   private val PAGE_SIZE = 10
   private var isLastPage = false
@@ -63,19 +63,50 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+    setHasOptionsMenu(true)
     viewModel = ViewModelProvider(this, factory).get(FriendViewModel::class.java)
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
     showFriends(arrayListOf())
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//    https://developer.android.com/training/search/setup
+//    https://www.androidhive.info/2017/11/android-recyclerview-with-search-filter-functionality/
+    inflater.inflate(R.menu.search, menu)
+
+    val searchManager = context?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+    val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+    searchView.apply {
+      setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+    }
+    searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+      override fun onQueryTextSubmit(query: String?): Boolean {
+        friendAdapter.filter.filter(query)
+        return false
+      }
+      override fun onQueryTextChange(newText: String?): Boolean {
+        friendAdapter.filter.filter(newText)
+        return false
+      }
+    })
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when(item.itemId) {
+      R.id.action_search -> return true
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   fun showFriends(friends: MutableList<Employee>) {
     isLoading = false
-    friendAdapter = FriendAdapter(context!!, friends)
+    friendAdapter = FriendAdapter(context!!, friends, friends)
     val linearLayoutManager = LinearLayoutManager(activity)
     friendRecyclerView.apply {
       layoutManager = linearLayoutManager
       adapter = friendAdapter
+      itemAnimator = DefaultItemAnimator()
     }
 
 //    https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
@@ -129,7 +160,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         friendAdapter.removeLoading()
       }
       isLoading = false
-    }, 1500)
+    }, 1000)
   }
 
   override fun onRefresh() {

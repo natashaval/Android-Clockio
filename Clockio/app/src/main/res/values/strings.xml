@@ -6,7 +6,9 @@
     <string name="base_update">Update</string>
     <string name="base_delete">Delete</string>
     <string name="base_location">Location</string>
+    <string name="base_search">Search</string>
     <string name="action_settings">Settings</string>
+    <string name="search_hint">Type name ...</string>
 
     <!--    Navigation-->
     <string name="navigation_activity">Activity</string>

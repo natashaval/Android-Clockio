@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -17,8 +19,10 @@ import kotlinx.android.synthetic.main.item_status.view.*
 //https://androidwave.com/pagination-in-recyclerview/
 //https://www.codepolitan.com/cara-membuat-pagination-atau-load-more-menggunakan-recyclerview-part-1-59c689b1b2e76
 
-class FriendAdapter constructor(val context: Context, private var friends: MutableList<Employee>):
-    RecyclerView.Adapter<FriendAdapter.ViewHolder>() {
+class FriendAdapter constructor(val context: Context,
+    private var friends: MutableList<Employee>,
+    private var friendsFiltered: MutableList<Employee>):
+    RecyclerView.Adapter<FriendAdapter.ViewHolder>(), Filterable {
 
   private var isLoaderVisible: Boolean = false
 
@@ -37,10 +41,8 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
     }
   }
 
-  override fun getItemCount(): Int {
-    Log.d(TAG, "friend getItemCount ${friends.size}")
-    return friends.size
-  }
+//  override fun getItemCount(): Int = friends.size
+  override fun getItemCount(): Int = friendsFiltered.size
 
   override fun getItemViewType(position: Int): Int {
     Log.d(TAG, "getItemViewType friendsize ${friends.size}")
@@ -53,9 +55,7 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val viewType = getItemViewType(position)
-    val item = friends[position]
-//    val friendHolder = holder as FriendHolder
-//    friendHolder.bind(item)
+    val item = friendsFiltered[position]
     when(viewType) {
       ITEM_VIEW_TYPE_CONTENT -> {
         Log.d(TAG, "onbindviewHolder CONTENT")
@@ -68,17 +68,10 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
     }
   }
 
-  fun refresh(friends: List<Employee>, listViewType: List<Int>) {
-    Log.d(TAG, "refresh friends")
-//    this.friends = friends
-//    this.listViewType = listViewType
-    notifyDataSetChanged()
-  }
-
-//  https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
+  //  https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
   fun addItem(friend: Employee) {
     Log.d(TAG, "adapter add item $friend")
-//    friends.plus(friend)
+    //    friends.plus(friend)
     friends.add(friend)
     notifyItemInserted(friends.size - 1)
   }
@@ -87,7 +80,7 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
     val position = friends.indexOf(friend)
     val item = friends.get(position)
     if (item != null) {
-//      friends.minus(item)
+      //      friends.minus(item)
       friends.remove(item)
       notifyItemRemoved(position)
     }
@@ -102,10 +95,6 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
     notifyDataSetChanged()
   }
 
-  fun isEmpty(): Boolean {
-    return itemCount == 0
-  }
-
   fun addLoading() {
     Log.d(TAG, "adapter addLoading")
     isLoaderVisible = true
@@ -118,7 +107,7 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
     val position = friends.size - 1
     val item = friends[position]
     if (item != null) {
-//      friends.minus(item)
+      //      friends.minus(item)
       friends.remove(item)
       notifyItemRemoved(position)
     }
@@ -185,4 +174,36 @@ class FriendAdapter constructor(val context: Context, private var friends: Mutab
   }
 
   inner class ViewHolderLoading(itemView: View) : ViewHolder(itemView)
+
+  override fun getFilter(): Filter {
+    //    https://www.androidhive.info/2017/11/android-recyclerview-with-search-filter-functionality/
+    return object: Filter() {
+      override fun performFiltering(p0: CharSequence?): FilterResults {
+        val charString = p0.toString()
+        if (charString.isEmpty()) {
+          friendsFiltered = friends
+        } else {
+          var filteredList = arrayListOf<Employee>()
+          for (friend in friends) {
+            if (friend.firstName.toLowerCase().contains(
+                    charString.toLowerCase()) || friend.lastName?.toLowerCase()?.contains(
+                    charString.toLowerCase()) != false) {
+              filteredList.add(friend)
+            }
+          }
+          friendsFiltered = filteredList
+        }
+        val filterResults = FilterResults()
+        filterResults.values = friendsFiltered
+        return filterResults
+      }
+
+      override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+        friendsFiltered = p1?.values as MutableList<Employee>
+        notifyDataSetChanged()
+
+      }
+
+    }
+  }
 }
