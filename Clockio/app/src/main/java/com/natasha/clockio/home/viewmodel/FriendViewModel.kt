@@ -21,6 +21,7 @@ class FriendViewModel @Inject constructor(private val employeeRepository: Employ
   fun findAllEmployee(page: Int?, size: Int?) {
     viewModelScope.launch {
       employeeRepository.findAllEmployees(page, size, {
+        Log.d(TAG, "employee page Success $it")
         _employeePage.value = it
       }, { err ->
         Log.d(TAG, "employee page fetch Failed $err")

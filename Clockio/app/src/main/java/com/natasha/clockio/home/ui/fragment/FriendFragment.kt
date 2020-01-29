@@ -1,7 +1,9 @@
 package com.natasha.clockio.home.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.FriendAdapter
 import com.natasha.clockio.home.ui.adapter.PaginationScrollListener
 import com.natasha.clockio.home.viewmodel.FriendViewModel
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_friend.*
 import kotlinx.android.synthetic.main.item_loading.*
 import javax.inject.Inject
@@ -27,6 +30,7 @@ import javax.inject.Inject
 
 class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   companion object {
+    private val TAG: String = FriendFragment::class.java.simpleName
     fun newInstance() = FriendFragment()
   }
 
@@ -41,7 +45,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   private var totalPages = 1
   private var currentPage = PAGE_START
   lateinit var friendAdapter: FriendAdapter
-  private var employeeList = emptyList<Employee>()
+  private var employeeList = mutableListOf<Employee>()
 
   override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
@@ -52,20 +56,26 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     return inflater.inflate(R.layout.fragment_friend, container, false)
   }
 
+  override fun onAttach(context: Context) {
+    AndroidSupportInjection.inject(this)
+    super.onAttach(context)
+  }
+
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(FriendViewModel::class.java)
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
+    showFriends(arrayListOf())
   }
 
-  fun showFriends(friends: List<Employee>) {
+  fun showFriends(friends: MutableList<Employee>) {
     isLoading = false
     friendAdapter = FriendAdapter(context!!, friends)
     val linearLayoutManager = LinearLayoutManager(activity)
     friendRecyclerView.apply {
-      adapter = friendAdapter
       layoutManager = linearLayoutManager
+      adapter = friendAdapter
     }
 
 //    https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
@@ -93,12 +103,19 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
   fun observeFindAllEmployee() {
     viewModel.employeePage.observe(this, Observer {
-      employeeList = it.content!!
+      employeeList = it.content!!.toMutableList()
+      totalPages = it.totalPages - 1
+      currentPage = it.number
+      isLastPage = it.last
+      Log.d(TAG, "observeFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+//      showFriends(employeeList)
     })
   }
 
   fun doFindAllEmployee(page: Int?, size: Int?) {
     viewModel.findAllEmployee(page, size)
+//    observeFindAllEmployee()
+    Log.d(TAG, "doFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
 
     Handler().postDelayed({
       if (currentPage != PAGE_START) friendAdapter.removeLoading()
@@ -109,6 +126,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         friendAdapter.addLoading()
       } else {
         isLastPage = true
+        friendAdapter.removeLoading()
       }
       isLoading = false
     }, 1500)

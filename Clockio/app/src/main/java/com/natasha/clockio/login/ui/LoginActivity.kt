@@ -85,8 +85,6 @@ class LoginActivity : DaggerAppCompatActivity() {
         var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
         Log.d(TAG, "isLogin getProfile triggered $tkn")
         loginViewModel.loadProfile()
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
       }
 
       //Complete and destroy login activity once successful
@@ -99,7 +97,7 @@ class LoginActivity : DaggerAppCompatActivity() {
       showLoginFailed(R.string.login_failed)
     })
 
-    loginViewModel.profile.observe(this, Observer { result ->
+    loginViewModel.profile.observeOnce(this, Observer { result ->
       when(result.status) {
         BaseResponse.Status.LOADING -> loading.visibility = View.VISIBLE
         BaseResponse.Status.SUCCESS -> {
@@ -111,6 +109,8 @@ class LoginActivity : DaggerAppCompatActivity() {
             editor.putString(PreferenceConst.EMPLOYEE_ID_KEY, loggedInUser.employeeId)
             Log.d(TAG, "employee-id ${loggedInUser.employeeId}")
             editor.apply()
+
+            openHomeActivity()
           }
           else {
             val errorBody = result.data as ResponseBody
@@ -169,6 +169,11 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun showError(message: String?) {
     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     Log.d(TAG, "login return response error")
+  }
+
+  private fun openHomeActivity() {
+    val intent = Intent(this, HomeActivity::class.java)
+    startActivity(intent)
   }
 
   private fun clearSharedPref() {
