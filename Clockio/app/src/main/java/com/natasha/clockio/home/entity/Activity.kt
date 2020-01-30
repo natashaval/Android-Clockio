@@ -15,4 +15,7 @@ data class Activity (
     val endTime: String?,
     val latitude: Double?,
     val longitude: Double?
-): Parcelable
+): Parcelable {
+  constructor(): this("", "","",
+      Date(),"","",0.0, 0.0)
+}

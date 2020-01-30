@@ -16,11 +16,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.natasha.clockio.R
-import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.FriendAdapter
@@ -28,7 +26,6 @@ import com.natasha.clockio.home.ui.adapter.PaginationScrollListener
 import com.natasha.clockio.home.viewmodel.FriendViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_friend.*
-import kotlinx.android.synthetic.main.item_loading.*
 import javax.inject.Inject
 
 
@@ -43,11 +40,11 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   private lateinit var viewModel: FriendViewModel
 
   private var isLoading: Boolean = false
-  private val PAGE_START = 0
-  private val PAGE_SIZE = 10
+  private val pageStart = 0
+  private val pageSize = 10
   private var isLastPage = false
   private var totalPages = 1
-  private var currentPage = PAGE_START
+  private var currentPage = pageStart
   lateinit var friendAdapter: FriendAdapter
   private var employeeList = mutableListOf<Employee>()
 
@@ -105,7 +102,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
   private fun showFriends(friends: MutableList<Employee>) {
     isLoading = false
-    friendAdapter = FriendAdapter(context!!, friends, friends)
+    friendAdapter = FriendAdapter(this, friends, friends)
     friendAdapter.setListener(object: FriendAdapter.OnItemClickListener {
       override fun onPhoneClick(phone: String) {
         val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -163,7 +160,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       override fun loadMoreItems() {
         isLoading = true
         currentPage ++
-        doFindAllEmployee(currentPage, PAGE_SIZE)
+        doFindAllEmployee(currentPage, pageSize)
       }
 
       override fun getTotalPageCount(): Int {
@@ -178,10 +175,10 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         return isLoading
       }
     })
-    doFindAllEmployee(PAGE_START, PAGE_SIZE)
+    doFindAllEmployee(pageStart, pageSize)
   }
 
-  fun observeFindAllEmployee() {
+  private fun observeFindAllEmployee() {
     viewModel.employeePage.observe(this, Observer {
       employeeList = it.content!!.toMutableList()
       totalPages = it.totalPages - 1
@@ -197,7 +194,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     Log.d(TAG, "doFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
 
     Handler().postDelayed({
-      if (currentPage != PAGE_START) friendAdapter.removeLoading()
+      if (currentPage != pageStart) friendAdapter.removeLoading()
       friendAdapter.addAll(employeeList)
       friendSwipeRefresh.isRefreshing = false
 
@@ -212,9 +209,9 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
   }
 
   override fun onRefresh() {
-    currentPage = PAGE_START
+    currentPage = pageStart
     isLastPage = false
     friendAdapter.clear()
-    doFindAllEmployee(PAGE_START, PAGE_SIZE)
+    doFindAllEmployee(pageStart, pageSize)
   }
 }

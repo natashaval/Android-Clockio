@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
@@ -131,11 +132,15 @@ class HomeActivity : DaggerAppCompatActivity(),
   override fun onOpen() {
     Log.d(TAG, "space onOpen")
     spaceNavigation.visibility = View.GONE
+    val contentMargin = content.layoutParams as ViewGroup.MarginLayoutParams
+    contentMargin.bottomMargin = 0
   }
 
   override fun onClose() {
     Log.d(TAG, "space onClose")
     spaceNavigation.visibility = View.VISIBLE
+    val contentMargin = content.layoutParams as ViewGroup.MarginLayoutParams
+    contentMargin.bottomMargin = resources.getDimensionPixelOffset(R.dimen.space_navigation_height)
   }
 
   override fun onAttachFragment(fragment: Fragment) {

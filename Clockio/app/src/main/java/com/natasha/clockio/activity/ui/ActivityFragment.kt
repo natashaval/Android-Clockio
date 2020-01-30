@@ -188,13 +188,9 @@ class ActivityFragment : Fragment() {
         BaseResponse.Status.SUCCESS -> {
           var data = it.data as List<Activity>
           Log.d(TAG, "activity $data")
-//          showActivity(data)
           activityList = data.toMutableList()
           activityAdapter.addAll(activityList)
           showActivity()
-          /*Handler().postDelayed({
-            activityAdapter?.addAll(activityList)
-          }, 500)*/
         }
       }
     })

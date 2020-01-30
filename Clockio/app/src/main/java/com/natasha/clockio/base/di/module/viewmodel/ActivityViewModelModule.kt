@@ -13,6 +13,4 @@ abstract class ActivityViewModelModule {
     @IntoMap
     @ViewModelKey(ActivityViewModel::class)
     abstract fun bindActivityViewModel(viewModel: ActivityViewModel): ViewModel
-
-
 }

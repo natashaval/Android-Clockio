@@ -45,9 +45,8 @@ class ActivityAdapter constructor(private val activities: MutableList<Activity>)
 
   override fun getItemCount(): Int = activities.size
 
-  inner class ActivityHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+  inner class ActivityHolder(private val v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
     private val TAG: String = ActivityHolder::class.java.simpleName
-    private var view: View = v
 
     init {
       v.setOnClickListener(this)
@@ -58,10 +57,10 @@ class ActivityAdapter constructor(private val activities: MutableList<Activity>)
     }
 
     fun bind(activity: Activity) {
-      view.activityTitle.text = activity.title
-      view.activityContent.text = activity.content
-      view.activityDate.text = activity.date.toString()
-      view.setOnClickListener {
+      v.activityTitle.text = activity.title
+      v.activityContent.text = activity.content
+      v.activityDate.text = activity.date.toString()
+      v.setOnClickListener {
         Log.d(TAG, "activity clicked $activity")
         listener?.onActivityClick(activity)
       }

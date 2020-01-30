@@ -1,12 +1,12 @@
 package com.natasha.clockio.home.ui.adapter
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -19,21 +19,21 @@ import kotlinx.android.synthetic.main.item_status.view.*
 //https://androidwave.com/pagination-in-recyclerview/
 //https://www.codepolitan.com/cara-membuat-pagination-atau-load-more-menggunakan-recyclerview-part-1-59c689b1b2e76
 
-class FriendAdapter constructor(val context: Context,
+class FriendAdapter constructor(val fragment: Fragment,
     private var friends: MutableList<Employee>,
     private var friendsFiltered: MutableList<Employee>):
-    RecyclerView.Adapter<FriendAdapter.ViewHolder>(), Filterable {
+    RecyclerView.Adapter<OpenViewHolder>(), Filterable {
 
   private var isLoaderVisible: Boolean = false
   private var listener: OnItemClickListener? = null
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OpenViewHolder {
     val layoutInflater = LayoutInflater.from(parent?.context)
     Log.d(TAG, "layout inflater viewType $viewType")
     return when(viewType) {
       ITEM_VIEW_TYPE_CONTENT -> {
         val inflatedView = layoutInflater.inflate(R.layout.item_friend, parent, false)
-        FriendHolder(context, inflatedView)
+        FriendHolder(inflatedView)
       }
       else -> {
         val inflatedView = layoutInflater.inflate(R.layout.item_loading, parent, false)
@@ -42,7 +42,6 @@ class FriendAdapter constructor(val context: Context,
     }
   }
 
-//  override fun getItemCount(): Int = friends.size
   override fun getItemCount(): Int = friendsFiltered.size
 
   override fun getItemViewType(position: Int): Int {
@@ -54,7 +53,7 @@ class FriendAdapter constructor(val context: Context,
     }
   }
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: OpenViewHolder, position: Int) {
     val viewType = getItemViewType(position)
     val item = friendsFiltered[position]
     when(viewType) {
@@ -72,16 +71,14 @@ class FriendAdapter constructor(val context: Context,
   //  https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
   fun addItem(friend: Employee) {
     Log.d(TAG, "adapter add item $friend")
-    //    friends.plus(friend)
     friends.add(friend)
     notifyItemInserted(friends.size - 1)
   }
 
   fun removeItem(friend: Employee) {
     val position = friends.indexOf(friend)
-    val item = friends.get(position)
+    val item = friends[position]
     if (item != null) {
-      //      friends.minus(item)
       friends.remove(item)
       notifyItemRemoved(position)
     }
@@ -113,20 +110,16 @@ class FriendAdapter constructor(val context: Context,
 
   fun clear() {
     isLoaderVisible = false
-    while (itemCount > 0) {
-      removeItem(friends.get(0))
-    }
+    friends.clear()
   }
 
   companion object {
     private val TAG: String = FriendAdapter::class.java.simpleName
-    val ITEM_VIEW_TYPE_CONTENT = 1
-    val ITEM_VIEW_TYPE_LOADING = 2
+    const val ITEM_VIEW_TYPE_CONTENT = 1
+    const val ITEM_VIEW_TYPE_LOADING = 2
   }
 
-  open class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
-
-  inner class FriendHolder(context: Context, v: View): ViewHolder(v), View.OnClickListener {
+  inner class FriendHolder(v: View): OpenViewHolder(v), View.OnClickListener {
     private val TAG: String = FriendHolder::class.java.simpleName
     private val view = v
     init {
@@ -166,7 +159,7 @@ class FriendAdapter constructor(val context: Context,
           listener?.onLocationClick(emp.latitude, emp.longitude)
         }
       }
-      Glide.with(context).load(emp.profileUrl)
+      Glide.with(fragment).load(emp.profileUrl)
           .apply(RequestOptions.circleCropTransform()).into(view.friendImage)
     }
 
@@ -183,7 +176,7 @@ class FriendAdapter constructor(val context: Context,
     }
   }
 
-  inner class ViewHolderLoading(itemView: View) : ViewHolder(itemView)
+  inner class ViewHolderLoading(itemView: View) : OpenViewHolder(itemView)
 
   override fun getFilter(): Filter {
     //    https://www.androidhive.info/2017/11/android-recyclerview-with-search-filter-functionality/
