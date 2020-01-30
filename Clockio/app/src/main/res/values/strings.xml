@@ -9,6 +9,7 @@
     <string name="base_search">Search</string>
     <string name="action_settings">Settings</string>
     <string name="search_hint">Type name ...</string>
+    <string name="action_history">History</string>
 
     <!--    Navigation-->
     <string name="navigation_activity">Activity</string>
@@ -83,6 +84,7 @@
     <string name="activity_content_hint">Content</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
+    <string name="activity_history_date_hint">Start Date - End Date</string>
 
     <!--    Notification-->
     <string name="notif_no_result">No Results</string>

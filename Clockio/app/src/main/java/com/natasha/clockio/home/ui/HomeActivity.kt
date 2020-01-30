@@ -6,10 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
-import com.natasha.clockio.home.ui.fragment.ActivityFragment
+import com.natasha.clockio.activity.ui.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
@@ -86,8 +85,8 @@ class HomeActivity : DaggerAppCompatActivity(),
 
   private fun addSpaceNavigation(savedInstanceState: Bundle?) {
     spaceNavigation.initWithSaveInstanceState(savedInstanceState);
-    spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_black_24dp))
-    spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_friend), R.drawable.ic_perm_contact_calendar_black_24dp))
+    spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_round))
+    spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_friend), R.drawable.ic_notebook_of_contacts))
     spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_notif), R.drawable.ic_notifications_black_24dp))
     spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_profile), R.drawable.ic_person_black_24dp))
 
@@ -149,7 +148,8 @@ class HomeActivity : DaggerAppCompatActivity(),
   override fun onEmployeeRefresh() {
 //    https://developer.android.com/training/basics/fragments/communicating.html
     val activityFrag = supportFragmentManager.
-        findFragmentByTag(ActivityFragment::class.java.simpleName) as ActivityFragment
+        findFragmentByTag(
+            ActivityFragment::class.java.simpleName) as ActivityFragment
     Log.d(TAG, "home activity get Employee")
     activityFrag?.getEmployee()
   }

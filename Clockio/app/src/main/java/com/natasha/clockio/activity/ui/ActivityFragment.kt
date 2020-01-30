@@ -1,16 +1,12 @@
-package com.natasha.clockio.home.ui.fragment
+package com.natasha.clockio.activity.ui
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,21 +15,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
-import com.natasha.clockio.activity.ui.ActivityAddFragment
-import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
-import com.natasha.clockio.home.ui.HomeActivity.Companion.PRESENCE_ACTIVITY_REQUEST_CODE
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
-import com.natasha.clockio.home.viewmodel.ActivityViewModel
+import com.natasha.clockio.activity.viewmodel.ActivityViewModel
+import com.natasha.clockio.home.ui.fragment.SettingsFragment
+import com.natasha.clockio.home.ui.fragment.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
-import com.natasha.clockio.presence.ui.fragment.CameraFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
-import kotlinx.android.synthetic.main.fragment_activity.view.*
+import kotlinx.android.synthetic.main.item_activity_recyler_view.*
 import kotlinx.android.synthetic.main.item_profile.*
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
@@ -80,8 +74,10 @@ class ActivityFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+    setHasOptionsMenu(true)
     employeeViewModel = ViewModelProvider(this, factory).get(EmployeeViewModel::class.java)
-    activityViewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
+    activityViewModel = ViewModelProvider(this, factory).get(
+        ActivityViewModel::class.java)
 
     getEmployee()
     getStatus()
@@ -98,8 +94,27 @@ class ActivityFragment : Fragment() {
     super.onResume()
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.history, menu)
+  }
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when(item.itemId) {
+      R.id.action_history -> {
+        Log.d(TAG, "History icon clicked!")
+        fragmentManager?.
+            beginTransaction()?.
+            replace(R.id.content, ActivityHistoryFragment.newInstance())?.
+            addToBackStack(null)?.
+            commit()
+        return true
+      }
+    }
+    return false
+  }
+
   private fun getStatus() {
-    adapter = StatusSpinnerAdapter(context!!, R.layout.item_status, statusArray, statusIconArray)
+    adapter = StatusSpinnerAdapter(context!!,
+        R.layout.item_status, statusArray, statusIconArray)
     statusSpinner.adapter = adapter
     selectStatus()
     statusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

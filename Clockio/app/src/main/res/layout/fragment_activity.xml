@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.ui.fragment.ActivityFragment">
+    tools:context=".activity.ui.ActivityFragment">
 
     <include
         android:id="@+id/profileActivity"
@@ -23,14 +23,11 @@
         style="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/colorPrimaryDark" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activityRecyclerView"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/activityToday"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/item_activity" />
+        layout="@layout/item_activity_recyler_view" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activityAddButton"

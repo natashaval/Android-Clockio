@@ -24,7 +24,7 @@ import com.natasha.clockio.base.ui.alertSuccess
 import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
-import com.natasha.clockio.home.viewmodel.ActivityViewModel
+import com.natasha.clockio.activity.viewmodel.ActivityViewModel
 import com.natasha.clockio.location.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import dagger.android.support.AndroidSupportInjection
