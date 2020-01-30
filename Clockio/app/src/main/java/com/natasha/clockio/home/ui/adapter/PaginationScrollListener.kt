@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 //https://blog.iamsuleiman.com/android-pagination-tutorial-getting-started-recyclerview/
 abstract class PaginationScrollListener(layoutManager: LinearLayoutManager): RecyclerView.OnScrollListener() {
   val layoutManager = layoutManager
-  val FRIEND_PAGE_START = 1
-  val FRIEND_PAGE_SIZE = 10
+  val PAGE_START = 1
+  val PAGE_SIZE = 10
   override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
     super.onScrolled(recyclerView, dx, dy)
 
@@ -17,7 +17,7 @@ abstract class PaginationScrollListener(layoutManager: LinearLayoutManager): Rec
 
     if (!isLoading() && !isLastPage()) {
       if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0
-          && totalItemCount >= FRIEND_PAGE_SIZE) {
+          && totalItemCount >= PAGE_SIZE) {
         loadMoreItems()
       }
     }

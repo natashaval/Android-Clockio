@@ -84,6 +84,7 @@
     <string name="activity_content_hint">Content</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
+    <string name="activity_not_available">No Activity Record</string>
     <string name="activity_history_date_hint">Start Date - End Date</string>
 
     <!--    Notification-->

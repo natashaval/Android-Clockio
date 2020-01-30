@@ -24,10 +24,19 @@
         android:textColor="@color/colorPrimaryDark" />
 
     <include
+        android:id="@+id/activityRecyclerViewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/activityToday"
         layout="@layout/item_activity_recyler_view" />
+
+    <TextView
+        android:id="@+id/activityNotAvailableLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:hint="@string/activity_not_available" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activityAddButton"

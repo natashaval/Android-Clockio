@@ -3,6 +3,7 @@ package com.natasha.clockio.activity.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -13,8 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-
 import com.natasha.clockio.R
+
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Activity
@@ -22,7 +23,7 @@ import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
-import com.natasha.clockio.home.ui.fragment.SettingsFragment
+import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.home.ui.fragment.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -52,6 +53,7 @@ class ActivityFragment : Fragment() {
 
   private lateinit var activityAdapter: ActivityAdapter
   private lateinit var linearLayoutManager: LinearLayoutManager
+  private var activityList = mutableListOf<Activity>()
 
   override fun onCreateView(
       inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +67,12 @@ class ActivityFragment : Fragment() {
     act.supportActionBar?.setTitle(R.string.navigation_activity)
 
     return inflater.inflate(R.layout.fragment_activity, container, false)
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+//    https://stackoverflow.com/questions/55087234/error-lateinit-property-adapter-has-not-been-initialized-after-come-back-from-ac
+    activityAdapter = ActivityAdapter(mutableListOf())
   }
 
   override fun onAttach(context: Context) {
@@ -83,6 +91,8 @@ class ActivityFragment : Fragment() {
     getStatus()
     getActivityToday()
 
+    setUpActivityAdapter(mutableListOf())
+
     observeEmployee()
     observeActivity()
 
@@ -97,6 +107,7 @@ class ActivityFragment : Fragment() {
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.history, menu)
   }
+
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when(item.itemId) {
       R.id.action_history -> {
@@ -177,7 +188,13 @@ class ActivityFragment : Fragment() {
         BaseResponse.Status.SUCCESS -> {
           var data = it.data as List<Activity>
           Log.d(TAG, "activity $data")
-          showActivity(data)
+//          showActivity(data)
+          activityList = data.toMutableList()
+          activityAdapter.addAll(activityList)
+          showActivity()
+          /*Handler().postDelayed({
+            activityAdapter?.addAll(activityList)
+          }, 500)*/
         }
       }
     })
@@ -188,14 +205,34 @@ class ActivityFragment : Fragment() {
     statusSpinner.setSelection(statusPosition)
   }
 
-  private fun showActivity(activities: List<Activity>) {
-    Log.d(TAG, "show Activity $activities")
-    activityAdapter = ActivityAdapter(context!!, activities)
+  private fun setUpActivityAdapter(activities: MutableList<Activity>) {
+    activityAdapter = ActivityAdapter(activities)
+    activityAdapter.setListener(object: ActivityAdapter.OnActivityClickListener {
+      override fun onActivityClick(actvy: Activity) {
+        val mFragment = ActivityDetailsFragment.newInstance()
+        val mBundle = Bundle()
+        mBundle.putParcelable(ParcelableConst.ITEM_ACTIVITY, actvy)
+        mFragment.arguments = mBundle
+        val act = activity as HomeActivity
+        act.addFragmentBackstack(mFragment)
+      }
+    })
     linearLayoutManager = LinearLayoutManager(activity)
     activityRecyclerView.apply {
       layoutManager = linearLayoutManager
       adapter = activityAdapter
       addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+    }
+  }
+
+  private fun showActivity() {
+    if(activityList.isEmpty()) {
+      activityNotAvailableLabel.visibility = View.VISIBLE
+      activityRecyclerViewLayout.visibility = View.INVISIBLE
+    } else {
+      Log.d(TAG, "show Activity ${activityList.size}")
+      activityNotAvailableLabel.visibility = View.INVISIBLE
+      activityRecyclerViewLayout.visibility = View.VISIBLE
     }
   }
 

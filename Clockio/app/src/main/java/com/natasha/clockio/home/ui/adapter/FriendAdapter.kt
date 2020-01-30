@@ -89,9 +89,6 @@ class FriendAdapter constructor(val context: Context,
 
   fun addAll(newFriends: List<Employee>) {
     Log.d(TAG, "adapter add All $newFriends")
-    /*for(friend in newFriends) {
-      addItem(friend)
-    }*/
     friends.addAll(newFriends)
     notifyDataSetChanged()
   }

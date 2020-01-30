@@ -103,7 +103,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     return super.onOptionsItemSelected(item)
   }
 
-  fun showFriends(friends: MutableList<Employee>) {
+  private fun showFriends(friends: MutableList<Employee>) {
     isLoading = false
     friendAdapter = FriendAdapter(context!!, friends, friends)
     friendAdapter.setListener(object: FriendAdapter.OnItemClickListener {
@@ -188,7 +188,6 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
-//      showFriends(employeeList)
     })
   }
 
