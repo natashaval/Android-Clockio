@@ -16,7 +16,7 @@ import javax.inject.Inject
 class NotifViewModel @Inject constructor(private val notifRepository: NotifRepository) : ViewModel() {
   private val TAG: String = NotifViewModel::class.java.simpleName
 
-  private val notifResult: LiveData<NotifResult> = liveData(Dispatchers.IO) {
+  val notifResult: LiveData<NotifResult> = liveData(Dispatchers.IO) {
     val result = notifRepository.getAllNotif()
     Log.d(TAG, "notifResult ${result.data}")
     emit(result)

@@ -6,4 +6,7 @@ object ParcelableConst {
   const val LOCATION = "item_location"
   const val LOCATION_SAVE = "location_save"
   const val ITEM_NOTIF = "item_notif"
+
+  const val PRESENCE_FINISH = "presence_finish"
+  const val NOTIF_FINISH = "notif_finish"
 }

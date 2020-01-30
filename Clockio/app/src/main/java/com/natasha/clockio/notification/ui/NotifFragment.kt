@@ -43,9 +43,6 @@ class NotifFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(NotifViewModel::class.java)
 
-    //    val decoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-    //    notifRecyclerView.addItemDecoration(decoration)
-
     observeAdapter()
     addNotifClick()
     swipeDelete()
@@ -55,6 +52,13 @@ class NotifFragment : Fragment() {
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
     super.onAttach(context)
+  }
+
+  override fun onResume() {
+//    https://stackoverflow.com/questions/20702333/refresh-fragment-at-reload/20702418
+    Log.d(TAG, "notif onResume")
+//    fragmentManager?.beginTransaction()?.detach(this)?.attach(this)?.commit()
+    super.onResume()
   }
 
   private fun observeAdapter() {
@@ -92,6 +96,7 @@ class NotifFragment : Fragment() {
 
   private fun swipeRefresh() {
     notifSwipeRefresh.setOnRefreshListener {
+      Log.d(TAG, "notif swipeRefresh")
       notifSwipeRefresh.isRefreshing = false
     }
   }
@@ -116,4 +121,19 @@ class NotifFragment : Fragment() {
     itemTouchHelper.attachToRecyclerView(notifRecyclerView)
   }
 
+  interface OnNotifReattachListener {
+    fun onNotifReattach()
+  }
+
+  internal var reattachCallback: OnNotifReattachListener? = null
+  fun setOnNotifReattachListener(callback: OnNotifReattachListener) {
+    this.reattachCallback = callback
+  }
+  fun reAttachFragment() {
+    Log.d(TAG, "notif reattach")
+    val frg = fragmentManager?.findFragmentByTag(TAG)
+    frg?.let {
+      fragmentManager?.beginTransaction()?.detach(it)?.attach(it)?.commit()
+    }
+  }
 }

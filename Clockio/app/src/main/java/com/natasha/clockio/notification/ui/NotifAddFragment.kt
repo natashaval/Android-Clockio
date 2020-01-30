@@ -122,6 +122,8 @@ class NotifAddFragment : Fragment() {
     val request = NotifRequest(title, content, startDate, endDate, 0.0, 0.0)
     Log.d(TAG, "create notif $request")
     viewModel.createNotif(request)
+
+//    reattachSavedNotif()
   }
 
   private fun observeNotifAdd() {
@@ -147,5 +149,10 @@ class NotifAddFragment : Fragment() {
         }
       }
     })
+  }
+
+  private fun reattachSavedNotif() {
+    val i: NotifFragment.OnNotifReattachListener = activity as NotifFragment.OnNotifReattachListener
+    i.onNotifReattach()
   }
 }

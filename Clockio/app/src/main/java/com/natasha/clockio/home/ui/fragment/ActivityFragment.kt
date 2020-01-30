@@ -1,6 +1,7 @@
 package com.natasha.clockio.home.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -12,17 +13,20 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
 import com.natasha.clockio.activity.ui.ActivityAddFragment
+import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
+import com.natasha.clockio.home.ui.HomeActivity.Companion.PRESENCE_ACTIVITY_REQUEST_CODE
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.home.viewmodel.ActivityViewModel
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
@@ -89,6 +93,11 @@ class ActivityFragment : Fragment() {
     addActivityClick()
   }
 
+  override fun onResume() {
+    Log.d(TAG, "activity Fragment onResume")
+    super.onResume()
+  }
+
   private fun getStatus() {
     adapter = StatusSpinnerAdapter(context!!, R.layout.item_status, statusArray, statusIconArray)
     statusSpinner.adapter = adapter
@@ -109,7 +118,7 @@ class ActivityFragment : Fragment() {
     }
   }
 
-  private fun getEmployee() {
+  fun getEmployee() {
     employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     employeeViewModel.getEmployee(employeeId!!)
   }
@@ -171,6 +180,7 @@ class ActivityFragment : Fragment() {
     activityRecyclerView.apply {
       layoutManager = linearLayoutManager
       adapter = activityAdapter
+      addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
     }
   }
 
@@ -184,4 +194,13 @@ class ActivityFragment : Fragment() {
     }
   }
 
+  interface OnEmployeeRefreshListener {
+    fun onEmployeeRefresh()
+  }
+
+  internal var callback: OnEmployeeRefreshListener? = null
+  fun setOnEmployeeRefreshListener(callback: OnEmployeeRefreshListener) {
+    //    https://developer.android.com/training/basics/fragments/communicating.html
+    this.callback = callback
+  }
 }

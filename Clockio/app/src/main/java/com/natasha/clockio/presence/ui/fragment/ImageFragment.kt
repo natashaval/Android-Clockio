@@ -1,6 +1,8 @@
 package com.natasha.clockio.presence.ui.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -92,14 +94,20 @@ class ImageFragment : Fragment() {
   //    https://stackoverflow.com/questions/10863572/programmatically-go-back-to-the-previous-fragment-in-the-backstack
   private fun closeImage() {
     imageClose.setOnClickListener {
-      activity!!.finish()
+      activity?.apply {
+        val i = Intent()
+        i.putExtra(ParcelableConst.PRESENCE_FINISH, "Presence Finished")
+        setResult(Activity.RESULT_OK, i)
+        finish()
+      }
+//      activity!!.finish()
     }
   }
 
   private fun showImage(imagePath: String) {
     Glide.with(this)
-      .load(Uri.fromFile(File(imagePath)))
-      .into(imageResult)
+        .load(Uri.fromFile(File(imagePath)))
+        .into(imageResult)
   }
 
   //    https://cloudinary.com/documentation/android_image_and_video_upload
@@ -183,16 +191,16 @@ class ImageFragment : Fragment() {
       when(it.status) {
         BaseResponse.Status.LOADING -> {
           SweetAlertDialog(activity, SweetAlertDialog.PROGRESS_TYPE)
-            .setTitleText("Loading ...");
+              .setTitleText("Loading ...");
         }
         BaseResponse.Status.SUCCESS -> {
           it.data?.let { result ->
             var presenceSucces = result as DataResponse
             Log.d(TAG, "checkin success $presenceSucces")
             SweetAlertDialog(activity, SweetAlertDialog.SUCCESS_TYPE)
-              .setTitleText(AlertConst.CHECKIN)
-              .setContentText(presenceSucces.message)
-              .show()
+                .setTitleText(AlertConst.CHECKIN)
+                .setContentText(presenceSucces.message)
+                .show()
           }
         }
         BaseResponse.Status.FAILED -> {
@@ -200,22 +208,22 @@ class ImageFragment : Fragment() {
             var presenceFailed = result as DataResponse
             Log.d(TAG, "checkin failed $presenceFailed")
             SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE)
-              .setTitleText(AlertConst.FAILED)
-              .setContentText(presenceFailed.message)
-              .show()
+                .setTitleText(AlertConst.FAILED)
+                .setContentText(presenceFailed.message)
+                .show()
           }
         }
         BaseResponse.Status.ERROR -> {
           SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-            .setTitleText(AlertConst.ERROR)
-            .setContentText(it.data.toString())
-            .show()
+              .setTitleText(AlertConst.ERROR)
+              .setContentText(it.data.toString())
+              .show()
         }
       }
     })
   }
 
-//  https://stackoverflow.com/questions/18573774/how-to-reduce-an-image-file-size-before-uploading-to-a-server
+  //  https://stackoverflow.com/questions/18573774/how-to-reduce-an-image-file-size-before-uploading-to-a-server
   private fun compressImageFile(imagePath: String): String? {
     try {
       val file: File = File(imagePath)
@@ -232,7 +240,7 @@ class ImageFragment : Fragment() {
 
       var scale = 1;
       while(o.outWidth/scale/2 >= REQUIRED_SIZE &&
-              o.outHeight/scale/2 >= REQUIRED_SIZE) {
+            o.outHeight/scale/2 >= REQUIRED_SIZE) {
         scale *= 2;
       }
 

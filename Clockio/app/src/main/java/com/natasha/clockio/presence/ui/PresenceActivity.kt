@@ -1,34 +1,12 @@
 package com.natasha.clockio.presence.ui
 
-import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.natasha.clockio.R
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.os.Looper
-import android.util.Log
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.natasha.clockio.presence.ui.fragment.LockFragment
-import com.nightonke.blurlockview.BlurLockView
-import com.nightonke.blurlockview.Directions.HideType
-import com.nightonke.blurlockview.Eases.EaseType
-import com.nightonke.blurlockview.Password
-import kotlinx.android.synthetic.main.activity_presence.*
 import java.io.File
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
-import javax.inject.Inject
 
 class PresenceActivity : AppCompatActivity() {
 

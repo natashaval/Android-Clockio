@@ -1,5 +1,6 @@
 package com.natasha.clockio.home.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.FirebaseConst
+import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.ui.NotifFragment
@@ -25,9 +27,14 @@ import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
+class HomeActivity : DaggerAppCompatActivity(),
+    OnViewOpenedInterface, ActivityFragment.OnEmployeeRefreshListener, NotifFragment.OnNotifReattachListener {
 
-  private val TAG: String = HomeActivity::class.java.simpleName
+  companion object {
+    private val TAG: String = HomeActivity::class.java.simpleName
+    const val PRESENCE_ACTIVITY_REQUEST_CODE = 1
+  }
+
   @Inject lateinit var firebaseInstance: FirebaseInstanceId
   @Inject lateinit var firebaseMessaging: FirebaseMessaging
 
@@ -36,6 +43,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     setContentView(R.layout.activity_home)
 
     AndroidInjection.inject(this)
+    Log.d(TAG, "home onCreate")
     val fragment = ActivityFragment.newInstance()
     addFragment(fragment)
     addSpaceNavigation(savedInstanceState)
@@ -49,6 +57,15 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     } else {
       Log.d(TAG, "fragment backpressed")
       super.onBackPressed()
+    }
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if(requestCode == PRESENCE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+      val returnString = data?.getStringExtra(ParcelableConst.PRESENCE_FINISH)
+      Log.d(TAG, "home onActivityResult $returnString")
+      onEmployeeRefresh()
     }
   }
 
@@ -82,7 +99,7 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
     override fun onCentreButtonClick() {
       Toast.makeText(applicationContext, "onCenterButtonClick", Toast.LENGTH_SHORT).show()
       val intent = Intent(this@HomeActivity, PresenceActivity::class.java)
-      startActivity(intent)
+      startActivityForResult(intent, PRESENCE_ACTIVITY_REQUEST_CODE)
     }
 
     override fun onItemClick(itemIndex: Int, itemName: String) {
@@ -120,6 +137,27 @@ class HomeActivity : DaggerAppCompatActivity(), OnViewOpenedInterface {
   override fun onClose() {
     Log.d(TAG, "space onClose")
     spaceNavigation.visibility = View.VISIBLE
+  }
+
+  override fun onAttachFragment(fragment: Fragment) {
+    when(fragment) {
+      is ActivityFragment -> fragment.setOnEmployeeRefreshListener(this)
+      is NotifFragment -> fragment.setOnNotifReattachListener(this)
+    }
+  }
+
+  override fun onEmployeeRefresh() {
+//    https://developer.android.com/training/basics/fragments/communicating.html
+    val activityFrag = supportFragmentManager.
+        findFragmentByTag(ActivityFragment::class.java.simpleName) as ActivityFragment
+    Log.d(TAG, "home activity get Employee")
+    activityFrag?.getEmployee()
+  }
+
+  override fun onNotifReattach() {
+    val notifFrag = supportFragmentManager.findFragmentByTag(NotifFragment::class.java.simpleName) as NotifFragment
+    Log.d(TAG, "home activity reattach notif")
+    notifFrag.reAttachFragment()
   }
 
   private fun firebaseInstance() {

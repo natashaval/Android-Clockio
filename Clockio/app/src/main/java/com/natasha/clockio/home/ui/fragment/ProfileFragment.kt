@@ -102,8 +102,8 @@ class ProfileFragment : Fragment() {
   }
 
   override fun onResume() {
-    super.onResume()
     invokeLocationAction()
+    super.onResume()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
