@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/card_horizontal_margin"
-    android:layout_marginVertical="@dimen/card_vertical_margin" >
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/card_vertical_margin"
+        android:paddingHorizontal="@dimen/card_horizontal_margin">
         <TextView
             android:id="@+id/notifTitle"
-            style="@style/TextAppearance.MaterialComponents.Body1"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notif Title" />
+            android:paddingVertical="@dimen/text_padding"
+            android:text="@string/notif_title_hint" />
 
         <TextView
             android:id="@+id/notifContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_below="@id/notifTitle"
-            android:text="Notif Content" />
+            android:text="@string/notif_content_hint" />
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

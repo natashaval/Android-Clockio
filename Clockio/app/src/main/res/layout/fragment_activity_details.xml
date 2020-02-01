@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/activityTitleDetails"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"
@@ -32,6 +32,7 @@
         android:layout_margin="@dimen/input_margin"
         android:hint="@string/activity_content_hint"
         android:scrollbars="vertical"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activityTimeDetailsLayout" />
 

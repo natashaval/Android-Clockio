@@ -80,8 +80,9 @@
     <!--    Activity-->
     <string name="activity_title">Activity Today</string>
     <string name="activity_create_title">What have you done today?</string>
-    <string name="activity_title_hint">Title</string>"
-    <string name="activity_content_hint">Content</string>
+    <string name="activity_title_hint">Activity Title</string>"
+    <string name="activity_content_hint">Activity Content</string>
+    <string name="activity_date_time_hint">Activity Date Time</string>
     <string name="activity_start_hint">Start Time</string>
     <string name="activity_end_hint">End Time</string>
     <string name="activity_not_available">No Activity Record</string>
