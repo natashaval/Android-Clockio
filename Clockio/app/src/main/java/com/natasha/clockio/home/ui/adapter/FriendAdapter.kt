@@ -48,6 +48,7 @@ class FriendAdapter constructor(val fragment: Fragment,
   override fun getItemCount(): Int = friendsFiltered.size
 
   override fun getItemViewType(position: Int): Int {
+    Log.d(TAG, "getViewItemType position: $position filteredSize: ${friendsFiltered.size}")
     return if (position == friendsFiltered.size - 1 && isLoaderVisible) {
       ITEM_VIEW_TYPE_LOADING
     } else {
@@ -201,6 +202,7 @@ class FriendAdapter constructor(val fragment: Fragment,
       }
 
       override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+        isLoaderVisible = false
         friendsFiltered = p1?.values as MutableList<Employee>
         notifyDataSetChanged()
       }

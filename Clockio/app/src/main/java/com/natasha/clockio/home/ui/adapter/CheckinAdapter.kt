@@ -128,6 +128,7 @@ class CheckinAdapter constructor(val fragment: Fragment,
       }
 
       override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+        isLoaderVisible = false
         checkinFilter = p1?.values as MutableList<Employee>
         notifyDataSetChanged()
       }
@@ -135,15 +136,7 @@ class CheckinAdapter constructor(val fragment: Fragment,
     }
   }
 
-  inner class CheckinHolder(private val v: View): OpenViewHolder(v), View.OnClickListener {
-    init {
-      v.setOnClickListener(this)
-    }
-
-    override fun onClick(p0: View?) {
-      Log.d(TAG, "click $p0")
-    }
-
+  inner class CheckinHolder(private val v: View): OpenViewHolder(v) {
     fun bind(emp: Employee) {
       v.checkinName.text = emp.firstName + " " + emp.lastName
       v.checkinDepartment.text = emp.department.name
@@ -158,6 +151,9 @@ class CheckinAdapter constructor(val fragment: Fragment,
         v.profileImage.visibility = View.VISIBLE
         Glide.with(fragment).load(emp.profileUrl)
             .apply(RequestOptions.circleCropTransform()).into(v.profileImage)
+      }
+      v.setOnClickListener {
+        listener?.onClick(emp)
       }
     }
 

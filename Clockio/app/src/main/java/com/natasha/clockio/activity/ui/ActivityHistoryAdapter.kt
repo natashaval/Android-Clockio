@@ -44,10 +44,10 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
 
   override fun getItemViewType(position: Int): Int {
     Log.d(TAG, "getItemViewType history size ${activities.size}")
-    if (position == activities.size - 1 && isLoaderVisible) {
-      return ITEM_VIEW_TYPE_LOADING
+    return if (position == activities.size - 1 && isLoaderVisible) {
+      ITEM_VIEW_TYPE_LOADING
     } else {
-      return ITEM_VIEW_TYPE_CONTENT
+      ITEM_VIEW_TYPE_CONTENT
     }
 
   }
@@ -84,7 +84,8 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
   fun addAll(newActivities: List<Activity>) {
     Log.d(TAG, "history add All $newActivities")
     activities.addAll(newActivities)
-    notifyDataSetChanged()
+    Log.d(TAG, "history add All size ${activities.size}")
+    notifyItemRangeInserted(0, newActivities.size)
   }
 
   fun addLoading() {
@@ -94,7 +95,7 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
   }
 
   fun removeLoading() {
-    Log.d(TAG, "adapter history removeLoading")
+    Log.d(TAG, "adapter history removeLoading size ${activities.size}")
     isLoaderVisible = false
     val position = activities.size - 1
     if ( position > -1 ){
@@ -104,22 +105,18 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
         notifyItemRemoved(position)
       }
     }
+    notifyDataSetChanged()
   }
 
   fun clear() {
     isLoaderVisible = false
+    val size = activities.size
     activities.clear()
+    notifyItemRangeRemoved(0, size)
   }
 
-  inner class HistoryHolder(private val v: View): OpenViewHolder(v), View.OnClickListener {
+  inner class HistoryHolder(private val v: View): OpenViewHolder(v){
     private val TAG:String = HistoryHolder::class.java.simpleName
-    init {
-      v.setOnClickListener(this)
-    }
-    override fun onClick(p0: View?) {
-      Log.d(TAG, "click $p0")
-    }
-
     fun bind(activity: Activity) {
       Log.d(TAG, "history bind $activity")
       v.activityTitle.text = activity.title

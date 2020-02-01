@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
 
-import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.entity.Employee
@@ -23,6 +22,7 @@ import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
 import com.natasha.clockio.base.constant.ParcelableConst
+import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.home.ui.adapter.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -36,10 +36,14 @@ import javax.inject.Inject
 class ActivityFragment : Fragment() {
 
   companion object {
-    fun newInstance() = ActivityFragment()
+    @JvmStatic fun newInstance(employeeId: String) = ActivityFragment().apply {
+      arguments = Bundle().apply {
+        putString(PreferenceConst.EMPLOYEE_ID_KEY, employeeId)
+      }
+    }
+    private val TAG: String = ActivityFragment::class.java.simpleName
   }
 
-  private val TAG: String = ActivityFragment::class.java.simpleName
   @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var employeeViewModel: EmployeeViewModel
@@ -72,6 +76,9 @@ class ActivityFragment : Fragment() {
     super.onCreate(savedInstanceState)
 //    https://stackoverflow.com/questions/55087234/error-lateinit-property-adapter-has-not-been-initialized-after-come-back-from-ac
     activityAdapter = ActivityAdapter(mutableListOf())
+    arguments?.let {
+      employeeId = it.getString(PreferenceConst.EMPLOYEE_ID_KEY)
+    }
   }
 
   override fun onAttach(context: Context) {
@@ -113,7 +120,7 @@ class ActivityFragment : Fragment() {
         Log.d(TAG, "History icon clicked!")
         fragmentManager?.
             beginTransaction()?.
-            replace(R.id.content, ActivityHistoryFragment.newInstance())?.
+            replace(R.id.content, ActivityHistoryFragment.newInstance(employeeId!!))?.
             addToBackStack(null)?.
             commit()
         return true
@@ -144,7 +151,6 @@ class ActivityFragment : Fragment() {
   }
 
   fun getEmployee() {
-    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     employeeViewModel.getEmployee(employeeId!!)
   }
 
@@ -232,6 +238,9 @@ class ActivityFragment : Fragment() {
   }
 
   private fun addActivityClick() {
+    val userEmployeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "") // to check if admin
+    if (userEmployeeId != employeeId) activityAddButton.visibility = View.INVISIBLE
+    else activityAddButton.visibility = View.VISIBLE
     activityAddButton.setOnClickListener {
       Log.d(TAG, "FAB activity clicked!")
       fragmentManager?.beginTransaction()?.

@@ -89,7 +89,7 @@ class HomeActivity : DaggerAppCompatActivity(),
   }
 
   private fun addSpaceNavigation(savedInstanceState: Bundle?) {
-    var userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
     spaceNavigation.initWithSaveInstanceState(savedInstanceState)
     if (userRole == UserConst.ROLE_ADMIN) spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_dashboard), R.drawable.ic_speedometer))
     else spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_round))
@@ -116,7 +116,8 @@ class HomeActivity : DaggerAppCompatActivity(),
           addFragment(fragment)
         }
         getString(R.string.navigation_activity) -> {
-          val fragment = ActivityFragment.newInstance()
+          val employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
+          val fragment = ActivityFragment.newInstance(employeeId!!)
           addFragment(fragment)
         }
         getString(R.string.navigation_friend) -> {
@@ -140,13 +141,14 @@ class HomeActivity : DaggerAppCompatActivity(),
   }
 
   private fun showFirstFragment() {
-    var userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    val employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     Log.d(TAG, "userRole $userRole")
     if (userRole == UserConst.ROLE_ADMIN) {
       val fragment = DashboardAdminFragment.newInstance()
       addFragment(fragment)
     } else {
-      val fragment = ActivityFragment.newInstance()
+      val fragment = ActivityFragment.newInstance(employeeId!!)
       addFragment(fragment)
     }
   }

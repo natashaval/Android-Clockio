@@ -29,6 +29,7 @@ class ActivityRepository @Inject constructor(private val activityApi: ActivityAp
         val response = activityApi.getActivityHistory(id, start, end, page, size)
         try {
             if (response.isSuccessful) {
+                Log.d(TAG, "history response body")
                 response.body()?.let {
                     onSuccess(it)
                 }

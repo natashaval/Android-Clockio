@@ -1,6 +1,7 @@
 package com.natasha.clockio.notification.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.home.ui.HomeActivity
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_notif.*
@@ -28,6 +31,7 @@ class NotifFragment : Fragment() {
     private val TAG: String = NotifFragment::class.java.simpleName
   }
 
+  @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var viewModel: NotifViewModel
   private val adapter = NotifAdapter()
@@ -85,6 +89,9 @@ class NotifFragment : Fragment() {
   }
 
   private fun addNotifClick() {
+    val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    if (userRole == UserConst.ROLE_ADMIN) notifAddButton.visibility = View.VISIBLE
+    else notifAddButton.visibility = View.INVISIBLE
     notifAddButton.setOnClickListener {
       Log.d(TAG, "FAB notif clicked!")
       fragmentManager?.beginTransaction()?.

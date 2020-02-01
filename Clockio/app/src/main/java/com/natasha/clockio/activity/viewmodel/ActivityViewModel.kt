@@ -10,6 +10,7 @@ import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.repository.ActivityRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,7 +33,7 @@ class ActivityViewModel @Inject constructor(private val activityRepository: Acti
 
   fun getActivityToday(id: String) {
     viewModelScope.launch {
-//      val queryDate = "2019-12-12 01:01:00"
+      //      val queryDate = "2019-12-12 01:01:00"
 //      val qDate: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(queryDate)
       val qDate = Date()
       val formatter = SimpleDateFormat("yyyy-MM-dd")

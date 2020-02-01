@@ -1,7 +1,6 @@
 package com.natasha.clockio.activity.ui
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -39,24 +37,35 @@ import javax.inject.Inject
 class ActivityHistoryFragment : Fragment() {
 
   companion object {
-    fun newInstance() = ActivityHistoryFragment()
+    //    https://stackoverflow.com/questions/42397915/how-to-pass-string-from-one-fragment-to-another-in-android
+    @JvmStatic fun newInstance(employeeId: String) = ActivityHistoryFragment().apply {
+      arguments = Bundle().apply {
+        putString(PreferenceConst.EMPLOYEE_ID_KEY, employeeId)
+      }
+    }
     private val TAG: String = ActivityHistoryFragment::class.java.simpleName
   }
 
-  @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var viewModel: ActivityViewModel
   private var selectedDate: androidx.core.util.Pair<Long, Long> = androidx.core.util.Pair(0,0)
 
-  private var employeeId: String? = ""
+  private var employeeId: String? = null
   private var isLoading: Boolean = false
   private val pageStart = 0
   private val pageSize = 10
   private var isLastPage = false
-  private var totalPages = 1
+  private var totalPages = 0
   private var currentPage = pageStart
   lateinit var historyAdapter: ActivityHistoryAdapter
   private var historyList = mutableListOf<Activity>()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    arguments?.let {
+      employeeId = it.getString(PreferenceConst.EMPLOYEE_ID_KEY)
+    }
+  }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -67,7 +76,6 @@ class ActivityHistoryFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
 
-    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     setHistoryDate()
     observeActivityHistory()
     showHistory(historyList)
@@ -124,7 +132,7 @@ class ActivityHistoryFragment : Fragment() {
     picker.addOnPositiveButtonClickListener { selection ->
       selectedDate = selection as androidx.core.util.Pair<Long, Long>
       Log.d(TAG, "Date String = ${picker.headerText}:: Date epoch values:: ${selectedDate.first} to ${selectedDate.second}")
-//      https://stackoverflow.com/questions/6850874/how-to-create-a-java-date-object-of-midnight-today-and-midnight-tomorrow
+      //      https://stackoverflow.com/questions/6850874/how-to-create-a-java-date-object-of-midnight-today-and-midnight-tomorrow
       val aDay = 24*60*60*1000
       val startDate = Date(selectedDate.first!!)
       val endDate = Date(selectedDate.second!! + aDay)
@@ -132,7 +140,9 @@ class ActivityHistoryFragment : Fragment() {
       activityHistoryDateInput.setText(picker.headerText)
 
       historyAdapter.clear()
+      Log.d(TAG, "history picker start:$pageStart")
       doGetActivityHistory(pageStart, pageSize)
+      Log.d(TAG, "history picker finished")
     }
     picker.addOnNegativeButtonClickListener { dialog ->
       Log.d(TAG, "calendar history negative")
@@ -195,11 +205,9 @@ class ActivityHistoryFragment : Fragment() {
     val endDate = formatter.format(selectedDate.second)
     viewModel.getActivityHistory(employeeId!!, startDate, endDate, page, size)
 
-    Log.d(TAG, "doGetAll history size: ${historyList.size} currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
     Handler().postDelayed({
       if (currentPage != pageStart) historyAdapter.removeLoading()
       historyAdapter.addAll(historyList)
-      historyAdapter.notifyDataSetChanged()
       if (currentPage < totalPages) {
         historyAdapter.addLoading()
       } else {

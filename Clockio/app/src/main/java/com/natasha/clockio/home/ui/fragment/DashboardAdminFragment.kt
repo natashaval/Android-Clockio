@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.natasha.clockio.R
+import com.natasha.clockio.activity.ui.ActivityFragment
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.CheckinAdapter
@@ -54,9 +55,9 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
     setHasOptionsMenu(true)
-    checkinSwipeRefresh.setOnRefreshListener(this)
     observeCheckIn()
     showCheckIn(employeeList)
+    checkinSwipeRefresh.setOnRefreshListener(this)
   }
 
   override fun onAttach(context: Context) {
@@ -107,6 +108,9 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
     checkinAdapter.setListener(object: CheckinAdapter.OnCheckInClickListener {
       override fun onClick(employee: Employee) {
         Log.d(TAG, "on Click checkin Employee $employee")
+        val frag = ActivityFragment.newInstance(employee.id)
+        val act = activity as HomeActivity
+        act.addFragmentBackstack(frag)
       }
     })
     val linearLayoutManager = LinearLayoutManager(activity)
@@ -134,7 +138,7 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
     Handler().postDelayed({
       if (currentPage != pageStart) checkinAdapter.removeLoading()
       checkinAdapter.addAll(employeeList)
-      checkinSwipeRefresh.isRefreshing = false
+      checkinSwipeRefresh?.isRefreshing = false
 
       if (currentPage < totalPages) {
         checkinAdapter.addLoading()
@@ -143,7 +147,7 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
         checkinAdapter.removeLoading()
       }
       isLoading = false
-    }, 1000)
+    }, 1500)
   }
 
   override fun onRefresh() {
