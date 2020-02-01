@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginHorizontal="@dimen/card_horizontal_margin"
-    android:layout_marginVertical="@dimen/card_vertical_margin"
-    android:padding="@dimen/input_margin"
-    android:background="@color/float_transparent"
-    app:cardCornerRadius="4dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:layout_marginTop="@dimen/card_vertical_margin">
 
         <TextView
             android:id="@+id/friendName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/employee_name"
+            android:maxLines="1"
+            android:maxLength="20"
             android:layout_marginTop="@dimen/input_margin"
             android:layout_marginLeft="@dimen/input_margin"
-            android:paddingVertical="@dimen/text_padding"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,22 +29,24 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <include
+            android:id="@+id/friendStatusLayout"
             layout="@layout/item_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/input_margin"
-            android:layout_marginTop="12dp"
-            app:layout_constraintStart_toEndOf="@id/friendName"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="@dimen/input_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/friendName"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <include
             android:id="@+id/friendImage"
+            layout="@layout/item_profile_image"
             android:layout_width="@dimen/image_size_small"
             android:layout_height="@dimen/image_size_small"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginEnd="@dimen/profile_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <include
             android:layout_width="wrap_content"
@@ -60,6 +55,4 @@
             android:layout_marginStart="@dimen/input_margin"
             app:layout_constraintTop_toBottomOf="@id/friendDepartment"
             app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

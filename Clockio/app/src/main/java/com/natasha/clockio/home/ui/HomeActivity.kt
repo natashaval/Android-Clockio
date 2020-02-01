@@ -2,6 +2,7 @@ package com.natasha.clockio.home.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,6 +20,9 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.FirebaseConst
 import com.natasha.clockio.base.constant.ParcelableConst
+import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
 import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.ui.NotifFragment
@@ -35,6 +39,7 @@ class HomeActivity : DaggerAppCompatActivity(),
     const val PRESENCE_ACTIVITY_REQUEST_CODE = 1
   }
 
+  @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var firebaseInstance: FirebaseInstanceId
   @Inject lateinit var firebaseMessaging: FirebaseMessaging
 
@@ -44,9 +49,8 @@ class HomeActivity : DaggerAppCompatActivity(),
 
     AndroidInjection.inject(this)
     Log.d(TAG, "home onCreate")
-    val fragment = ActivityFragment.newInstance()
-    addFragment(fragment)
     addSpaceNavigation(savedInstanceState)
+    showFirstFragment()
     firebaseInstance()
   }
 
@@ -85,8 +89,10 @@ class HomeActivity : DaggerAppCompatActivity(),
   }
 
   private fun addSpaceNavigation(savedInstanceState: Bundle?) {
-    spaceNavigation.initWithSaveInstanceState(savedInstanceState);
-    spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_round))
+    var userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    spaceNavigation.initWithSaveInstanceState(savedInstanceState)
+    if (userRole == UserConst.ROLE_ADMIN) spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_dashboard), R.drawable.ic_speedometer))
+    else spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_activity), R.drawable.ic_dashboard_round))
     spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_friend), R.drawable.ic_notebook_of_contacts))
     spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_notif), R.drawable.ic_notifications_black_24dp))
     spaceNavigation.addSpaceItem(SpaceItem(getString(R.string.navigation_profile), R.drawable.ic_person_black_24dp))
@@ -105,6 +111,10 @@ class HomeActivity : DaggerAppCompatActivity(),
     override fun onItemClick(itemIndex: Int, itemName: String) {
 //      Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
       when(itemName) {
+        getString(R.string.navigation_dashboard) -> {
+          val fragment = DashboardAdminFragment.newInstance()
+          addFragment(fragment)
+        }
         getString(R.string.navigation_activity) -> {
           val fragment = ActivityFragment.newInstance()
           addFragment(fragment)
@@ -126,6 +136,18 @@ class HomeActivity : DaggerAppCompatActivity(),
 
     override fun onItemReselected(itemIndex: Int, itemName: String) {
 //      Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+    }
+  }
+
+  private fun showFirstFragment() {
+    var userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    Log.d(TAG, "userRole $userRole")
+    if (userRole == UserConst.ROLE_ADMIN) {
+      val fragment = DashboardAdminFragment.newInstance()
+      addFragment(fragment)
+    } else {
+      val fragment = ActivityFragment.newInstance()
+      addFragment(fragment)
     }
   }
 

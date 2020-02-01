@@ -1,4 +1,4 @@
-package com.natasha.clockio.home.ui.fragment
+package com.natasha.clockio.home.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -70,8 +70,10 @@ class ActivityHistoryFragment : Fragment() {
     employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     setHistoryDate()
     observeActivityHistory()
-    showHistory(arrayListOf())
+    showHistory(historyList)
     showActivity()
+
+    Log.d(TAG, "history trigger again ${historyList.size}")
   }
 
 

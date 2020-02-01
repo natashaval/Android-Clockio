@@ -9,6 +9,7 @@ import com.natasha.clockio.base.di.module.viewmodel.*
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.activity.ui.ActivityFragment
 import com.natasha.clockio.activity.ui.ActivityHistoryFragment
+import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
 import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import com.natasha.clockio.notification.ui.NotifAddFragment
@@ -50,6 +51,11 @@ abstract class BuilderFragmentModule {
     ActivityViewModelModule::class, ActivityModule::class])
   @ActivityScope
   abstract fun activityHistoryFragment(): ActivityHistoryFragment
+
+  @ContributesAndroidInjector(modules = [
+    DashboardViewModelModule::class])
+  @ActivityScope
+  abstract fun activityDashboardAdminFragment(): DashboardAdminFragment
 
   @ContributesAndroidInjector
   @ActivityScope

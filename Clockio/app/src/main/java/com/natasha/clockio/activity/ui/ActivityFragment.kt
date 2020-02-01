@@ -3,7 +3,6 @@ package com.natasha.clockio.activity.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -24,7 +23,7 @@ import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
 import com.natasha.clockio.base.constant.ParcelableConst
-import com.natasha.clockio.home.ui.fragment.StatusSpinnerAdapter
+import com.natasha.clockio.home.ui.adapter.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*

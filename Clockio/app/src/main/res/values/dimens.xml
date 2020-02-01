@@ -5,7 +5,7 @@
     <dimen name="profile_margin">16dp</dimen>
     <dimen name="input_margin">8dp</dimen>
 
-    <dimen name="status_horizontal_margin">8dp</dimen>
+    <dimen name="status_horizontal_margin">4dp</dimen>
     <dimen name="status_vertical_margin">2dp</dimen>
 
     <dimen name="card_horizontal_margin">8dp</dimen>

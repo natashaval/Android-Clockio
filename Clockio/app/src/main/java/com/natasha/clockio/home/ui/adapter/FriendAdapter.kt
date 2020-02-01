@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.home.entity.Employee
 import kotlinx.android.synthetic.main.item_friend.view.*
 import kotlinx.android.synthetic.main.item_friend_call.view.*
+import kotlinx.android.synthetic.main.item_profile_image.view.*
 import kotlinx.android.synthetic.main.item_status.view.*
 
 //https://androidwave.com/pagination-in-recyclerview/
@@ -24,6 +26,7 @@ class FriendAdapter constructor(val fragment: Fragment,
     private var friendsFiltered: MutableList<Employee>):
     RecyclerView.Adapter<OpenViewHolder>(), Filterable {
 
+  private val TAG: String = FriendAdapter::class.java.simpleName
   private var isLoaderVisible: Boolean = false
   private var listener: OnItemClickListener? = null
 
@@ -45,11 +48,10 @@ class FriendAdapter constructor(val fragment: Fragment,
   override fun getItemCount(): Int = friendsFiltered.size
 
   override fun getItemViewType(position: Int): Int {
-    Log.d(TAG, "getItemViewType friendsize ${friends.size}")
-    if (position == friends.size - 1 && isLoaderVisible) {
-      return ITEM_VIEW_TYPE_LOADING
+    return if (position == friendsFiltered.size - 1 && isLoaderVisible) {
+      ITEM_VIEW_TYPE_LOADING
     } else {
-      return ITEM_VIEW_TYPE_CONTENT
+      ITEM_VIEW_TYPE_CONTENT
     }
   }
 
@@ -87,6 +89,7 @@ class FriendAdapter constructor(val fragment: Fragment,
   fun addAll(newFriends: List<Employee>) {
     Log.d(TAG, "adapter add All $newFriends")
     friends.addAll(newFriends)
+    Log.d(TAG, "adapter add All friends: ${friends.size} friendsFiltered: ${friendsFiltered.size}")
     notifyDataSetChanged()
   }
 
@@ -102,7 +105,6 @@ class FriendAdapter constructor(val fragment: Fragment,
     val position = friends.size - 1
     val item = friends[position]
     if (item != null) {
-      //      friends.minus(item)
       friends.remove(item)
       notifyItemRemoved(position)
     }
@@ -113,15 +115,8 @@ class FriendAdapter constructor(val fragment: Fragment,
     friends.clear()
   }
 
-  companion object {
-    private val TAG: String = FriendAdapter::class.java.simpleName
-    const val ITEM_VIEW_TYPE_CONTENT = 1
-    const val ITEM_VIEW_TYPE_LOADING = 2
-  }
-
-  inner class FriendHolder(v: View): OpenViewHolder(v), View.OnClickListener {
+  inner class FriendHolder(private val v: View): OpenViewHolder(v), View.OnClickListener {
     private val TAG: String = FriendHolder::class.java.simpleName
-    private val view = v
     init {
       v.setOnClickListener(this)
     }
@@ -132,51 +127,55 @@ class FriendAdapter constructor(val fragment: Fragment,
 
     fun bind(emp: Employee) {
       Log.d(TAG, "holder bind $emp")
-      view.friendName.text = emp.firstName + " " + emp.lastName
-      view.friendDepartment.text = emp.department.name
+      v.friendName.text = emp.firstName + " " + emp.lastName
+      v.friendDepartment.text = emp.department.name
       setStatus(emp)
-      view.friendPhone.setOnClickListener {
+      v.friendPhone.setOnClickListener {
         Log.d(TAG, "phone clicked ${emp.phone}")
         emp.phone?.let {
           listener?.onPhoneClick(it)
         }
       }
-      view.friendEmail.setOnClickListener {
+      v.friendEmail.setOnClickListener {
         Log.d(TAG, "email clicked ${emp.email}")
         emp.email?.let {
           listener?.onEmailClick(it)
         }
       }
-      view.friendWhatsapp.setOnClickListener {
+      v.friendWhatsapp.setOnClickListener {
         Log.d(TAG, "whatsapp clicked ${emp.phone} how to check??")
         emp.phone?.let {
           listener?.onWhatsappClick(it)
         }
       }
-      view.friendLocation.setOnClickListener {
+      v.friendLocation.setOnClickListener {
         Log.d(TAG, "location clicked (${emp.latitude},${emp.longitude}")
         if (emp.latitude != null && emp.longitude != null) {
           listener?.onLocationClick(emp.latitude, emp.longitude)
         }
       }
-      Glide.with(fragment).load(emp.profileUrl)
-          .apply(RequestOptions.circleCropTransform()).into(view.friendImage)
+      if (emp.profileUrl.isNullOrBlank()) {
+        v.profileInitial.letter = emp.firstName + " " + emp.lastName
+      } else {
+        v.profileImage.visibility = View.VISIBLE
+        Glide.with(fragment).load(emp.profileUrl)
+          .apply(RequestOptions.circleCropTransform()).into(v.profileImage)
+      }
     }
 
     private fun setStatus(emp: Employee) {
-      view.statusText.text = emp.status?.toLowerCase()?.capitalize()
+      val statusText = emp.status?.toLowerCase()?.capitalize()
+      v.statusText.text = statusText
       var iconPosition: Int = R.drawable.ic_status_online_24dp
-      when(emp.status?.toLowerCase()) {
-        "online" -> iconPosition = R.drawable.ic_status_online_24dp
-        "meeting" -> iconPosition = R.drawable.ic_status_meeting_24dp
-        "away" -> iconPosition = R.drawable.ic_status_away_24dp
-        "offline" -> iconPosition = R.drawable.ic_status_offline_24dp
+      when(statusText) {
+        UserConst.STATUS_ONLINE -> iconPosition = R.drawable.ic_status_online_24dp
+        UserConst.STATUS_MEETING -> iconPosition = R.drawable.ic_status_meeting_24dp
+        UserConst.STATUS_AWAY -> iconPosition = R.drawable.ic_status_away_24dp
+        UserConst.STATUS_OFFLINE -> iconPosition = R.drawable.ic_status_offline_24dp
       }
-      view.statusIcon.setImageResource(iconPosition)
+      v.statusIcon.setImageResource(iconPosition)
     }
   }
-
-  inner class ViewHolderLoading(itemView: View) : OpenViewHolder(itemView)
 
   override fun getFilter(): Filter {
     //    https://www.androidhive.info/2017/11/android-recyclerview-with-search-filter-functionality/
@@ -204,7 +203,6 @@ class FriendAdapter constructor(val fragment: Fragment,
       override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
         friendsFiltered = p1?.values as MutableList<Employee>
         notifyDataSetChanged()
-
       }
 
     }

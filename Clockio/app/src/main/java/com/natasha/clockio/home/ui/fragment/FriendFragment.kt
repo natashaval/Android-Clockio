@@ -68,7 +68,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     viewModel = ViewModelProvider(this, factory).get(FriendViewModel::class.java)
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
-    showFriends(arrayListOf())
+    showFriends(employeeList)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -162,18 +162,9 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         currentPage ++
         doFindAllEmployee(currentPage, pageSize)
       }
-
-      override fun getTotalPageCount(): Int {
-        return totalPages
-      }
-
-      override fun isLastPage(): Boolean {
-        return isLastPage
-      }
-
-      override fun isLoading(): Boolean {
-        return isLoading
-      }
+      override fun getTotalPageCount(): Int = totalPages
+      override fun isLastPage(): Boolean = isLastPage
+      override fun isLoading(): Boolean = isLoading
     })
     doFindAllEmployee(pageStart, pageSize)
   }

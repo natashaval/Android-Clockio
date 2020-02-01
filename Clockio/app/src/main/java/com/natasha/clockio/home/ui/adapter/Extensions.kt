@@ -11,3 +11,8 @@ fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false):
 }
 
 open class OpenViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+
+class ViewHolderLoading(itemView: View) : OpenViewHolder(itemView)
+
+const val ITEM_VIEW_TYPE_CONTENT = 1
+const val ITEM_VIEW_TYPE_LOADING = 2

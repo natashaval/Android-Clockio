@@ -1,7 +1,7 @@
 package com.natasha.clockio.base.model
 
 data class PageResponse<T> (
-    val content: List<T>?,
+    var content: List<T>?,
     val first: Boolean,
     val last: Boolean,
     val empty: Boolean,

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.natasha.clockio.R
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
+import com.natasha.clockio.home.ui.adapter.ITEM_VIEW_TYPE_CONTENT
+import com.natasha.clockio.home.ui.adapter.ITEM_VIEW_TYPE_LOADING
 import com.natasha.clockio.home.ui.adapter.OpenViewHolder
 import kotlinx.android.synthetic.main.item_activity.view.*
 
@@ -15,8 +17,6 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
     RecyclerView.Adapter<OpenViewHolder>() {
   companion object {
     private val TAG:String = ActivityHistoryAdapter::class.java.simpleName
-    const val ITEM_VIEW_TYPE_CONTENT = 1
-    const val ITEM_VIEW_TYPE_LOADING = 2
   }
 
   private var isLoaderVisible: Boolean = false

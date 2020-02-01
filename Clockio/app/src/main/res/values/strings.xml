@@ -12,7 +12,8 @@
     <string name="action_history">History</string>
 
     <!--    Navigation-->
-    <string name="navigation_activity">Activity</string>
+    <string name="navigation_activity">Activity</string> <!-- Dashboard for User -->
+    <string name="navigation_dashboard">Dashboard</string> <!-- Dashboard for Admin -->
     <string name="navigation_friend">Friend</string>
     <string name="navigation_checkin">Check In</string>
     <string name="navigation_checkout">Check Out</string>
