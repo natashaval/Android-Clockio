@@ -9,6 +9,7 @@ import com.natasha.clockio.base.di.module.worker.WorkerBindingModule
 import com.natasha.clockio.base.di.scope.ApplicationScope
 import com.natasha.clockio.base.di.factory.DaggerWorkerFactory
 import com.natasha.clockio.base.di.module.worker.WorkerFactoryModule
+import com.natasha.clockio.location.worker.TrackLocationWorker
 
 import dagger.BindsInstance
 import dagger.Component

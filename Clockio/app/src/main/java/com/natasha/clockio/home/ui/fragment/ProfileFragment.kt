@@ -82,6 +82,7 @@ class ProfileFragment : Fragment() {
 
     getEmployee()
     logout()
+    startTrackLocation()
   }
 
   override fun onStart() {
@@ -150,6 +151,9 @@ class ProfileFragment : Fragment() {
       val intent = Intent(activity, LoginActivity::class.java)
       startActivity(intent)
     }
+    stopTrackLocationButton.setOnClickListener {
+      locationViewModel.stopTrackLocation()
+    }
   }
 
   private fun invokeLocationAction() {
@@ -190,8 +194,13 @@ class ProfileFragment : Fragment() {
 
   private fun locationWorker(loc: Location) {
 //    Log.d(TAG, "worker inputData before location $loc")
-    val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
-    workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.KEEP, simpleWorkRequest)
+//    val simpleWorkRequest = LocationWorker.buildOneTimeRequest(loc)
+//    workManager.enqueueUniqueWork(LocationWorker.LOCATION_WORKER_TAG, ExistingWorkPolicy.KEEP, simpleWorkRequest)
+  }
+
+  private fun startTrackLocation() {
+    Log.d(TAG, "worker start track location fragment")
+    locationViewModel.trackLocation()
   }
 
   private fun isPermissionGranted() =

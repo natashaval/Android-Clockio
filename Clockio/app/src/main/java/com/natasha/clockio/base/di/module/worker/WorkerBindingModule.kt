@@ -4,6 +4,7 @@ import androidx.work.Worker
 import com.natasha.clockio.base.di.qualifier.WorkerKey
 import com.natasha.clockio.location.worker.ChildWorkerFactory
 import com.natasha.clockio.location.worker.LocationWorker
+import com.natasha.clockio.location.worker.TrackLocationWorker
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -17,5 +18,10 @@ interface WorkerBindingModule {
   @IntoMap
   @WorkerKey(LocationWorker::class)
   fun bindLocationWorker(worker: LocationWorker.Factory): ChildWorkerFactory
+
+  @Binds
+  @IntoMap
+  @WorkerKey(TrackLocationWorker::class)
+  fun bindTrackLocationWorker(worker: LocationWorker.Factory): ChildWorkerFactory
 
 }

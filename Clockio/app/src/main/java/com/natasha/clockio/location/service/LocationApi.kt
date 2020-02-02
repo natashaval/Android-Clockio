@@ -9,5 +9,5 @@ import retrofit2.http.POST
 
 interface LocationApi {
     @POST("/api/location")
-    fun sendLocation(@Body location: Location): Call<Response<DataResponse>>
+    fun sendLocation(@Body location: Location): Call<DataResponse>
 }
