@@ -193,7 +193,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     Handler().postDelayed({
       if (currentPage != pageStart) friendAdapter.removeLoading()
       friendAdapter.addAll(employeeList)
-      friendSwipeRefresh.isRefreshing = false
+      friendSwipeRefresh?.isRefreshing = false
 
       if (currentPage < totalPages) {
         friendAdapter.addLoading()

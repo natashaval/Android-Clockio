@@ -8,10 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.entity.Department
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
@@ -29,8 +30,7 @@ class EmployeeAddFragment : Fragment() {
 
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var viewModel: EmployeeViewModel
-  private lateinit var deptAdapter: ArrayAdapter<Department>
-  private var departmentList = arrayListOf<Department>()
+  private lateinit var deptAdapter: DepartmentAdapter
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -43,10 +43,7 @@ class EmployeeAddFragment : Fragment() {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProvider(this, factory).get(EmployeeViewModel::class.java)
 
-    departmentList.add(Department("1", "A", ""))
-    departmentList.add(Department("2", "B", ""))
-    departmentList.add(Department("3", "C", ""))
-    setDepartmentDropdown()
+    observeDepartment()
   }
 
   override fun onAttach(context: Context) {
@@ -66,20 +63,27 @@ class EmployeeAddFragment : Fragment() {
     i.onClose()
   }
 
-  private fun setDepartmentDropdown() {
-    deptAdapter = ArrayAdapter(context!!, R.layout.item_department, R.id.addDepartmentInput, departmentList)
+  private fun showDepartmentDropdown(departmentList: List<Department>) {
+    deptAdapter = DepartmentAdapter(context!!,
+        R.layout.item_department, departmentList)
     addDepartmentSpinner.adapter = deptAdapter
 
     addDepartmentSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(p0: AdapterView<*>?) {
-
       }
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        val selectedDept = addDepartmentSpinner.selectedItem as Department
+        val selectedDept = addDepartmentSpinner.selectedItem
         Log.d(TAG, "department selected $selectedDept")
       }
-
     }
+  }
+
+  private fun observeDepartment() {
+    viewModel.getDepartment()
+    viewModel.departmentList.observeOnce(this, Observer {
+      Log.d(TAG, "deptList $it")
+      showDepartmentDropdown(it)
+    })
   }
 }

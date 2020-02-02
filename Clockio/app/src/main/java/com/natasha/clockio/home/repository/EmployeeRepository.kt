@@ -23,6 +23,11 @@ class EmployeeRepository @Inject constructor(private val employeeApi: EmployeeAp
     return ResponseUtils.convertResponse(response)
   }
 
+  suspend fun getDepartments() : BaseResponse<Any> {
+    val response = employeeApi.getDepartments()
+    return ResponseUtils.convertResponse(response)
+  }
+
   suspend fun findAllEmployees(page: Int?, size: Int?,
       onSuccess: (empList: PageResponse<Employee>) -> Unit,
       onError: (error: String) -> Unit) {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.natasha.clockio.base.model.ApiResponse
 import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.model.PageResponse
+import com.natasha.clockio.home.entity.Department
 import com.natasha.clockio.home.entity.Employee
 import retrofit2.Response
 import retrofit2.http.GET
@@ -28,4 +29,7 @@ interface EmployeeApi {
   @GET("/api/employees")
   suspend fun findAllEmployees(@Query("page") page: Int?, @Query("size") size: Int?)
   : Response<PageResponse<Employee>>
+
+  @GET("/api/departments")
+  suspend fun getDepartments(): Response<List<Department>>
 }
