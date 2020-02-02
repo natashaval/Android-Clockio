@@ -62,6 +62,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/employeeStatusLayout"
+        layout="@layout/item_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginStart="@dimen/profile_margin"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/employeeName" />
+
     <ProgressBar
         android:id="@+id/statusProgressBar"
         android:layout_width="wrap_content"

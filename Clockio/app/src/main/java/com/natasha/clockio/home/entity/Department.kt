@@ -6,4 +6,8 @@ data class Department(
     val branchId: String?
 ) {
   constructor(): this("", "" ,"")
+
+    override fun toString(): String {
+        return this.name
+    }
 }

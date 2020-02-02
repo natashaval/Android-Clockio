@@ -25,10 +25,6 @@ class ActivityDetailsFragment : Fragment() {
     val TAG: String = ActivityDetailsFragment::class.java.simpleName
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-  }
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     arguments?.let {

@@ -3,6 +3,7 @@ package com.natasha.clockio.home.ui.fragment
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.friend.ui.EmployeeAddFragment
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.FriendAdapter
@@ -36,6 +40,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     fun newInstance() = FriendFragment()
   }
 
+  @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var viewModel: FriendViewModel
 
@@ -69,6 +74,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
     showFriends(employeeList)
+    showAddEmployee()
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -204,5 +210,18 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     isLastPage = false
     friendAdapter.clear()
     doFindAllEmployee(pageStart, pageSize)
+  }
+
+  private fun showAddEmployee() {
+    val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
+    if (userRole == UserConst.ROLE_ADMIN) employeeAddButton.visibility = View.VISIBLE
+
+    employeeAddButton.setOnClickListener {
+      Log.d(TAG, "FAB friend clicked!")
+      fragmentManager?.beginTransaction()?.
+        replace(R.id.content, EmployeeAddFragment.newInstance())?.
+        addToBackStack(null)?.
+        commit()
+    }
   }
 }

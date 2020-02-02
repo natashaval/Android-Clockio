@@ -23,12 +23,15 @@ import com.natasha.clockio.home.ui.adapter.ActivityAdapter
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.base.ui.setStatusIcon
 import com.natasha.clockio.home.ui.adapter.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
 import kotlinx.android.synthetic.main.item_activity_recyler_view.*
 import kotlinx.android.synthetic.main.item_profile.*
+import kotlinx.android.synthetic.main.item_status.*
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -133,7 +136,7 @@ class ActivityFragment : Fragment() {
     adapter = StatusSpinnerAdapter(context!!,
         R.layout.item_status, statusArray, statusIconArray)
     statusSpinner.adapter = adapter
-    selectStatus()
+    selectStatus(UserConst.STATUS_ONLINE)
     statusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
       override fun onNothingSelected(p0: AdapterView<*>?) {
       }
@@ -170,12 +173,14 @@ class ActivityFragment : Fragment() {
           employeeName.text = response.firstName + " " + response.lastName
           employeeDept.text = response.department.name
           val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
-          employeeLastCheckin.text = getString(R.string.employee_last_checkin, dateFormat.format(response.checkIn))
-          response.status?.let {
-            employeeStatus = it.toLowerCase()
+          response.checkIn?.let {
+            employeeLastCheckin.text = getString(R.string.employee_last_checkin, dateFormat.format(it))
+          }
+          response.status?.let { status ->
+            employeeStatus = status.toLowerCase()
             // https://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position:
             Log.d(TAG, "BaseResponse status $employeeStatus")
-            selectStatus()
+            selectStatus(status)
           }
           Glide.with(this).load(response.profileUrl)
               .apply(RequestOptions.circleCropTransform()).into(employeeProfile)
@@ -201,9 +206,13 @@ class ActivityFragment : Fragment() {
     })
   }
 
-  private fun selectStatus() {
-    val statusPosition: Int = adapter.getPosition(StringUtils.capitalize(employeeStatus))
+  private fun selectStatus(status: String) {
+    var statusText = status.toLowerCase().capitalize()
+    val statusPosition: Int = adapter.getPosition(statusText)
     statusSpinner.setSelection(statusPosition)
+    statusTextView.text = statusText
+    var iconPosition: Int = setStatusIcon(statusText)
+    statusIcon.setImageResource(iconPosition)
   }
 
   private fun setUpActivityAdapter(activities: MutableList<Activity>) {
@@ -239,8 +248,11 @@ class ActivityFragment : Fragment() {
 
   private fun addActivityClick() {
     val userEmployeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "") // to check if admin
-    if (userEmployeeId != employeeId) activityAddButton.visibility = View.INVISIBLE
-    else activityAddButton.visibility = View.VISIBLE
+    if (userEmployeeId != employeeId) {
+      activityAddButton.visibility = View.INVISIBLE
+      statusSpinner.visibility = View.INVISIBLE
+      employeeStatusLayout.visibility = View.VISIBLE
+    }
     activityAddButton.setOnClickListener {
       Log.d(TAG, "FAB activity clicked!")
       fragmentManager?.beginTransaction()?.

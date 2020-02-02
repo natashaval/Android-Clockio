@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.base.ui.setStatusIcon
 import com.natasha.clockio.home.entity.Employee
 import kotlinx.android.synthetic.main.item_checkin.view.*
 import kotlinx.android.synthetic.main.item_profile_image.view.*
@@ -159,17 +160,10 @@ class CheckinAdapter constructor(val fragment: Fragment,
 
     private fun setStatus(emp: Employee) {
       val statusText = emp.status?.toLowerCase()?.capitalize()
-      v.statusText.text = statusText
-      var iconPosition: Int = R.drawable.ic_status_online_24dp
-      when(statusText) {
-        UserConst.STATUS_ONLINE -> iconPosition = R.drawable.ic_status_online_24dp
-        UserConst.STATUS_MEETING -> iconPosition = R.drawable.ic_status_meeting_24dp
-        UserConst.STATUS_AWAY -> iconPosition = R.drawable.ic_status_away_24dp
-        UserConst.STATUS_OFFLINE -> iconPosition = R.drawable.ic_status_offline_24dp
-      }
+      v.statusTextView.text = statusText
+      var iconPosition: Int = setStatusIcon(statusText)
       v.statusIcon.setImageResource(iconPosition)
     }
-
   }
 
   fun setListener(listener: OnCheckInClickListener) {
