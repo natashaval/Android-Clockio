@@ -14,21 +14,28 @@ import com.natasha.clockio.activity.ui.ActivityFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.natasha.clockio.R
-import com.natasha.clockio.base.constant.FirebaseConst
-import com.natasha.clockio.base.constant.ParcelableConst
-import com.natasha.clockio.base.constant.PreferenceConst
-import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.base.constant.*
+import com.natasha.clockio.base.model.BaseResponse
+import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.ui.*
+import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
 import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
+import com.natasha.clockio.location.LocationViewModel
+import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.notification.ui.NotifFragment
+import com.natasha.clockio.presence.service.request.CheckoutRequest
 import com.natasha.clockio.presence.ui.PresenceActivity
+import com.natasha.clockio.presence.viewModel.PresenceViewModel
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
+import java.util.*
 import javax.inject.Inject
 
 class HomeActivity : DaggerAppCompatActivity(),
@@ -39,19 +46,27 @@ class HomeActivity : DaggerAppCompatActivity(),
     const val PRESENCE_ACTIVITY_REQUEST_CODE = 1
   }
 
+  @Inject lateinit var factory: ViewModelProvider.Factory
   @Inject lateinit var sharedPref: SharedPreferences
+  private lateinit var presenceViewModel: PresenceViewModel
+  private lateinit var locationViewModel: LocationViewModel
   @Inject lateinit var firebaseInstance: FirebaseInstanceId
   @Inject lateinit var firebaseMessaging: FirebaseMessaging
+  private var employeeId: String? = null
+  private var presenceId: String? = null
+  var location = LocationModel(0.0, 0.0)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_home)
 
     AndroidInjection.inject(this)
-    Log.d(TAG, "home onCreate")
+    presenceViewModel = ViewModelProvider(this, factory).get(PresenceViewModel::class.java)
+    locationViewModel = ViewModelProvider(this, factory).get(LocationViewModel::class.java)
     addSpaceNavigation(savedInstanceState)
     showFirstFragment()
     firebaseInstance()
+    observeCheckOut()
   }
 
   override fun onBackPressed() {
@@ -68,7 +83,10 @@ class HomeActivity : DaggerAppCompatActivity(),
     super.onActivityResult(requestCode, resultCode, data)
     if(requestCode == PRESENCE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
       val returnString = data?.getStringExtra(ParcelableConst.PRESENCE_FINISH)
+      val presenceIdReturned = data?.getStringExtra(ParcelableConst.PRESENCE_ID)
+      presenceId = sharedPref.getString(PreferenceConst.CHECK_IN_KEY, presenceIdReturned)
       Log.d(TAG, "home onActivityResult $returnString")
+      changeSpaceNavigationCenterButton()
       onEmployeeRefresh()
     }
   }
@@ -103,13 +121,18 @@ class HomeActivity : DaggerAppCompatActivity(),
 
   private val mSpaceOnClickListener = object : SpaceOnClickListener {
     override fun onCentreButtonClick() {
-      Toast.makeText(applicationContext, "onCenterButtonClick", Toast.LENGTH_SHORT).show()
-      val intent = Intent(this@HomeActivity, PresenceActivity::class.java)
-      startActivityForResult(intent, PRESENCE_ACTIVITY_REQUEST_CODE)
+      if (presenceId.isNullOrBlank()) {
+        Toast.makeText(this@HomeActivity, "onCenterButtonClick CheckIn", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@HomeActivity, PresenceActivity::class.java)
+        startActivityForResult(intent, PRESENCE_ACTIVITY_REQUEST_CODE)
+      } else {
+        Toast.makeText(this@HomeActivity, "onCenterButtonClick CheckOut", Toast.LENGTH_SHORT).show()
+        setCheckOut()
+      }
     }
 
     override fun onItemClick(itemIndex: Int, itemName: String) {
-//      Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+      //      Toast.makeText(applicationContext, "onItemClick $itemIndex $itemName", Toast.LENGTH_SHORT).show()
       when(itemName) {
         getString(R.string.navigation_dashboard) -> {
           val fragment = DashboardAdminFragment.newInstance()
@@ -136,13 +159,13 @@ class HomeActivity : DaggerAppCompatActivity(),
     }
 
     override fun onItemReselected(itemIndex: Int, itemName: String) {
-//      Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
+      //      Toast.makeText(applicationContext, "onReselected $itemIndex $itemName", Toast.LENGTH_SHORT).show()
     }
   }
 
   private fun showFirstFragment() {
     val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
-    val employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
+    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "")
     Log.d(TAG, "userRole $userRole")
     if (userRole == UserConst.ROLE_ADMIN) {
       val fragment = DashboardAdminFragment.newInstance()
@@ -150,6 +173,14 @@ class HomeActivity : DaggerAppCompatActivity(),
     } else {
       val fragment = ActivityFragment.newInstance(employeeId!!)
       addFragment(fragment)
+    }
+  }
+
+  private fun changeSpaceNavigationCenterButton() {
+    if (presenceId.isNullOrBlank()) {
+      spaceNavigation.changeCenterButtonIcon(R.drawable.ic_alarm_black_24dp)
+    } else {
+      spaceNavigation.changeCenterButtonIcon(R.drawable.ic_exit_24dp)
     }
   }
 
@@ -175,7 +206,7 @@ class HomeActivity : DaggerAppCompatActivity(),
   }
 
   override fun onEmployeeRefresh() {
-//    https://developer.android.com/training/basics/fragments/communicating.html
+    //    https://developer.android.com/training/basics/fragments/communicating.html
     val activityFrag = supportFragmentManager.
         findFragmentByTag(
             ActivityFragment::class.java.simpleName) as ActivityFragment
@@ -209,6 +240,57 @@ class HomeActivity : DaggerAppCompatActivity(),
           }
           Log.d(TAG, "firebase subscribe topic: $msg")
         }
+  }
+
+  private fun observeCheckOut() {
+    presenceViewModel.presenceCheckout.observe(this, androidx.lifecycle.Observer {
+      when(it.status) {
+        BaseResponse.Status.LOADING -> {
+          alertLoading(this@HomeActivity)
+        }
+        BaseResponse.Status.SUCCESS -> {
+          it.data?.let { result ->
+            var presenceSuccess = result as DataResponse
+            Log.d(TAG, "checkout success $presenceSuccess")
+            alertSuccess(this@HomeActivity, presenceSuccess.message)
+            sharedPref.edit().remove(PreferenceConst.CHECK_IN_KEY).apply()
+            presenceId = null
+            changeSpaceNavigationCenterButton()
+          }
+        }
+        BaseResponse.Status.FAILED -> {
+          it.data?.let { result ->
+            var presenceFailed = result as DataResponse
+            Log.d(TAG, "checkout failed $presenceFailed")
+            alertFailed(this@HomeActivity, presenceFailed.message)
+          }
+        }
+        BaseResponse.Status.ERROR -> {
+          alertError(this@HomeActivity, it.data.toString())
+        }
+      }
+    })
+  }
+
+  private fun observeLocation() {
+    locationViewModel.getLocationData().observeOnce(this, androidx.lifecycle.Observer {
+      location = it
+      Log.d(TAG, "presence image $location")
+    })
+  }
+
+  private fun setCheckOut() {
+    val listener = object: SweetAlertConfirmListener {
+      override fun onConfirm(data: Any?) {
+        observeLocation()
+        presenceId?.let {
+          Log.d(TAG, "checkout send")
+          presenceViewModel.sendCheckOut(it, CheckoutRequest(Date(), location.latitude, location.longitude))
+        }
+      }
+
+    }
+    alertConfirm(this, "Are you sure to check out?", AlertConst.CHECKOUT, listener, null)
   }
 
 }

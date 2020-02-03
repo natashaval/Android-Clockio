@@ -10,9 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.natasha.clockio.R
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
+import com.natasha.clockio.base.constant.AlertConst
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.ui.SweetAlertConfirmListener
-import com.natasha.clockio.base.ui.alertConfirmDelete
+import com.natasha.clockio.base.ui.alertConfirm
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.location.entity.LocationModel
@@ -114,11 +115,11 @@ class ActivityDetailsFragment : Fragment() {
 
   private fun deleteActivity(id: String) {
     alertListener = object : SweetAlertConfirmListener {
-      override fun onDelete(data: Any?) {
+      override fun onConfirm(data: Any?) {
         val actId = data as String
         viewModel.deleteActivity(actId)
       }
     }
-    alertConfirmDelete(activity!!, "Activity will be deleted!", alertListener, id)
+    alertConfirm(activity!!, "Activity will be deleted!", AlertConst.DELETE, alertListener, id)
   }
 }

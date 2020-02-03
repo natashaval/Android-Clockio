@@ -6,8 +6,8 @@
 
     <com.github.ivbaranov.mli.MaterialLetterIcon
         android:id="@+id/profileInitial"
-        android:layout_width="@dimen/image_size_small"
-        android:layout_height="@dimen/image_size_small"
+        android:layout_width="@dimen/image_size_large"
+        android:layout_height="@dimen/image_size_large"
         app:mli_shape_type="circle"
         app:mli_shape_color="@color/colorPrimaryLight"
         app:mli_letter=""
@@ -19,8 +19,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
-        android:layout_width="@dimen/image_size_small"
-        android:layout_height="@dimen/image_size_small"
+        android:layout_width="@dimen/image_size_large"
+        android:layout_height="@dimen/image_size_large"
         android:visibility="invisible" />
 
 </RelativeLayout>

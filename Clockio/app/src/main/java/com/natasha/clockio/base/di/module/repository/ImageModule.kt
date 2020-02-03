@@ -18,16 +18,4 @@ class ImageModule {
   fun provideImageRepository(context: Context): ImageRepository {
     return ImageRepositoryImpl(context)
   }
-
-  @Provides
-  @ActivityScope
-  fun providePresenceApi(retrofit: Retrofit): PresenceApi {
-    return retrofit.create(PresenceApi::class.java)
-  }
-
-  @Provides
-  @ActivityScope
-  fun providePresenceRepository(presenceApi: PresenceApi): PresenceRepository {
-    return PresenceRepository(presenceApi)
-  }
 }

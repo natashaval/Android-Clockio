@@ -6,4 +6,5 @@ object PreferenceConst {
   const val REFRESH_TOKEN_KEY = "refresh-token"
   const val PIN_KEY = "pin_key"
   const val USER_ROLE_KEY = "user-role"
+  const val CHECK_IN_KEY = "check-in"
 }

@@ -32,6 +32,7 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
 import kotlinx.android.synthetic.main.item_activity_recyler_view.*
 import kotlinx.android.synthetic.main.item_profile.*
+import kotlinx.android.synthetic.main.item_profile_image.*
 import kotlinx.android.synthetic.main.item_status.*
 import org.apache.commons.lang3.StringUtils
 import java.text.SimpleDateFormat
@@ -184,8 +185,13 @@ class ActivityFragment : Fragment() {
             Log.d(TAG, "BaseResponse status $employeeStatus")
             selectStatus(status)
           }
-          Glide.with(this).load(response.profileUrl)
-              .apply(RequestOptions.circleCropTransform()).into(employeeProfile)
+          if (response.profileUrl.isNullOrBlank()) {
+            profileInitial.letter = response.firstName + " " + response.lastName
+          } else {
+            profileImage.visibility = View.VISIBLE
+            Glide.with(this).load(response.profileUrl)
+              .apply(RequestOptions.circleCropTransform()).into(profileImage)
+          }
         }
         BaseResponse.Status.ERROR, BaseResponse.Status.FAILED -> {
           statusProgressBar.visibility = View.INVISIBLE

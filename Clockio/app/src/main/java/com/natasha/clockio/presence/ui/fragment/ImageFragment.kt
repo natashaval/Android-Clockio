@@ -15,20 +15,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 
 import com.natasha.clockio.R
-import com.natasha.clockio.base.constant.AlertConst
 import com.natasha.clockio.base.constant.CloudinaryConst
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.base.ui.alertError
+import com.natasha.clockio.base.ui.alertFailed
+import com.natasha.clockio.base.ui.alertLoading
+import com.natasha.clockio.base.ui.alertSuccess
 import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import com.natasha.clockio.presence.service.request.CheckinRequest
+import com.natasha.clockio.presence.service.request.CheckinResult
 import com.natasha.clockio.presence.viewModel.ImageViewModel
 import com.natasha.clockio.presence.viewModel.PresenceViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -49,13 +53,14 @@ class ImageFragment : Fragment() {
 
   @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
+  @Inject lateinit var gson: Gson
   private lateinit var imageViewModel: ImageViewModel
   private lateinit var locationViewModel: LocationViewModel
   private lateinit var presenceViewModel: PresenceViewModel
   private lateinit var imagePath: String
   private var employeeId: String? = null
-  var location: LocationModel =
-      LocationModel(0.0, 0.0)
+  private var location = LocationModel(0.0, 0.0)
+  private var checkinResult: CheckinResult? = null
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -96,6 +101,7 @@ class ImageFragment : Fragment() {
       activity?.apply {
         val i = Intent()
         i.putExtra(ParcelableConst.PRESENCE_FINISH, "Presence Finished")
+        i.putExtra(ParcelableConst.PRESENCE_ID, checkinResult?.id)
         setResult(Activity.RESULT_OK, i)
         finish()
       }
@@ -185,38 +191,31 @@ class ImageFragment : Fragment() {
   }
 
   private fun observeCheckInResult() {
-    presenceViewModel.presenceResult.observe(this, androidx.lifecycle.Observer {
+    presenceViewModel.presenceCheckin.observe(this, androidx.lifecycle.Observer {
       Log.d(TAG, "checkin in ImageFragment ${it.data}")
       when(it.status) {
         BaseResponse.Status.LOADING -> {
-          SweetAlertDialog(activity, SweetAlertDialog.PROGRESS_TYPE)
-              .setTitleText("Loading ...");
+          alertLoading(activity!!)
         }
         BaseResponse.Status.SUCCESS -> {
           it.data?.let { result ->
-            var presenceSucces = result as DataResponse
-            Log.d(TAG, "checkin success $presenceSucces")
-            SweetAlertDialog(activity, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText(AlertConst.CHECKIN)
-                .setContentText(presenceSucces.message)
-                .show()
+            var presenceSuccess = result as DataResponse
+            Log.d(TAG, "checkin success $presenceSuccess")
+            alertSuccess(activity!!, presenceSuccess!!.message)
+            checkinResult = gson.fromJson(presenceSuccess.data.toString(), CheckinResult::class.java)
+            Log.d(TAG, "checkin result $checkinResult")
+            sharedPref.edit().putString(PreferenceConst.CHECK_IN_KEY, checkinResult?.id).apply()
           }
         }
         BaseResponse.Status.FAILED -> {
           it.data?.let { result ->
             var presenceFailed = result as DataResponse
             Log.d(TAG, "checkin failed $presenceFailed")
-            SweetAlertDialog(activity, SweetAlertDialog.ERROR_TYPE)
-                .setTitleText(AlertConst.FAILED)
-                .setContentText(presenceFailed.message)
-                .show()
+            alertFailed(activity!!, presenceFailed.message)
           }
         }
         BaseResponse.Status.ERROR -> {
-          SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
-              .setTitleText(AlertConst.ERROR)
-              .setContentText(it.data.toString())
-              .show()
+          alertError(activity!!, it.data.toString())
         }
       }
     })
@@ -225,7 +224,7 @@ class ImageFragment : Fragment() {
   //  https://stackoverflow.com/questions/18573774/how-to-reduce-an-image-file-size-before-uploading-to-a-server
   private fun compressImageFile(imagePath: String): String? {
     try {
-      val file: File = File(imagePath)
+      val file = File(imagePath)
       var o = BitmapFactory.Options()
       o.inJustDecodeBounds = true;
       o.inSampleSize = 8;

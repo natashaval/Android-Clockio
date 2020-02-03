@@ -7,7 +7,7 @@ import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.ui.alertError
 import com.natasha.clockio.base.ui.alertFailed
-import com.natasha.clockio.base.ui.alertSuccess
+import com.natasha.clockio.base.ui.alertSaved
 import retrofit2.Response
 
 object ResponseUtils {
@@ -30,7 +30,7 @@ object ResponseUtils {
         it.data?.let {result ->
           Log.d(ActivityAddFragment.TAG, "create something success $result")
           val response = result as DataResponse
-          alertSuccess(context, response.message)
+          alertSaved(context, response.message)
         }
       }
       BaseResponse.Status.FAILED -> {

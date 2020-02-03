@@ -2,14 +2,11 @@ package com.natasha.clockio.base.di.module
 
 import com.natasha.clockio.activity.ui.ActivityAddFragment
 import com.natasha.clockio.activity.ui.ActivityDetailsFragment
-import com.natasha.clockio.base.di.module.repository.ActivityModule
-import com.natasha.clockio.base.di.module.repository.ImageModule
-import com.natasha.clockio.base.di.module.repository.NotifModule
-import com.natasha.clockio.base.di.module.repository.ProfileModule
 import com.natasha.clockio.base.di.module.viewmodel.*
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.activity.ui.ActivityFragment
 import com.natasha.clockio.activity.ui.ActivityHistoryFragment
+import com.natasha.clockio.base.di.module.repository.*
 import com.natasha.clockio.friend.ui.EmployeeAddFragment
 import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
 import com.natasha.clockio.home.ui.fragment.FriendFragment
@@ -28,7 +25,7 @@ abstract class BuilderFragmentModule {
   @ContributesAndroidInjector(modules = [
     PresenceViewModelModule::class,
     LocationViewModelModule::class,
-    ImageModule::class])
+    ImageModule::class, PresenceModule::class])
   @ActivityScope
   abstract fun imageFragment(): ImageFragment
 
@@ -41,7 +38,7 @@ abstract class BuilderFragmentModule {
 
   @ContributesAndroidInjector(modules = [
     ProfileViewModelModule::class, ActivityViewModelModule::class,
-    ProfileModule::class, ActivityModule::class])
+    ProfileModule::class, ActivityModule::class, PresenceModule::class])
   @ActivityScope
   abstract fun activityFragment(): ActivityFragment
 

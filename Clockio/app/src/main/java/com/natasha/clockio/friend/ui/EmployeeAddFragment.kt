@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
@@ -13,15 +12,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import cn.pedant.SweetAlert.SweetAlertDialog
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.AlertConst
 import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.base.model.Role
 import com.natasha.clockio.base.ui.SweetAlertConfirmListener
-import com.natasha.clockio.base.ui.alertConfirmDelete
+import com.natasha.clockio.base.ui.alertConfirm
 import com.natasha.clockio.base.util.ResponseUtils
 import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.entity.Department
@@ -32,8 +29,6 @@ import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_employee_add.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -149,8 +144,8 @@ class EmployeeAddFragment : Fragment() {
 
   private fun addImageClick() {
     imageListener = object: SweetAlertConfirmListener {
-      override fun onDelete(data: Any?) {
-        Log.d(TAG, "onDelete in sweetAlert")
+      override fun onConfirm(data: Any?) {
+        Log.d(TAG, "onConfirm in sweetAlert")
       }
     }
     showImageDisplay(false)
@@ -160,7 +155,7 @@ class EmployeeAddFragment : Fragment() {
     if (isImageVisible) {
       addImageDisplay.setOnClickListener {
         Log.d(TAG, "image clicked after posted")
-        alertConfirmDelete(context!!, "Image will be replaced",
+        alertConfirm(context!!, "Image will be replaced", AlertConst.CONFIRMATION,
           imageListener as SweetAlertConfirmListener, null)
       }
     } else {
