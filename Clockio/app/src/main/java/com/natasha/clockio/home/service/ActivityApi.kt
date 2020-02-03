@@ -18,6 +18,10 @@ interface ActivityApi {
     suspend fun createActivity(@Path("id") id: String, @Body request: ActivityCreateRequest)
     : Response<DataResponse>
 
+    @DELETE("/api/activity/{id}")
+    suspend fun deleteActivity(@Path("id") id: String)
+        : Response<DataResponse>
+
     @GET("/api/activity/employee/{id}/history")
     suspend fun getActivityHistory(@Path("id") id: String,
         @Query("start") start: String, @Query("end") end: String,

@@ -27,6 +27,7 @@ import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.base.ui.setStatusIcon
 import com.natasha.clockio.home.ui.adapter.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
+import com.natasha.clockio.location.ui.LocationHistoryFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
 import kotlinx.android.synthetic.main.item_activity_recyler_view.*
@@ -51,6 +52,8 @@ class ActivityFragment : Fragment() {
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var employeeViewModel: EmployeeViewModel
   private lateinit var activityViewModel: ActivityViewModel
+  private lateinit var act: HomeActivity
+
   private lateinit var statusArray: Array<String>
   private lateinit var statusIconArray: Array<Int>
   private var employeeId: String? = ""
@@ -65,13 +68,13 @@ class ActivityFragment : Fragment() {
       inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?
   ): View? {
-    val act = activity as HomeActivity
+    act = activity as HomeActivity
     statusArray = act!!.resources.getStringArray(R.array.status_array)
     statusIconArray = arrayOf(
         R.drawable.ic_status_online_24dp, R.drawable.ic_status_meeting_24dp,
         R.drawable.ic_status_away_24dp, R.drawable.ic_status_offline_24dp)
     act.supportActionBar?.setTitle(R.string.navigation_activity)
-
+    setHasOptionsMenu(true)
     return inflater.inflate(R.layout.fragment_activity, container, false)
   }
 
@@ -91,7 +94,6 @@ class ActivityFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    setHasOptionsMenu(true)
     employeeViewModel = ViewModelProvider(this, factory).get(EmployeeViewModel::class.java)
     activityViewModel = ViewModelProvider(this, factory).get(
         ActivityViewModel::class.java)
@@ -119,13 +121,13 @@ class ActivityFragment : Fragment() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when(item.itemId) {
-      R.id.action_history -> {
+      R.id.action_activity_history -> {
         Log.d(TAG, "History icon clicked!")
-        fragmentManager?.
-            beginTransaction()?.
-            replace(R.id.content, ActivityHistoryFragment.newInstance(employeeId!!))?.
-            addToBackStack(null)?.
-            commit()
+        act.addFragmentBackstack(ActivityHistoryFragment.newInstance(employeeId!!))
+        return true
+      }
+      R.id.action_location_history -> {
+        act.addFragmentBackstack(LocationHistoryFragment.newInstance(employeeId!!))
         return true
       }
     }
@@ -255,10 +257,7 @@ class ActivityFragment : Fragment() {
     }
     activityAddButton.setOnClickListener {
       Log.d(TAG, "FAB activity clicked!")
-      fragmentManager?.beginTransaction()?.
-        replace(R.id.content, ActivityAddFragment.newInstance())?.
-        addToBackStack(null)?.
-        commit()
+      act.addFragmentBackstack(ActivityAddFragment.newInstance())
     }
   }
 

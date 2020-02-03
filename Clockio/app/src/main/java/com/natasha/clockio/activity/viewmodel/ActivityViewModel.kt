@@ -60,4 +60,10 @@ class ActivityViewModel @Inject constructor(private val activityRepository: Acti
       })
     }
   }
+
+  fun deleteActivity(id: String) {
+    viewModelScope.launch {
+      activityRepository.deleteActivity(id)
+    }
+  }
 }

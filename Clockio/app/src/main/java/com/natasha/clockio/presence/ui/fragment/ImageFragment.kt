@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 
 import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.AlertConst
@@ -27,14 +26,13 @@ import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.util.observeOnce
-import com.natasha.clockio.location.LocationModel
+import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import com.natasha.clockio.presence.service.request.CheckinRequest
 import com.natasha.clockio.presence.viewModel.ImageViewModel
 import com.natasha.clockio.presence.viewModel.PresenceViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_image.*
-import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -56,7 +54,8 @@ class ImageFragment : Fragment() {
   private lateinit var presenceViewModel: PresenceViewModel
   private lateinit var imagePath: String
   private var employeeId: String? = null
-  var location: LocationModel = LocationModel(0.0, 0.0)
+  var location: LocationModel =
+      LocationModel(0.0, 0.0)
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)

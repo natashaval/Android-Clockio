@@ -1,6 +1,7 @@
 package com.natasha.clockio.base.di.module
 
 import com.natasha.clockio.activity.ui.ActivityAddFragment
+import com.natasha.clockio.activity.ui.ActivityDetailsFragment
 import com.natasha.clockio.base.di.module.repository.ActivityModule
 import com.natasha.clockio.base.di.module.repository.ImageModule
 import com.natasha.clockio.base.di.module.repository.NotifModule
@@ -13,6 +14,7 @@ import com.natasha.clockio.friend.ui.EmployeeAddFragment
 import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
 import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
+import com.natasha.clockio.location.ui.LocationHistoryFragment
 import com.natasha.clockio.notification.ui.NotifAddFragment
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
@@ -51,6 +53,11 @@ abstract class BuilderFragmentModule {
   @ContributesAndroidInjector(modules = [
     ActivityViewModelModule::class, ActivityModule::class])
   @ActivityScope
+  abstract fun activityDetailsFragment(): ActivityDetailsFragment
+
+  @ContributesAndroidInjector(modules = [
+    ActivityViewModelModule::class, ActivityModule::class])
+  @ActivityScope
   abstract fun activityHistoryFragment(): ActivityHistoryFragment
 
   @ContributesAndroidInjector(modules = [
@@ -79,4 +86,8 @@ abstract class BuilderFragmentModule {
   @ContributesAndroidInjector(modules = [ProfileViewModelModule::class, ProfileModule::class])
   @ActivityScope
   abstract fun employeeAddFragment(): EmployeeAddFragment
+
+  @ContributesAndroidInjector(modules = [LocationViewModelModule::class])
+  @ActivityScope
+  abstract fun locationHistoryFragment(): LocationHistoryFragment
 }

@@ -195,11 +195,10 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       friendAdapter.addAll(employeeList)
       friendSwipeRefresh?.isRefreshing = false
 
-      if (currentPage < totalPages) {
+      if (!isLastPage) {
         friendAdapter.addLoading()
       } else {
         isLastPage = true
-        friendAdapter.removeLoading()
       }
       isLoading = false
     }, 1000)

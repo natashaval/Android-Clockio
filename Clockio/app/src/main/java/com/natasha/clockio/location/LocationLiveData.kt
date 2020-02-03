@@ -5,15 +5,14 @@ import android.content.SharedPreferences
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.work.ListenableWorker
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.model.DataResponse
+import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.location.service.LocationApi
-import com.natasha.clockio.location.worker.LocationWorker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,8 +51,8 @@ class LocationLiveData @Inject constructor(
 
   private fun setLocationData(location: Location) {
     value = LocationModel(
-        latitude = location.latitude,
-        longitude = location.longitude
+      latitude = location.latitude,
+      longitude = location.longitude
     )
   }
 

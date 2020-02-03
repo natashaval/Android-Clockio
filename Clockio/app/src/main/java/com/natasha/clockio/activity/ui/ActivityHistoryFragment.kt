@@ -19,6 +19,7 @@ import com.natasha.clockio.R
 import com.natasha.clockio.activity.viewmodel.ActivityViewModel
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
+import com.natasha.clockio.base.ui.customResolveOrThrow
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.adapter.ActivityAdapter
@@ -69,6 +70,8 @@ class ActivityHistoryFragment : Fragment() {
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
+    val act = activity as HomeActivity
+    act.supportActionBar?.setTitle(R.string.action_activity_history)
     return inflater.inflate(R.layout.fragment_activity_history, container, false)
   }
 
@@ -83,7 +86,6 @@ class ActivityHistoryFragment : Fragment() {
 
     Log.d(TAG, "history trigger again ${historyList.size}")
   }
-
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -106,7 +108,7 @@ class ActivityHistoryFragment : Fragment() {
     activityHistoryDateInput.setOnClickListener {
       val builder = MaterialDatePicker.Builder.dateRangePicker()
       builder.apply {
-        setTheme(resolveOrThrow(context!!, R.attr.materialCalendarTheme))
+        setTheme(customResolveOrThrow(context!!, R.attr.materialCalendarTheme))
         build()
       }
       val picker = builder.build()
@@ -120,23 +122,11 @@ class ActivityHistoryFragment : Fragment() {
     }
   }
 
-  private fun resolveOrThrow(context: Context, @AttrRes attributeResId: Int): Int {
-    val typedValue = TypedValue()
-    if (context.theme.resolveAttribute(attributeResId, typedValue, true)) {
-      return typedValue.data
-    }
-    throw IllegalArgumentException(context.resources.getResourceName(attributeResId))
-  }
-
   private fun addCalendarListener(picker: MaterialDatePicker<*>) {
     picker.addOnPositiveButtonClickListener { selection ->
       selectedDate = selection as androidx.core.util.Pair<Long, Long>
       Log.d(TAG, "Date String = ${picker.headerText}:: Date epoch values:: ${selectedDate.first} to ${selectedDate.second}")
       //      https://stackoverflow.com/questions/6850874/how-to-create-a-java-date-object-of-midnight-today-and-midnight-tomorrow
-      val aDay = 24*60*60*1000
-      val startDate = Date(selectedDate.first!!)
-      val endDate = Date(selectedDate.second!! + aDay)
-      Log.d(TAG, "Real Date start: $startDate end: $endDate")
       activityHistoryDateInput.setText(picker.headerText)
 
       historyAdapter.clear()
@@ -208,11 +198,10 @@ class ActivityHistoryFragment : Fragment() {
     Handler().postDelayed({
       if (currentPage != pageStart) historyAdapter.removeLoading()
       historyAdapter.addAll(historyList)
-      if (currentPage < totalPages) {
+      if (!isLastPage) {
         historyAdapter.addLoading()
       } else {
         isLastPage = true
-        historyAdapter.removeLoading()
       }
       isLoading = false
     }, 1000)

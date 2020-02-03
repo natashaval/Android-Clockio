@@ -9,7 +9,8 @@
     <string name="base_search">Search</string>
     <string name="action_settings">Settings</string>
     <string name="search_hint">Type name ...</string>
-    <string name="action_history">History</string>
+    <string name="action_activity_history">Activity History</string>
+    <string name="action_location_history">Location History</string>
 
     <!--    Navigation-->
     <string name="navigation_activity">Activity</string> <!-- Dashboard for User -->
@@ -102,7 +103,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-<!--    Employee-->
+    <!--    Employee-->
     <string name="emp_add_title">Add Employee</string>
     <string name="emp_add_first_name_hint">First Name</string>
     <string name="emp_add_last_name_hint">Last Name</string>
