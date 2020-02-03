@@ -6,22 +6,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".friend.ui.EmployeeAddFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/addNameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <!--com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addImageInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/image_size_medium"
+            android:src="@drawable/ic_add_white_24dp"
+            app:borderWidth="0dp"
+            app:fabCustomSize="@dimen/image_size_medium" / -->
+
+        <ImageView
+            android:id="@+id/addImageDisplay"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_person_add_black_24dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/addFirstNameLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="@dimen/input_margin"
-            android:hint="@string/emp_add_first_name_hint"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_toRightOf="@id/addImageDisplay"
+            android:hint="@string/emp_add_first_name_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addFirstNameInput"
                 android:background="@color/float_transparent"
@@ -33,13 +52,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/addLastNameLayout"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="@dimen/input_margin"
-            android:hint="@string/emp_add_last_name_hint"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/addFirstNameLayout">
+            android:layout_toRightOf="@id/addImageDisplay"
+            android:layout_below="@id/addFirstNameLayout"
+            android:hint="@string/emp_add_last_name_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/addLastNameInput"
                 android:background="@color/float_transparent"
@@ -48,7 +66,7 @@
                 android:inputType="text"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/addDepartmentLabel"
@@ -77,6 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"
         android:hint="@string/emp_add_phone_hint"
+        app:startIconDrawable="@drawable/ic_phone_black_24dp"
         app:layout_constraintTop_toBottomOf="@id/addDepartmentSpinner"
         app:layout_constraintStart_toStartOf="parent">
         <com.google.android.material.textfield.TextInputEditText
@@ -94,6 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"
         android:hint="@string/emp_add_email_hint"
+        app:startIconDrawable="@drawable/ic_email_black_24dp"
         app:layout_constraintTop_toBottomOf="@id/addPhoneLayout"
         app:layout_constraintStart_toStartOf="parent">
         <com.google.android.material.textfield.TextInputEditText
@@ -102,6 +122,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/addUserLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginStart="@dimen/input_margin"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:text="@string/emp_add_user_hint"
+        app:layout_constraintTop_toBottomOf="@id/addEmailLayout"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addUsernameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/prompt_email"
+        app:startIconDrawable="@drawable/ic_person_black_24dp"
+        app:layout_constraintTop_toBottomOf="@id/addUserLabel"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addUsernameInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/prompt_password"
+        app:startIconDrawable="@drawable/ic_lock_black_24dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@id/addUsernameLayout"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addPasswordInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textVisiblePassword"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 

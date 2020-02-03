@@ -14,8 +14,11 @@
     <dimen name="icon_padding_horizontal">12dp</dimen>
     <dimen name="icon_padding_vertical">4dp</dimen>
 
+    <dimen name="fab_margin">16dp</dimen>
+
     <dimen name="image_size_small">48dp</dimen>
     <dimen name="image_size_medium">64dp</dimen>
+    <dimen name="image_size_large">128dp</dimen>
 
     <dimen name="text_padding">2dp</dimen>
 </resources>
