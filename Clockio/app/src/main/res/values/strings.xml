@@ -109,6 +109,7 @@
     <string name="emp_add_department_hint">Department</string>
     <string name="emp_add_phone_hint">Phone</string>
     <string name="emp_add_email_hint">Email</string>
+    <string name="emp_add_role_hint">Role</string>
     <string name="emp_add_user_hint">Create User</string>
 
 

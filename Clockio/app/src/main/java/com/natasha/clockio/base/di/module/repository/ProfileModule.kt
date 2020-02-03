@@ -5,6 +5,7 @@ import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.home.repository.EmployeeRepository
 import com.natasha.clockio.home.repository.ProfileRepository
 import com.natasha.clockio.home.service.EmployeeApi
+import com.natasha.clockio.login.service.AuthApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -18,5 +19,6 @@ class ProfileModule {
 
   @Provides
   @ActivityScope
-  fun provideEmployeeRepository(employeeApi: EmployeeApi) = EmployeeRepository(employeeApi)
+  fun provideEmployeeRepository(employeeApi: EmployeeApi, authApi: AuthApi) =
+    EmployeeRepository(employeeApi, authApi)
 }

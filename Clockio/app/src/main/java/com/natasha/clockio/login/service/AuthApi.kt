@@ -2,12 +2,10 @@ package com.natasha.clockio.login.service
 
 import com.natasha.clockio.base.model.AccessToken
 import com.natasha.clockio.base.model.LoggedInUser
+import com.natasha.clockio.home.entity.UserRequest
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.POST
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
+import retrofit2.http.*
 
 interface AuthApi {
     //https://medium.com/skyshidigital/kotlin-coroutines-solusi-asynchronous-di-android-ee4c83e5f962
@@ -36,4 +34,7 @@ interface AuthApi {
     @GET("/api/profile")
     suspend fun getProfile(
     ): Response<LoggedInUser>
+
+    @POST("/api/user")
+    suspend fun createUser(@Body request: UserRequest): Response<LoggedInUser>
 }

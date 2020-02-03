@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addRoleInput"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/TextAppearance.MaterialComponents.Body2"
+    android:padding="@dimen/input_margin"
+    android:hint="@string/emp_add_role_hint"
+    android:maxLines="1"
+    android:ellipsize="end"
+    />

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -17,10 +18,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 import com.natasha.clockio.R
+import com.natasha.clockio.base.constant.UserConst
+import com.natasha.clockio.base.model.Role
 import com.natasha.clockio.base.ui.SweetAlertConfirmListener
 import com.natasha.clockio.base.ui.alertConfirmDelete
+import com.natasha.clockio.base.util.ResponseUtils
 import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.entity.Department
+import com.natasha.clockio.home.entity.EmployeeRequest
+import com.natasha.clockio.home.entity.UserRequest
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
@@ -44,6 +50,9 @@ class EmployeeAddFragment : Fragment() {
   private lateinit var deptAdapter: DepartmentAdapter
 
   private var imageListener: SweetAlertConfirmListener? = null
+  private var roleId: Int? = null
+  private var departmentId: String = ""
+  private var profileUrl: String? = null
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
@@ -58,7 +67,9 @@ class EmployeeAddFragment : Fragment() {
     setHasOptionsMenu(true)
 
     observeDepartment()
+    showRole()
     addImageClick()
+    observeCreateEmployee()
   }
 
   override fun onAttach(context: Context) {
@@ -86,6 +97,7 @@ class EmployeeAddFragment : Fragment() {
     when(item.itemId) {
       R.id.action_save -> {
         Log.d(TAG, "employee created saved button clicked!")
+        createEmployee()
         return true
       }
     }
@@ -120,8 +132,9 @@ class EmployeeAddFragment : Fragment() {
       }
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        val selectedDept = addDepartmentSpinner.selectedItem
+        val selectedDept = addDepartmentSpinner.selectedItem as Department
         Log.d(TAG, "department selected $selectedDept")
+        departmentId = selectedDept.id!!
       }
     }
   }
@@ -158,9 +171,42 @@ class EmployeeAddFragment : Fragment() {
     }
   }
 
-  private fun showFab(isShow: Boolean) {
-//    if (isShow) {
-//      val p = addImageInput.layoutParams
-//    }
+  private fun showRole() {
+    var roleList = arrayListOf<Role>()
+    roleList.add(Role(2, UserConst.ROLE_USER))
+    roleList.add(Role(1, UserConst.ROLE_ADMIN))
+
+    val roleAdapter = ArrayAdapter<Role>(context!!, R.layout.item_role, roleList)
+    addRoleSpinner.adapter = roleAdapter
+
+    addRoleSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+      override fun onNothingSelected(p0: AdapterView<*>?) {
+      }
+
+      override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        val role = p0?.getItemAtPosition(p2) as Role
+        roleId = role.id
+      }
+
+    }
+  }
+
+  private fun createEmployee() {
+    val username = addUsernameInput.text.toString()
+    val password = addPasswordInput.text.toString()
+    val userRequest = UserRequest(username, password, roleId!!)
+    val firstName = addFirstNameInput.text.toString()
+    val lastName = addLastNameInput.text.toString()
+    val phone = addPhoneInput.text.toString()
+    val email = addEmailInput.text.toString()
+    val employeeRequest = EmployeeRequest(firstName, lastName, phone, email, profileUrl?: null, departmentId, null)
+    viewModel.createUser(userRequest, employeeRequest)
+  }
+
+  private fun observeCreateEmployee() {
+    viewModel.employeeCreate.observeOnce(this, Observer {
+      Log.d(TAG, "create employee $it")
+      ResponseUtils.showResponseAlert(activity!!, it)
+    })
   }
 }
