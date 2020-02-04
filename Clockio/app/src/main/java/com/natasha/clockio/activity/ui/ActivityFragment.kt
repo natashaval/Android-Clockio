@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
@@ -146,8 +147,6 @@ class ActivityFragment : Fragment() {
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val status: String = statusSpinner.selectedItem.toString()
-//        Toast.makeText(activity!!, "Status selected: $status", Toast.LENGTH_SHORT).show()
-//        Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
         if (employeeStatus!= null && !employeeStatus.equals(status.toLowerCase())) {
           Log.d(TAG, "status changed! $status")
           employeeViewModel.updateStatus(employeeId!!, status)
@@ -209,6 +208,7 @@ class ActivityFragment : Fragment() {
           activityList = data.toMutableList()
           activityAdapter.addAll(activityList)
           showActivity()
+          activitySwipeRefresh.isRefreshing = false
         }
       }
     })
@@ -240,6 +240,9 @@ class ActivityFragment : Fragment() {
       layoutManager = linearLayoutManager
       adapter = activityAdapter
       addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+    }
+    activitySwipeRefresh.setOnRefreshListener {
+      getActivityToday()
     }
   }
 

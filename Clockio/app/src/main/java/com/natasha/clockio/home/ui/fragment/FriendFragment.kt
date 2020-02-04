@@ -182,17 +182,19 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      attachAdapter(employeeList)
     })
   }
 
   fun doFindAllEmployee(page: Int?, size: Int?) {
     viewModel.findAllEmployee(page, size)
-//    observeFindAllEmployee()
     Log.d(TAG, "doFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+  }
 
+  private fun attachAdapter(list: List<Employee>) {
     Handler().postDelayed({
       if (currentPage != pageStart) friendAdapter.removeLoading()
-      friendAdapter.addAll(employeeList)
+      friendAdapter.addAll(list)
       friendSwipeRefresh?.isRefreshing = false
 
       if (!isLastPage) {
@@ -201,7 +203,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         isLastPage = true
       }
       isLoading = false
-    }, 1000)
+    }, 1500)
   }
 
   override fun onRefresh() {

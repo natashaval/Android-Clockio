@@ -53,8 +53,9 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
 
     fun loadProfile() =
         viewModelScope.launch {
-            Log.d(TAG, "getProfile is called in view model")
-            _profile.value = loginRepository.getProfile()
+            val response = loginRepository.getProfile()
+            Log.d(TAG, "getProfile is called in view model $response")
+            _profile.value = response
         }
         /*liveData(Dispatchers.IO) {
             emit(BaseResponse.loading(null))

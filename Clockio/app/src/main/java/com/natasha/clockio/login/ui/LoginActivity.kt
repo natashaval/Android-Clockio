@@ -64,31 +64,30 @@ class LoginActivity : DaggerAppCompatActivity() {
     })
 
 
-    loginViewModel.loginResult.observeOnce(this@LoginActivity, Observer {
+    loginViewModel.loginResult.observe(this@LoginActivity, Observer {
       val loginResult = it ?: return@Observer
-      var isLogin = false
-      loading.visibility = View.GONE
-
       Log.d(TAG, "login is called from login result $loginResult")
       Log.d(TAG, "msg: ${loginResult.message} data: ${loginResult.data?.accessToken}")
-      loginResult.data?.let { token ->
-        interceptor.setToken(token.accessToken)
-        val editor = sharedPref.edit()
-        editor.putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
-        editor.putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
-        editor.commit()
-        if (!TextUtils.isEmpty(token.accessToken)) isLogin = true
+      when(it.status) {
+        BaseResponse.Status.LOADING -> showLoading(true)
+        BaseResponse.Status.SUCCESS -> {
+          showLoading(false)
+          loginResult.data?.let { token ->
+            interceptor.setToken(token.accessToken)
+            sharedPref.edit().apply {
+              putString(PreferenceConst.ACCESS_TOKEN_KEY, token.accessToken)
+              putString(PreferenceConst.REFRESH_TOKEN_KEY, token.refreshToken)
+              apply()
+            }
+            loginViewModel.loadProfile()
+          }
+        }
+        else -> {
+          showLoading(false)
+          showError(resources.getString(R.string.login_failed))
+        }
       }
-      setResult(Activity.RESULT_OK)
 
-      if (isLogin) {
-        var tkn = sharedPref.getString(PreferenceConst.ACCESS_TOKEN_KEY, "")
-        Log.d(TAG, "isLogin getProfile triggered $tkn")
-        loginViewModel.loadProfile()
-      }
-
-      //Complete and destroy login activity once successful
-      finish()
     })
 
     loginViewModel.loginFailed.observe(this@LoginActivity, Observer {
@@ -97,7 +96,7 @@ class LoginActivity : DaggerAppCompatActivity() {
       showLoginFailed(R.string.login_failed)
     })
 
-    loginViewModel.profile.observeOnce(this, Observer { result ->
+    loginViewModel.profile.observe(this, Observer { result ->
       when(result.status) {
         BaseResponse.Status.LOADING -> showLoading(true)
         BaseResponse.Status.SUCCESS -> {
@@ -152,15 +151,11 @@ class LoginActivity : DaggerAppCompatActivity() {
   private fun updateUiWithUser(model: LoggedInUserView) {
     val welcome = getString(R.string.welcome)
     val displayName = model.displayName
-    Toast.makeText(
-        applicationContext,
-        "$welcome $displayName",
-        Toast.LENGTH_LONG
-    ).show()
+    Toast.makeText(this, "$welcome $displayName", Toast.LENGTH_LONG).show()
   }
 
   private fun showLoginFailed(@StringRes errorString: Int) {
-    Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    Toast.makeText(this, errorString, Toast.LENGTH_SHORT).show()
   }
 
   private fun showLoading(isLoading: Boolean) {
@@ -168,11 +163,14 @@ class LoginActivity : DaggerAppCompatActivity() {
     else loading.visibility = View.INVISIBLE
   }
   private fun showError(message: String?) {
-    Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     Log.d(TAG, "login return response error")
   }
 
   private fun openHomeActivity() {
+    //Complete and destroy login activity once successful
+    setResult(Activity.RESULT_OK)
+    finish()
     val intent = Intent(this, HomeActivity::class.java)
     startActivity(intent)
   }

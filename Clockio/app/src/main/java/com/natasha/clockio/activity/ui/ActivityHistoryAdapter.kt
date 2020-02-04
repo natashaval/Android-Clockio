@@ -98,7 +98,7 @@ class ActivityHistoryAdapter constructor(var activities: MutableList<Activity>):
     Log.d(TAG, "adapter history removeLoading size ${activities.size}")
     isLoaderVisible = false
     val position = activities.size - 1
-    if ( position > -1 ){
+    if ( position > 0 ){
       val item = activities[position]
       if (item != null) {
         activities.remove(item)

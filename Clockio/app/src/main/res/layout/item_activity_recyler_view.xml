@@ -4,6 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/activitySwipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activityRecyclerView"
         android:layout_width="match_parent"
@@ -11,5 +16,7 @@
         android:padding="@dimen/input_margin"
         android:scrollbars="vertical"
         tools:listitem="@layout/item_activity" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

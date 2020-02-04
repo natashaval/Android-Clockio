@@ -201,7 +201,8 @@ class ActivityHistoryFragment : Fragment() {
       if (!isLastPage) {
         historyAdapter.addLoading()
       } else {
-        isLastPage = true
+//        isLastPage = true
+        historyAdapter.removeLoading()
       }
       isLoading = false
     }, 1000)

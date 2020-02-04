@@ -99,6 +99,7 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observe checkin currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      attachAdapter(employeeList)
     })
   }
 
@@ -134,10 +135,12 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
   fun doFindAllEmployee(page: Int?, size: Int?) {
     viewModel.findAllEmployeeByCheckIn(page, size)
     Log.d(TAG, "doFindAll checkin currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+  }
 
+  fun attachAdapter(list: List<Employee>) {
     Handler().postDelayed({
       if (currentPage != pageStart) checkinAdapter.removeLoading()
-      checkinAdapter.addAll(employeeList)
+      checkinAdapter.addAll(list)
       checkinSwipeRefresh?.isRefreshing = false
 
       if (currentPage < totalPages) {
