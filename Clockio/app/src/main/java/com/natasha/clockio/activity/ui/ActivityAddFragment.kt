@@ -15,17 +15,13 @@ import com.natasha.clockio.R
 import com.natasha.clockio.activity.entity.ActivityCreateRequest
 import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.base.constant.PreferenceConst
-import com.natasha.clockio.base.model.BaseResponse
-import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.ui.TimePickerFragment
-import com.natasha.clockio.base.ui.alertError
-import com.natasha.clockio.base.ui.alertFailed
-import com.natasha.clockio.base.ui.alertSuccess
 import com.natasha.clockio.base.util.observeOnce
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
-import com.natasha.clockio.home.viewmodel.ActivityViewModel
-import com.natasha.clockio.location.LocationModel
+import com.natasha.clockio.activity.viewmodel.ActivityViewModel
+import com.natasha.clockio.base.util.ResponseUtils
+import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.location.LocationViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity_add.*
@@ -44,7 +40,8 @@ class ActivityAddFragment : Fragment() {
   private lateinit var activityViewModel: ActivityViewModel
   private lateinit var locationViewModel: LocationViewModel
   private var tp: TimePickerDialog? = null
-  var location: LocationModel = LocationModel(0.0, 0.0)
+  var location: LocationModel =
+      LocationModel(0.0, 0.0)
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -133,26 +130,7 @@ class ActivityAddFragment : Fragment() {
 
   private fun observeCreateActivityResult() {
     activityViewModel.activityResult.observe(this, androidx.lifecycle.Observer {
-      when(it.status) {
-        BaseResponse.Status.SUCCESS -> {
-          it.data?.let {result ->
-            Log.d(TAG, "create activity success $result")
-            val response = result as DataResponse
-            alertSuccess(activity!!,response.message)
-          }
-        }
-        BaseResponse.Status.FAILED -> {
-          it.data?.let {result->
-            Log.d(TAG, "create activity failed $result")
-            val response = result as DataResponse
-            alertFailed(activity!!,response.message)
-          }
-        }
-        BaseResponse.Status.ERROR -> {
-          Log.d(TAG, "create activity error ${it.data}")
-          alertError(activity!!, it.data.toString())
-        }
-      }
+      ResponseUtils.showResponseAlert(activity!!, it)
     })
   }
 

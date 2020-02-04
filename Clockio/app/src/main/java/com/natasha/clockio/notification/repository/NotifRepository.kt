@@ -37,6 +37,10 @@ class NotifRepository @Inject constructor(
         return NotifResult(data, networkErrors)
     }
 
+    fun invalidateNotif() {
+        val datasourceFactory = localCache.getAll()
+    }
+
     companion object {
         const val DATABASE_PAGE_SIZE = 2
     }

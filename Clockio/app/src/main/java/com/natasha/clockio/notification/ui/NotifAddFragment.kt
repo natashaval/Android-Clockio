@@ -14,6 +14,7 @@ import com.natasha.clockio.R
 import com.natasha.clockio.base.model.BaseResponse
 import com.natasha.clockio.base.model.DataResponse
 import com.natasha.clockio.base.ui.*
+import com.natasha.clockio.base.util.ResponseUtils
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
 import com.natasha.clockio.notification.entity.NotifRequest
@@ -122,30 +123,18 @@ class NotifAddFragment : Fragment() {
     val request = NotifRequest(title, content, startDate, endDate, 0.0, 0.0)
     Log.d(TAG, "create notif $request")
     viewModel.createNotif(request)
+
+//    reattachSavedNotif()
   }
 
   private fun observeNotifAdd() {
     viewModel.notifAddResult.observe(this, Observer {
-      when(it.status) {
-        BaseResponse.Status.SUCCESS -> {
-          it.data?.let {result ->
-            Log.d(TAG, "create notif success $result")
-            val response = result as DataResponse
-            alertSuccess(activity!!,response.message)
-          }
-        }
-        BaseResponse.Status.FAILED -> {
-          it.data?.let {result->
-            Log.d(TAG, "create notif failed $result")
-            val response = result as DataResponse
-            alertFailed(activity!!,response.message)
-          }
-        }
-        BaseResponse.Status.ERROR -> {
-          Log.d(TAG, "create notif error ${it.data}")
-          alertError(activity!!, it.data.toString())
-        }
-      }
+      ResponseUtils.showResponseAlert(activity!!, it)
     })
+  }
+
+  private fun reattachSavedNotif() {
+    val i: NotifFragment.OnNotifReattachListener = activity as NotifFragment.OnNotifReattachListener
+    i.onNotifReattach()
   }
 }

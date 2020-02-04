@@ -1,4 +1,4 @@
-package com.natasha.clockio.home.ui.fragment
+package com.natasha.clockio.home.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -34,7 +34,7 @@ class StatusSpinnerAdapter(context: Context, resource: Int, objects: Array<out S
       val row = inflater.inflate(R.layout.item_status, parent, false)
 //    }
 
-    val statusText = row.findViewById<View>(R.id.statusText) as TextView
+    val statusText = row.findViewById<View>(R.id.statusTextView) as TextView
     statusText.text = stringArray[position]
 
     val statusIcon = row.findViewById<View>(R.id.statusIcon) as ImageView

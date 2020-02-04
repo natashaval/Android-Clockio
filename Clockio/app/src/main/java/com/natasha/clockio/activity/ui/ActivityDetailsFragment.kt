@@ -6,27 +6,33 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 
 import com.natasha.clockio.R
+import com.natasha.clockio.activity.viewmodel.ActivityViewModel
+import com.natasha.clockio.base.constant.AlertConst
 import com.natasha.clockio.base.constant.ParcelableConst
+import com.natasha.clockio.base.ui.SweetAlertConfirmListener
+import com.natasha.clockio.base.ui.alertConfirm
 import com.natasha.clockio.home.entity.Activity
 import com.natasha.clockio.home.ui.fragment.OnViewOpenedInterface
-import com.natasha.clockio.location.LocationModel
+import com.natasha.clockio.location.entity.LocationModel
 import com.natasha.clockio.location.ui.MapsFragment
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity_details.*
 import kotlinx.android.synthetic.main.item_start_end_time.*
+import javax.inject.Inject
 
 class ActivityDetailsFragment : Fragment() {
 
   var act: Activity? = null
+  @Inject lateinit var factory: ViewModelProvider.Factory
+  private lateinit var viewModel: ActivityViewModel
+  private lateinit var alertListener: SweetAlertConfirmListener
 
   companion object {
     fun newInstance() = ActivityDetailsFragment()
     val TAG: String = ActivityDetailsFragment::class.java.simpleName
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +47,13 @@ class ActivityDetailsFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+    viewModel = ViewModelProvider(this, factory).get(ActivityViewModel::class.java)
     setDetails(act!!)
+  }
+
+  override fun onAttach(context: Context) {
+    AndroidSupportInjection.inject(this)
+    super.onAttach(context)
   }
 
   override fun onStart() {
@@ -56,10 +68,6 @@ class ActivityDetailsFragment : Fragment() {
     i.onClose()
   }
 
-  override fun onAttach(context: Context) {
-    super.onAttach(context)
-  }
-
 //  https://stackoverflow.com/questions/18374183/how-to-show-icons-in-overflow-menu-in-actionbar
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.update, menu)
@@ -69,6 +77,14 @@ class ActivityDetailsFragment : Fragment() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when(item.itemId) {
+      R.id.action_delete -> {
+        act?.let {
+          deleteActivity(it.id)
+        }
+        return true
+      }
+    }
     return super.onOptionsItemSelected(item)
   }
 
@@ -78,6 +94,7 @@ class ActivityDetailsFragment : Fragment() {
     activityContentDetails.text = act.content.toString()
     startDetails.text = act.startTime.toString()
     endDetails.text = act.endTime.toString()
+    activityDateDetails.text = act.date.toString()
     if (act.latitude != null && act.longitude != null) {
       setMap(LocationModel(act.latitude, act.longitude))
     }
@@ -94,5 +111,15 @@ class ActivityDetailsFragment : Fragment() {
     fragmentManager?.beginTransaction()
         ?.replace(R.id.activityMapDetails, frag, TAG)
         ?.commit()
+  }
+
+  private fun deleteActivity(id: String) {
+    alertListener = object : SweetAlertConfirmListener {
+      override fun onConfirm(data: Any?) {
+        val actId = data as String
+        viewModel.deleteActivity(actId)
+      }
+    }
+    alertConfirm(activity!!, "Activity will be deleted!", AlertConst.DELETE, alertListener, id)
   }
 }

@@ -3,11 +3,15 @@ package com.natasha.clockio.base.di.module
 import com.natasha.clockio.MainActivity
 import com.natasha.clockio.base.di.module.activity.LoginActivityModule
 import com.natasha.clockio.base.di.module.activity.MainActivityModule
+import com.natasha.clockio.base.di.module.repository.ImageModule
 import com.natasha.clockio.base.di.module.repository.LoginModule
+import com.natasha.clockio.base.di.module.repository.PresenceModule
 import com.natasha.clockio.base.di.module.repository.TestModule
+import com.natasha.clockio.base.di.module.viewmodel.LocationViewModelModule
 import com.natasha.clockio.base.di.scope.ActivityScope
 import com.natasha.clockio.base.di.module.viewmodel.LoginViewModelModule
 import com.natasha.clockio.base.di.module.viewmodel.MainViewModelModule
+import com.natasha.clockio.base.di.module.viewmodel.PresenceViewModelModule
 import com.natasha.clockio.home.ui.HomeActivity
 import com.natasha.clockio.login.ui.LoginActivity
 import com.natasha.clockio.presence.ui.PresenceActivity
@@ -28,7 +32,8 @@ abstract class BuilderActivityModule {
     @ActivityScope
     internal abstract fun bindPresenceActivity(): PresenceActivity
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [PresenceViewModelModule::class, LocationViewModelModule::class,
+    PresenceModule::class, ImageModule::class])
     @ActivityScope
     internal abstract fun bindHomeActivity(): HomeActivity
 }

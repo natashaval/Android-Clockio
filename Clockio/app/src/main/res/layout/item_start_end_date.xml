@@ -16,6 +16,8 @@
         android:id="@+id/startDateDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/text_padding"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:hint="@string/notif_start_hint"/>
 
     <TextView
@@ -31,5 +33,7 @@
         android:id="@+id/endDateDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/text_padding"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:hint="@string/notif_end_hint"/>
 </LinearLayout>

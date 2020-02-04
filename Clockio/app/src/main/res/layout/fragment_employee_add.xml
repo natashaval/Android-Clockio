@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".friend.ui.EmployeeAddFragment">
+
+    <RelativeLayout
+        android:id="@+id/addNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!--com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addImageInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/image_size_medium"
+            android:src="@drawable/ic_add_white_24dp"
+            app:borderWidth="0dp"
+            app:fabCustomSize="@dimen/image_size_medium" / -->
+
+        <ImageView
+            android:id="@+id/addImageDisplay"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_marginHorizontal="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_person_add_black_24dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addFirstNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/input_margin"
+            android:layout_toRightOf="@id/addImageDisplay"
+            android:hint="@string/emp_add_first_name_hint">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addFirstNameInput"
+                android:background="@color/float_transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/addLastNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/input_margin"
+            android:layout_toRightOf="@id/addImageDisplay"
+            android:layout_below="@id/addFirstNameLayout"
+            android:hint="@string/emp_add_last_name_hint">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addLastNameInput"
+                android:background="@color/float_transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/addDepartmentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/emp_add_department_hint"
+        app:layout_constraintTop_toBottomOf="@id/addNameLayout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/addDepartmentSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:padding="@dimen/text_padding"
+        app:layout_constraintTop_toBottomOf="@id/addDepartmentLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addPhoneLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/emp_add_phone_hint"
+        app:startIconDrawable="@drawable/ic_phone_black_24dp"
+        app:layout_constraintTop_toBottomOf="@id/addDepartmentSpinner"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addPhoneInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addEmailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/input_margin"
+        android:hint="@string/emp_add_email_hint"
+        app:startIconDrawable="@drawable/ic_email_black_24dp"
+        app:layout_constraintTop_toBottomOf="@id/addPhoneLayout"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addEmailInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/addUserLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/input_margin"
+        android:layout_marginStart="@dimen/input_margin"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:text="@string/emp_add_user_hint"
+        app:layout_constraintTop_toBottomOf="@id/addEmailLayout"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addUsernameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/input_margin"
+        android:layout_marginHorizontal="@dimen/input_margin"
+        android:hint="@string/prompt_email"
+        app:startIconDrawable="@drawable/ic_person_black_24dp"
+        app:layout_constraintTop_toBottomOf="@id/addUserLabel"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addUsernameInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/input_margin"
+        android:hint="@string/prompt_password"
+        app:startIconDrawable="@drawable/ic_lock_black_24dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintTop_toBottomOf="@id/addUsernameLayout"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addPasswordInput"
+            android:background="@color/float_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textVisiblePassword"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/addPasswordLayout"
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <TextView
+            android:id="@+id/addRoleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/input_margin"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/input_margin"
+            android:hint="@string/emp_add_role_hint"
+             />
+
+        <Spinner
+            android:id="@+id/addRoleSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/input_margin"
+            android:padding="@dimen/text_padding"
+            app:layout_constraintTop_toBottomOf="@id/addPasswordLayout"
+            app:layout_constraintStart_toEndOf="@id/addRoleLabel" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

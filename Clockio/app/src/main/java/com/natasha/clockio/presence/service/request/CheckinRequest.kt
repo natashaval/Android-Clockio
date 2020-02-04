@@ -6,7 +6,7 @@ import java.util.*
 data class CheckinRequest(
     val employeeId: String,
     val url: String?,
-    val checkIn: Date?,
-    val latitude: Double,
-    val longitude: Double
+    val checkIn: Date,
+    val latitude: Double?,
+    val longitude: Double?
 ) : Serializable

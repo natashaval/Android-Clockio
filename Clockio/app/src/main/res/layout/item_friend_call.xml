@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/friendPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/icon_padding_horizontal"
+        android:paddingVertical="@dimen/icon_padding_vertical"
+        android:src="@drawable/ic_phone_black_24dp" />
+
+    <ImageView
+        android:id="@+id/friendEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/icon_padding_horizontal"
+        android:paddingVertical="@dimen/icon_padding_vertical"
+        android:src="@drawable/ic_email_black_24dp" />
+
+    <ImageView
+        android:id="@+id/friendWhatsapp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/icon_padding_horizontal"
+        android:paddingVertical="@dimen/icon_padding_vertical"
+        android:src="@drawable/ic_whatsapp_black_24dp" />
+
+    <ImageView
+        android:id="@+id/friendLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/icon_padding_horizontal"
+        android:paddingVertical="@dimen/icon_padding_vertical"
+        android:src="@drawable/ic_location_on_black_24dp" />
+
+
+</LinearLayout>

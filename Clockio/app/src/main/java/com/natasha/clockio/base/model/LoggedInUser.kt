@@ -9,4 +9,4 @@ class LoggedInUser(
     val role: Role
 ) : Serializable
 
-data class Role (val id: String, val role: String) : Serializable
+data class Role (val id: Int, val role: String) : Serializable

@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/statusIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="@dimen/status_horizontal_margin"
+        android:layout_marginStart="@dimen/status_horizontal_margin"
         android:src="@drawable/ic_status_away_24dp" />
 
     <TextView
-        android:id="@+id/statusText"
+        android:id="@+id/statusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:hint="@string/status"
-        android:layout_marginLeft="6dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp" />
-
+        android:paddingStart="@dimen/status_horizontal_margin"
+        android:paddingVertical="@dimen/status_vertical_margin" />
 </LinearLayout>

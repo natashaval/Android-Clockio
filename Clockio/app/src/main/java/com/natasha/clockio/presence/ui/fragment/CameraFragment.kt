@@ -42,10 +42,6 @@ class CameraFragment : Fragment() {
     return inflater.inflate(R.layout.fragment_camera, container, false)
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
@@ -61,6 +57,19 @@ class CameraFragment : Fragment() {
       updateTransform()
     }
     switchCamera()
+  }
+
+  override fun onPause() {
+    Log.d(TAG, "camera onPause")
+    super.onPause()
+  }
+
+  override fun onResume() {
+    Log.d(TAG, "camera onResume")
+//    if (allPermissionGranted()) {
+//      viewFinder.post { startCamera() }
+//    }
+    super.onResume()
   }
 
   //    https://codelabs.developers.google.com/codelabs/camerax-getting-started/#4

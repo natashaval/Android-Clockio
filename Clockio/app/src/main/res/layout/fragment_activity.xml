@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.ui.fragment.ActivityFragment">
+    tools:context=".activity.ui.ActivityFragment">
 
     <include
         android:id="@+id/profileActivity"
@@ -23,14 +23,20 @@
         style="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/colorPrimaryDark" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activityRecyclerView"
+    <include
+        android:id="@+id/activityRecyclerViewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/activityToday"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/item_activity" />
+        layout="@layout/item_activity_recyler_view" />
+
+    <TextView
+        android:id="@+id/activityNotAvailableLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:hint="@string/activity_not_available" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activityAddButton"
@@ -38,9 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:backgroundTint="@color/colorPrimaryLight"
         app:borderWidth="0dp"
         android:src="@drawable/ic_add_white_24dp" />

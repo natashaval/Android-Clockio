@@ -1,4 +1,4 @@
-package com.natasha.clockio.location
+package com.natasha.clockio.location.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

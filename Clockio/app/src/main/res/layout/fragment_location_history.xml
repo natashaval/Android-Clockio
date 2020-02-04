@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".location.ui.LocationHistoryFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/locationHistoryDateLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/input_margin"
+        android:layout_alignParentTop="true"
+        android:hint="@string/activity_history_date_hint">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/locationHistoryDateInput"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <FrameLayout
+        android:id="@+id/locationHistoryMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/input_margin"
+        android:background="@color/colorPrimaryLight"
+        android:layout_below="@id/locationHistoryDateLayout"
+        />
+
+</RelativeLayout>

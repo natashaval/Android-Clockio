@@ -1,18 +1,17 @@
 package com.natasha.clockio.base.di.module
 
 import com.natasha.clockio.activity.ui.ActivityAddFragment
-import com.natasha.clockio.base.di.module.repository.ActivityModule
-import com.natasha.clockio.base.di.module.repository.ImageModule
-import com.natasha.clockio.base.di.module.repository.NotifModule
-import com.natasha.clockio.base.di.module.repository.ProfileModule
-import com.natasha.clockio.base.di.module.viewmodel.ActivityViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.LocationViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.NotifViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.PresenceViewModelModule
-import com.natasha.clockio.base.di.module.viewmodel.ProfileViewModelModule
+import com.natasha.clockio.activity.ui.ActivityDetailsFragment
+import com.natasha.clockio.base.di.module.viewmodel.*
 import com.natasha.clockio.base.di.scope.ActivityScope
-import com.natasha.clockio.home.ui.fragment.ActivityFragment
+import com.natasha.clockio.activity.ui.ActivityFragment
+import com.natasha.clockio.activity.ui.ActivityHistoryFragment
+import com.natasha.clockio.base.di.module.repository.*
+import com.natasha.clockio.friend.ui.EmployeeAddFragment
+import com.natasha.clockio.home.ui.fragment.DashboardAdminFragment
+import com.natasha.clockio.home.ui.fragment.FriendFragment
 import com.natasha.clockio.home.ui.fragment.ProfileFragment
+import com.natasha.clockio.location.ui.LocationHistoryFragment
 import com.natasha.clockio.notification.ui.NotifAddFragment
 import com.natasha.clockio.notification.ui.NotifFragment
 import com.natasha.clockio.presence.ui.fragment.ImageFragment
@@ -26,7 +25,7 @@ abstract class BuilderFragmentModule {
   @ContributesAndroidInjector(modules = [
     PresenceViewModelModule::class,
     LocationViewModelModule::class,
-    ImageModule::class])
+    ImageModule::class, PresenceModule::class])
   @ActivityScope
   abstract fun imageFragment(): ImageFragment
 
@@ -39,7 +38,7 @@ abstract class BuilderFragmentModule {
 
   @ContributesAndroidInjector(modules = [
     ProfileViewModelModule::class, ActivityViewModelModule::class,
-    ProfileModule::class, ActivityModule::class])
+    ProfileModule::class, ActivityModule::class, PresenceModule::class])
   @ActivityScope
   abstract fun activityFragment(): ActivityFragment
 
@@ -47,6 +46,21 @@ abstract class BuilderFragmentModule {
   ActivityViewModelModule::class, ActivityModule::class, LocationViewModelModule::class])
   @ActivityScope
   abstract fun activityAddFragment(): ActivityAddFragment
+
+  @ContributesAndroidInjector(modules = [
+    ActivityViewModelModule::class, ActivityModule::class])
+  @ActivityScope
+  abstract fun activityDetailsFragment(): ActivityDetailsFragment
+
+  @ContributesAndroidInjector(modules = [
+    ActivityViewModelModule::class, ActivityModule::class])
+  @ActivityScope
+  abstract fun activityHistoryFragment(): ActivityHistoryFragment
+
+  @ContributesAndroidInjector(modules = [
+    DashboardViewModelModule::class])
+  @ActivityScope
+  abstract fun activityDashboardAdminFragment(): DashboardAdminFragment
 
   @ContributesAndroidInjector
   @ActivityScope
@@ -61,4 +75,16 @@ abstract class BuilderFragmentModule {
     NotifViewModelModule::class, NotifModule::class])
   @ActivityScope
   abstract fun notifAddFragment(): NotifAddFragment
+
+  @ContributesAndroidInjector(modules = [FriendViewModelModule::class])
+  @ActivityScope
+  abstract fun friendFragment(): FriendFragment
+
+  @ContributesAndroidInjector(modules = [ProfileViewModelModule::class, ProfileModule::class])
+  @ActivityScope
+  abstract fun employeeAddFragment(): EmployeeAddFragment
+
+  @ContributesAndroidInjector(modules = [LocationViewModelModule::class])
+  @ActivityScope
+  abstract fun locationHistoryFragment(): LocationHistoryFragment
 }

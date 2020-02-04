@@ -19,10 +19,11 @@ import com.natasha.clockio.home.ui.HomeActivity
 import kotlinx.android.synthetic.main.item_activity.view.*
 
 //https://www.raywenderlich.com/1560485-android-recyclerview-tutorial-with-kotlin
-class ActivityAdapter constructor(val context: Context, private val activities: List<Activity>):
+class ActivityAdapter constructor(private val activities: MutableList<Activity>):
   RecyclerView.Adapter<ActivityAdapter.ActivityHolder>() {
 
   private val TAG: String = ActivityAdapter::class.java.simpleName
+  private var listener: OnActivityClickListener? = null
 
   override fun onBindViewHolder(holder: ActivityHolder, position: Int) {
     val itemActivity = activities[position]
@@ -32,15 +33,20 @@ class ActivityAdapter constructor(val context: Context, private val activities: 
   override fun onCreateViewHolder(parent: ViewGroup,
                                   viewType: Int): ActivityHolder {
     val inflatedView = parent.inflate(R.layout.item_activity, false)
-    return ActivityHolder(context, inflatedView)
+    return ActivityHolder(inflatedView)
+  }
+
+  fun addAll(newActivities: List<Activity>) {
+    activities.clear() //clear previous data
+    Log.d(TAG, "activity adapter add All ${newActivities.size}")
+    activities.addAll(newActivities)
+    notifyDataSetChanged()
   }
 
   override fun getItemCount(): Int = activities.size
 
-  class ActivityHolder(context: Context, v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+  inner class ActivityHolder(private val v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
     private val TAG: String = ActivityHolder::class.java.simpleName
-    private var view: View = v
-    private val context = context
 
     init {
       v.setOnClickListener(this)
@@ -51,30 +57,22 @@ class ActivityAdapter constructor(val context: Context, private val activities: 
     }
 
     fun bind(activity: Activity) {
-      view.activityTitle.text = activity.title
-      view.activityContent.text = activity.content
-      view.activityDate.text = activity.date.toString()
-      view.setOnClickListener {
+      v.activityTitle.text = activity.title
+      v.activityContent.text = activity.content
+      v.activityDate.text = activity.date.toString()
+      v.setOnClickListener {
         Log.d(TAG, "activity clicked $activity")
-        openFragment(activity)
+        listener?.onActivityClick(activity)
       }
     }
-
     //    https://stackoverflow.com/questions/28984879/how-to-open-a-different-fragment-on-recyclerview-onclick
-    private fun openFragment(activity: Activity) {
-      val mFragment = ActivityDetailsFragment.newInstance()
-      val mBundle = Bundle()
-      mBundle.putParcelable(ParcelableConst.ITEM_ACTIVITY, activity)
-      mFragment.arguments = mBundle
-      switchContent(mFragment)
-    }
+  }
 
-    fun switchContent(fragment: Fragment) {
-      context?.let {
-        val ctx = it as HomeActivity
-        ctx.addFragmentBackstack(fragment)
-      }
-    }
+  fun setListener(listener: OnActivityClickListener) {
+    this.listener = listener
+  }
 
+  interface OnActivityClickListener {
+    fun onActivityClick(actvy: Activity)
   }
 }

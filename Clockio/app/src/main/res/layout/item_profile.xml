@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/employeeProfile"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+    <include
+        android:id="@+id/employeeImage"
+        layout="@layout/item_profile_image"
+        android:layout_width="@dimen/image_size_medium"
+        android:layout_height="@dimen/image_size_medium"
+        android:layout_marginStart="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,39 +20,39 @@
         android:id="@+id/employeeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/profile_margin"
+        android:layout_marginTop="@dimen/profile_margin"
         android:hint="@string/employee_name"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/employeeProfile"
+        android:padding="@dimen/text_padding"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintStart_toEndOf="@+id/employeeImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/employeeDept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/profile_margin"
         android:hint="@string/employee_dept"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/employeeProfile"
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintStart_toEndOf="@+id/employeeImage"
         app:layout_constraintTop_toBottomOf="@+id/employeeName" />
 
     <TextView
         android:id="@+id/employeeLastCheckin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/profile_margin"
         android:hint="@string/employee_last_checkin"
-        style="@style/TextAppearance.MaterialComponents.Caption"
-        app:layout_constraintStart_toEndOf="@+id/employeeProfile"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        app:layout_constraintStart_toEndOf="@+id/employeeImage"
         app:layout_constraintTop_toBottomOf="@+id/employeeDept" />
 
     <View
         style="@style/Divider"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/input_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/employeeImage" />
 
     <Spinner
         android:id="@+id/statusSpinner"
@@ -61,6 +62,17 @@
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/employeeStatusLayout"
+        layout="@layout/item_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/profile_margin"
+        android:layout_marginStart="@dimen/profile_margin"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/employeeName" />
 
     <ProgressBar
         android:id="@+id/statusProgressBar"

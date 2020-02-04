@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/activityTitleDetails"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/input_margin"
@@ -16,22 +16,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/activityDateDetails"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/input_margin"
+        android:hint="@string/activity_date_time_hint"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activityTitleDetails" />
+
     <include
         android:id="@+id/activityTimeDetailsLayout"
         layout="@layout/item_start_end_time"
         android:layout_margin="@dimen/input_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activityTitleDetails"
+        app:layout_constraintTop_toBottomOf="@id/activityDateDetails"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 
     <TextView
         android:id="@+id/activityContentDetails"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_margin="@dimen/input_margin"
         android:hint="@string/activity_content_hint"
         android:scrollbars="vertical"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activityTimeDetailsLayout" />
 
