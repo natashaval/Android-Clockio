@@ -146,10 +146,11 @@ class ActivityHistoryFragment : Fragment() {
     viewModel.activityPage.observe(this, androidx.lifecycle.Observer {
       historyList = it.content!!.toMutableList()
       Log.d(TAG, "history fragment ${it.content}")
-      totalPages = it.totalPages - 1
+      totalPages = it.totalPages
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll history sizeChanged?: ${historyList.size} currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      historyAdapter.addAll(historyList)
       showActivity()
     })
   }
@@ -197,12 +198,13 @@ class ActivityHistoryFragment : Fragment() {
 
     Handler().postDelayed({
       if (currentPage != pageStart) historyAdapter.removeLoading()
-      historyAdapter.addAll(historyList)
-      if (!isLastPage) {
+//      historyAdapter.addAll(historyList)
+//      if (!isLastPage) {
+      if (currentPage+1 < totalPages) {
         historyAdapter.addLoading()
       } else {
-//        isLastPage = true
-        historyAdapter.removeLoading()
+//        historyAdapter.removeLoading()
+        isLastPage = true
       }
       isLoading = false
     }, 1000)
