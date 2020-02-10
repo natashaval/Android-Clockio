@@ -9,6 +9,9 @@ import com.natasha.clockio.base.util.NetworkBoundResource
 import com.natasha.clockio.home.dao.EmployeeDao
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.service.EmployeeApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class ProfileRepository @Inject constructor(
@@ -41,6 +44,29 @@ class ProfileRepository @Inject constructor(
         employeeDao.insert(item)
       }
     }.asLiveData()
+  }
+
+  fun updateEmployee(id: String) {
+    employeeApi.getEmployee(id).enqueue(object: Callback<Employee> {
+      override fun onFailure(call: Call<Employee>, t: Throwable) {
+        Log.e(TAG, "Employee update Error ${t.message}")
+        t.printStackTrace()
+      }
+
+      override fun onResponse(call: Call<Employee>, response: Response<Employee>) {
+        if (response.isSuccessful) {
+          Log.d(TAG, "update Employee SUCCESS")
+          response.body()?.let {
+            appExecutors.diskIO().execute {
+              employeeDao.update(it)
+            }
+          }
+        } else {
+          Log.d(TAG, "update Employee Failed ${response.errorBody()}")
+        }
+      }
+
+    })
   }
 
 }

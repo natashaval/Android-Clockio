@@ -16,9 +16,9 @@ import javax.inject.Inject
 class EmployeeViewModel @Inject constructor(private val employeeRepository: EmployeeRepository) : ViewModel() {
   private val TAG: String = EmployeeViewModel::class.java.simpleName
 
-  private val _employee = MutableLiveData<BaseResponse<Any>>()
+  /*private val _employee = MutableLiveData<BaseResponse<Any>>()
   val employee: LiveData<BaseResponse<Any>>
-  get() = _employee
+  get() = _employee*/
 
   private val _departmentList = MutableLiveData<List<Department>>()
   val departmentList: LiveData<List<Department>>
@@ -28,14 +28,14 @@ class EmployeeViewModel @Inject constructor(private val employeeRepository: Empl
   val employeeCreate: LiveData<BaseResponse<Any>>
     get() = _employeeCreate
 
-  fun getEmployee(id: String) {
+  /*fun getEmployee(id: String) {
     viewModelScope.launch {
       _employee.value = BaseResponse.loading(null)
       val response = employeeRepository.getEmployee(id)
       Log.d(TAG, "employee get $response")
       _employee.value = response
     }
-  }
+  }*/
 
   fun updateStatus(id: String, status: String) {
     viewModelScope.launch {

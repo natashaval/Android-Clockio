@@ -212,8 +212,8 @@ class HomeActivity : DaggerAppCompatActivity(),
       val activityFrag = supportFragmentManager?.findFragmentByTag(
         ActivityFragment::class.java.simpleName
       ) as ActivityFragment
-      Log.d(TAG, "home activity get Employee")
-      activityFrag?.getEmployee()
+      Log.d(TAG, "home activity update Employee")
+      activityFrag?.updateEmployee()
     }
   }
 

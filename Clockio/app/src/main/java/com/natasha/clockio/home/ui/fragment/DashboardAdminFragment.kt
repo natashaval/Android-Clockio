@@ -56,6 +56,7 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
     viewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
     setHasOptionsMenu(true)
     observeCheckIn()
+    showCheckinLoading()
     showCheckIn(employeeList)
     checkinSwipeRefresh.setOnRefreshListener(this)
   }
@@ -99,6 +100,7 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observe checkin currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      showCheckinLoading()
       attachAdapter(employeeList)
     })
   }
@@ -158,5 +160,19 @@ class DashboardAdminFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener 
     isLastPage = false
     checkinAdapter.clear()
     doFindAllEmployee(pageStart, pageSize)
+  }
+
+  private fun showCheckinLoading() {
+    if (employeeList.isEmpty()) {
+      checkinLoadingIcon.visibility = View.VISIBLE
+      checkinLoadingTextView.visibility = View.VISIBLE
+      checkinSwipeRefresh.visibility = View.INVISIBLE
+      checkinRecyclerView.visibility = View.INVISIBLE
+    } else {
+      checkinLoadingIcon.visibility = View.INVISIBLE
+      checkinLoadingTextView.visibility = View.INVISIBLE
+      checkinSwipeRefresh.visibility = View.VISIBLE
+      checkinRecyclerView.visibility = View.VISIBLE
+    }
   }
 }

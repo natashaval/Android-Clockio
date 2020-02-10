@@ -61,6 +61,7 @@
     <string name="employee_name">Full Name</string>
     <string name="employee_dept">Department</string>
     <string name="employee_last_checkin">Check In: %s</string>
+    <string name="employee_checkin_loading_hint">Check In Loading ...</string>
 
     <!--    Status-->
     <string name="status">Status</string>

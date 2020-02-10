@@ -127,7 +127,7 @@ class ProfileFragment : Fragment() {
   }
 
   private fun getEmployee() {
-    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, null);
+    employeeId = sharedPref.getString(PreferenceConst.EMPLOYEE_ID_KEY, "");
     Log.d(TAG, "sharedPref id $employeeId")
     profileViewModel.setId(employeeId)
 
