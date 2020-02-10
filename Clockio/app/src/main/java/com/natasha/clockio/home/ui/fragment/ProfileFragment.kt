@@ -135,7 +135,7 @@ class ProfileFragment : Fragment() {
       Log.d(TAG, "Employee get $response")
       response.data?.let {
         Log.d(TAG, "Employee set fragment")
-        var employee = response.data
+        var employee = it
         profileNameTextView.text = employee.firstName + " " + employee.lastName
         profileDepartmentTextView.text = employee.department.name
         Glide.with(this).load(employee.profileUrl)

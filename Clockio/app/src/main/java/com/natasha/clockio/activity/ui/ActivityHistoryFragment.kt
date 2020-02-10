@@ -214,10 +214,12 @@ class ActivityHistoryFragment : Fragment() {
     if(historyList.isEmpty()) {
       Log.d(TAG, "show history empty ${historyList.size}")
       activityHistoryNotAvailableLabel.visibility = View.VISIBLE
+      activityHistoryNotAvailableIcon.visibility = View.VISIBLE
       activityHistoryRecyclerViewLayout.visibility = View.INVISIBLE
     } else {
       Log.d(TAG, "show history ${historyList.size}")
       activityHistoryNotAvailableLabel.visibility = View.INVISIBLE
+      activityHistoryNotAvailableIcon.visibility = View.INVISIBLE
       activityHistoryRecyclerViewLayout.visibility = View.VISIBLE
     }
   }

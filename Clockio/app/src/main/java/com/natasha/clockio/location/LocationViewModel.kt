@@ -45,11 +45,11 @@ class LocationViewModel @Inject constructor(
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-    val locationWorker = PeriodicWorkRequest.Builder(TrackLocationWorker::class.java, 20, TimeUnit.MINUTES)
+    val locationWorker = PeriodicWorkRequest.Builder(TrackLocationWorker::class.java, 30, TimeUnit.MINUTES)
         .addTag(LOCATION_WORKER_TAG)
         .setInputData(inputData)
         .setConstraints(constraints)
-        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.MINUTES)
+        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 40, TimeUnit.MINUTES)
         .build()
 
     Log.d(TAG, "worker start location update")

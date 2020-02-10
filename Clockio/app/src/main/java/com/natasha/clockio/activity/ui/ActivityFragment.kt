@@ -164,8 +164,11 @@ class ActivityFragment : Fragment() {
   }
 
   private fun observeEmployee() {
-    employeeViewModel.employee.observe(this, Observer {
-      when(it.status) {
+    employeeViewModel.employee.observe(this, Observer {response ->
+      response.data?.let {
+        var employee = it
+      }
+      /*when(it.status) {
         BaseResponse.Status.LOADING -> {
           statusProgressBar.visibility = View.VISIBLE
         }
@@ -195,7 +198,7 @@ class ActivityFragment : Fragment() {
         BaseResponse.Status.ERROR, BaseResponse.Status.FAILED -> {
           statusProgressBar.visibility = View.INVISIBLE
         }
-      }
+      }*/
     })
   }
 
@@ -249,10 +252,12 @@ class ActivityFragment : Fragment() {
   private fun showActivity() {
     if(activityList.isEmpty()) {
       activityNotAvailableLabel.visibility = View.VISIBLE
+      activityNotAvailableIcon.visibility = View.VISIBLE
       activityRecyclerViewLayout.visibility = View.INVISIBLE
     } else {
       Log.d(TAG, "show Activity ${activityList.size}")
       activityNotAvailableLabel.visibility = View.INVISIBLE
+      activityNotAvailableIcon.visibility = View.INVISIBLE
       activityRecyclerViewLayout.visibility = View.VISIBLE
     }
   }

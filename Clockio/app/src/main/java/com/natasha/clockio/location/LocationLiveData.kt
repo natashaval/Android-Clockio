@@ -43,7 +43,7 @@ class LocationLiveData @Inject constructor(
       Log.d(TAG, "worker onActive locationLiveData $location")
       location?.let {
         setLocationData(it)
-        sendLocationData(it, employeeId)
+        if (it.latitude != 0.0 || it.longitude != 0.0) sendLocationData(it, employeeId)
       }
     }
     startLocationUpdates()

@@ -74,6 +74,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
     showFriends(employeeList)
+    showFriendVisibility()
     showAddEmployee()
   }
 
@@ -182,6 +183,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      showFriendVisibility()
       attachAdapter(employeeList)
     })
   }
@@ -223,6 +225,20 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         replace(R.id.content, EmployeeAddFragment.newInstance())?.
         addToBackStack(null)?.
         commit()
+    }
+  }
+
+  private fun showFriendVisibility() {
+    if (employeeList.isEmpty()) {
+      friendLoadingIcon.visibility = View.VISIBLE
+      friendLoadingTextView.visibility = View.VISIBLE
+      friendSwipeRefresh.visibility = View.INVISIBLE
+      friendRecyclerView.visibility = View.INVISIBLE
+    } else {
+      friendLoadingIcon.visibility = View.INVISIBLE
+      friendLoadingTextView.visibility = View.INVISIBLE
+      friendSwipeRefresh.visibility = View.VISIBLE
+      friendRecyclerView.visibility = View.VISIBLE
     }
   }
 }

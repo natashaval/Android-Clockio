@@ -54,11 +54,11 @@ class LockFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    helloPresence.setOnClickListener {
+    /*helloPresence.setOnClickListener {
       activity!!.supportFragmentManager.beginTransaction()
           .replace(R.id.presenceContent, CameraFragment.newInstance())
           .commit()
-    }
+    }*/
 
 
     val activity: FragmentActivity? = activity
@@ -97,8 +97,10 @@ class LockFragment : Fragment() {
 
   private val mOnPasswordInputListener = object : BlurLockView.OnPasswordInputListener {
     override fun correct(inputPassword: String?) {
-//      Toast.makeText(activity, "Correct", Toast.LENGTH_SHORT).show()
-      blurLockView.hide(1000, HideType.FADE_OUT, EaseType.EaseInBack);
+      blurLockView.hide(1000, HideType.FADE_OUT, EaseType.EaseInBack)
+      activity!!.supportFragmentManager.beginTransaction()
+        .replace(R.id.presenceContent, CameraFragment.newInstance())
+        .commit()
     }
 
     override fun incorrect(inputPassword: String?) {
@@ -106,12 +108,10 @@ class LockFragment : Fragment() {
     }
 
     override fun input(inputPassword: String?) {
-      Log.d(TAG, "input: $inputPassword")
     }
   }
 
   private val mOnLeftButtonClickListener = BlurLockView.OnLeftButtonClickListener {
-    Toast.makeText(activity, "Left Button clicked", Toast.LENGTH_SHORT).show()
   }
 
   //    https://android-developers.googleblog.com/2019/10/one-biometric-api-over-all-android.html

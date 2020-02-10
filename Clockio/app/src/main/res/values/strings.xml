@@ -91,7 +91,7 @@
     <string name="activity_history_date_hint">Start Date - End Date</string>
 
     <!--    Notification-->
-    <string name="notif_no_result">No Results</string>
+    <string name="notif_no_result">No Notification Results</string>
     <string name="notif_create_title">Create Notification</string>
     <string name="notif_title_hint">Notif Title</string>
     <string name="notif_content_hint">Notif Contents</string>
@@ -102,6 +102,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+<!--    Friend-->
+    <string name="friend_loading_hint">Friend List Loading ...</string>
 
     <!--    Employee-->
     <string name="emp_add_title">Add Employee</string>
