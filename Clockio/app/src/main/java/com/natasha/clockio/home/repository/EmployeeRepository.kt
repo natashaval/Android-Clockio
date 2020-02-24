@@ -14,10 +14,10 @@ import javax.inject.Inject
 class EmployeeRepository @Inject constructor(private val employeeApi: EmployeeApi, private val authApi: AuthApi) {
   private val TAG: String = EmployeeRepository::class.java.simpleName
 
-  suspend fun getEmployee(id: String) : BaseResponse<Any> {
+  /*suspend fun getEmployee(id: String) : BaseResponse<Any> {
     val response = employeeApi.getEmployee(id)
     return ResponseUtils.convertResponse(response)
-  }
+  }*/
 
   suspend fun updateStatus(id: String, status: String): BaseResponse<Any> {
     val response = employeeApi.updateStatus(id, status)

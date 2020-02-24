@@ -146,10 +146,11 @@ class ActivityHistoryFragment : Fragment() {
     viewModel.activityPage.observe(this, androidx.lifecycle.Observer {
       historyList = it.content!!.toMutableList()
       Log.d(TAG, "history fragment ${it.content}")
-      totalPages = it.totalPages - 1
+      totalPages = it.totalPages
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll history sizeChanged?: ${historyList.size} currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      historyAdapter.addAll(historyList)
       showActivity()
     })
   }
@@ -197,10 +198,12 @@ class ActivityHistoryFragment : Fragment() {
 
     Handler().postDelayed({
       if (currentPage != pageStart) historyAdapter.removeLoading()
-      historyAdapter.addAll(historyList)
-      if (!isLastPage) {
+//      historyAdapter.addAll(historyList)
+//      if (!isLastPage) {
+      if (currentPage+1 < totalPages) {
         historyAdapter.addLoading()
       } else {
+//        historyAdapter.removeLoading()
         isLastPage = true
       }
       isLoading = false
@@ -211,10 +214,12 @@ class ActivityHistoryFragment : Fragment() {
     if(historyList.isEmpty()) {
       Log.d(TAG, "show history empty ${historyList.size}")
       activityHistoryNotAvailableLabel.visibility = View.VISIBLE
+      activityHistoryNotAvailableIcon.visibility = View.VISIBLE
       activityHistoryRecyclerViewLayout.visibility = View.INVISIBLE
     } else {
       Log.d(TAG, "show history ${historyList.size}")
       activityHistoryNotAvailableLabel.visibility = View.INVISIBLE
+      activityHistoryNotAvailableIcon.visibility = View.INVISIBLE
       activityHistoryRecyclerViewLayout.visibility = View.VISIBLE
     }
   }

@@ -7,6 +7,7 @@ import com.natasha.clockio.base.model.PageResponse
 import com.natasha.clockio.home.entity.Department
 import com.natasha.clockio.home.entity.Employee
 import com.natasha.clockio.home.entity.EmployeeRequest
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -17,8 +18,8 @@ interface EmployeeApi {
   ) : LiveData<ApiResponse<Employee>>
 
   @GET("/api/employees/{id}")
-  suspend fun getEmployee(@Path("id") id: String)
-  : Response<Employee>
+  fun getEmployee(@Path("id") id: String)
+  : Call<Employee>
 
   @POST("/api/employees/{id}/status")
   suspend fun updateStatus(@Path("id") id: String, @Query("status") status: String)

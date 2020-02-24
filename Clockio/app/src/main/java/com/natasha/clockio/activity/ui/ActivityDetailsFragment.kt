@@ -21,6 +21,7 @@ import com.natasha.clockio.location.ui.MapsFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity_details.*
 import kotlinx.android.synthetic.main.item_start_end_time.*
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class ActivityDetailsFragment : Fragment() {
@@ -94,7 +95,8 @@ class ActivityDetailsFragment : Fragment() {
     activityContentDetails.text = act.content.toString()
     startDetails.text = act.startTime.toString()
     endDetails.text = act.endTime.toString()
-    activityDateDetails.text = act.date.toString()
+    val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+    activityDateDetails.text = dateFormat.format(act.date).toString()
     if (act.latitude != null && act.longitude != null) {
       setMap(LocationModel(act.latitude, act.longitude))
     }

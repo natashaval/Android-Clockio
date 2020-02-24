@@ -206,12 +206,15 @@ class HomeActivity : DaggerAppCompatActivity(),
   }
 
   override fun onEmployeeRefresh() {
+    val userRole = sharedPref.getString(PreferenceConst.USER_ROLE_KEY, UserConst.ROLE_USER)
     //    https://developer.android.com/training/basics/fragments/communicating.html
-    val activityFrag = supportFragmentManager.
-        findFragmentByTag(
-            ActivityFragment::class.java.simpleName) as ActivityFragment
-    Log.d(TAG, "home activity get Employee")
-    activityFrag?.getEmployee()
+    if (userRole == UserConst.ROLE_USER) {
+      val activityFrag = supportFragmentManager?.findFragmentByTag(
+        ActivityFragment::class.java.simpleName
+      ) as ActivityFragment
+      Log.d(TAG, "home activity update Employee")
+      activityFrag?.updateEmployee()
+    }
   }
 
   override fun onNotifReattach() {

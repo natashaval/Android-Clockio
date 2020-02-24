@@ -22,39 +22,45 @@ class NotifRepository @Inject constructor(
     private val gson: Gson
 ) {
 
-    private val TAG: String = NotifRepository::class.java.simpleName
+  private val TAG: String = NotifRepository::class.java.simpleName
 
-    fun getAllNotif(): NotifResult {
-        Log.d(TAG, "Repository get All notif")
-        val dataSourceFactory = localCache.getAll()
-        val boundaryCallback = NotifBoundaryCallback(networkSource, localCache)
-        val networkErrors = boundaryCallback.networkErrors
+  fun getAllNotif(): NotifResult {
+    Log.d(TAG, "Repository get All notif")
+    val dataSourceFactory = localCache.getAll()
+    val boundaryCallback = NotifBoundaryCallback(networkSource, localCache)
+    val networkErrors = boundaryCallback.networkErrors
 
-        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
-            .setBoundaryCallback(boundaryCallback)
-            .build()
+    val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
+        .setBoundaryCallback(boundaryCallback)
+        .build()
 
-        return NotifResult(data, networkErrors)
+    return NotifResult(data, networkErrors)
+  }
+
+  fun invalidateNotif() {
+    val datasourceFactory = localCache.getAll()
+  }
+
+  companion object {
+    const val DATABASE_PAGE_SIZE = 2
+  }
+
+  suspend fun createNotif(req: NotifRequest): BaseResponse<Any> {
+    val response = networkSource.createNotif(req)
+    return ResponseUtils.convertResponse(response)
+  }
+
+  suspend fun deleteNotif(notif: Notif) {
+    localCache.delete(notif) {
+      Log.d(TAG, "repository local delete")
     }
+    val response = networkSource.deleteNotif(notif.id)
+    Log.d(TAG, "repository network delete $response")
+  }
 
-    fun invalidateNotif() {
-        val datasourceFactory = localCache.getAll()
+  fun updateNotif (notif: Notif) {
+    localCache.update(notif) {
+      Log.d(TAG, "repository local updated")
     }
-
-    companion object {
-        const val DATABASE_PAGE_SIZE = 2
-    }
-
-    suspend fun createNotif(req: NotifRequest): BaseResponse<Any> {
-        val response = networkSource.createNotif(req)
-        return ResponseUtils.convertResponse(response)
-    }
-
-    suspend fun deleteNotif(notif: Notif) {
-        localCache.delete(notif) {
-            Log.d(TAG, "repository local delete")
-        }
-        val response = networkSource.deleteNotif(notif.id)
-        Log.d(TAG, "repository network delete $response")
-    }
+  }
 }

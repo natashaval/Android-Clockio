@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.natasha.clockio.R
@@ -27,6 +28,7 @@ import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.base.ui.setStatusIcon
 import com.natasha.clockio.home.ui.adapter.StatusSpinnerAdapter
 import com.natasha.clockio.home.viewmodel.EmployeeViewModel
+import com.natasha.clockio.home.viewmodel.ProfileViewModel
 import com.natasha.clockio.location.ui.LocationHistoryFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_activity.*
@@ -52,6 +54,7 @@ class ActivityFragment : Fragment() {
   @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var employeeViewModel: EmployeeViewModel
+  private lateinit var profileViewModel: ProfileViewModel
   private lateinit var activityViewModel: ActivityViewModel
   private lateinit var act: HomeActivity
 
@@ -96,10 +99,10 @@ class ActivityFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     employeeViewModel = ViewModelProvider(this, factory).get(EmployeeViewModel::class.java)
+    profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
     activityViewModel = ViewModelProvider(this, factory).get(
         ActivityViewModel::class.java)
 
-    getEmployee()
     getStatus()
     getActivityToday()
 
@@ -146,8 +149,6 @@ class ActivityFragment : Fragment() {
 
       override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         val status: String = statusSpinner.selectedItem.toString()
-//        Toast.makeText(activity!!, "Status selected: $status", Toast.LENGTH_SHORT).show()
-//        Log.d(TAG, "onItemSelected tapi var employeeStatus $employeeStatus dibanding ${status.toLowerCase()}")
         if (employeeStatus!= null && !employeeStatus.equals(status.toLowerCase())) {
           Log.d(TAG, "status changed! $status")
           employeeViewModel.updateStatus(employeeId!!, status)
@@ -156,8 +157,9 @@ class ActivityFragment : Fragment() {
     }
   }
 
-  fun getEmployee() {
-    employeeViewModel.getEmployee(employeeId!!)
+  fun updateEmployee() {
+//    employeeViewModel.getEmployee(employeeId!!)
+    profileViewModel.updateProfile(employeeId!!)
   }
 
   private fun getActivityToday() {
@@ -165,7 +167,10 @@ class ActivityFragment : Fragment() {
   }
 
   private fun observeEmployee() {
-    employeeViewModel.employee.observe(this, Observer {
+    /*employeeViewModel.employee.observe(this, Observer {response ->
+      response.data?.let {
+        var employee = it
+      }
       when(it.status) {
         BaseResponse.Status.LOADING -> {
           statusProgressBar.visibility = View.VISIBLE
@@ -197,6 +202,33 @@ class ActivityFragment : Fragment() {
           statusProgressBar.visibility = View.INVISIBLE
         }
       }
+    })*/
+    profileViewModel.setId(employeeId)
+
+    profileViewModel.employee.observe(this, Observer {response ->
+      Log.d(TAG, "Employee get $response")
+      response.data?.let {
+        statusProgressBar.visibility = View.INVISIBLE
+        var employee = it
+        Log.d(TAG, "Employee set fragment")
+        employeeName.text = employee.firstName + " " + employee.lastName
+        employeeDept.text = employee.department.name
+        val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+        employee.checkIn?.let {
+          employeeLastCheckin.text = getString(R.string.employee_last_checkin, dateFormat.format(it))
+        }
+        employee.status?.let {status ->
+          selectStatus(status.toLowerCase())
+        }
+        Log.d(TAG, "Employee set isnull ${employee.profileUrl.isNullOrBlank()} profileUrl ${employee.profileUrl}")
+        if (employee.profileUrl.isNullOrBlank()) {
+          profileInitial.letter = employee.firstName + " " + employee.lastName
+        } else {
+          profileImage.visibility = View.VISIBLE
+          Glide.with(this).load(employee.profileUrl)
+              .apply(RequestOptions.circleCropTransform()).into(profileImage)
+        }
+      }
     })
   }
 
@@ -209,6 +241,7 @@ class ActivityFragment : Fragment() {
           activityList = data.toMutableList()
           activityAdapter.addAll(activityList)
           showActivity()
+          activitySwipeRefresh.isRefreshing = false
         }
       }
     })
@@ -241,15 +274,20 @@ class ActivityFragment : Fragment() {
       adapter = activityAdapter
       addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
     }
+    activitySwipeRefresh.setOnRefreshListener {
+      getActivityToday()
+    }
   }
 
   private fun showActivity() {
     if(activityList.isEmpty()) {
       activityNotAvailableLabel.visibility = View.VISIBLE
+      activityNotAvailableIcon.visibility = View.VISIBLE
       activityRecyclerViewLayout.visibility = View.INVISIBLE
     } else {
       Log.d(TAG, "show Activity ${activityList.size}")
       activityNotAvailableLabel.visibility = View.INVISIBLE
+      activityNotAvailableIcon.visibility = View.INVISIBLE
       activityRecyclerViewLayout.visibility = View.VISIBLE
     }
   }

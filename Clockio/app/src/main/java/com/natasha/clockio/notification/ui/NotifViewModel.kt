@@ -43,4 +43,11 @@ class NotifViewModel @Inject constructor(private val notifRepository: NotifRepos
       notifRepository.deleteNotif(notif)
     }
   }
+
+  fun updateNotif(notif: Notif) {
+    viewModelScope.launch {
+      notif.isOpen = true
+      notifRepository.updateNotif(notif)
+    }
+  }
 }

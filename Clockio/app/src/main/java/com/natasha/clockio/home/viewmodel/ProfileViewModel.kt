@@ -29,4 +29,9 @@ class ProfileViewModel @Inject constructor(private val profileRepository: Profil
     }
     Log.d(TAG, "profileViewModule _id ${_id.value}")
   }
+
+  fun updateProfile(id: String) {
+    Log.d(TAG, "profileViewModule update Employee")
+    profileRepository.updateEmployee(id)
+  }
 }

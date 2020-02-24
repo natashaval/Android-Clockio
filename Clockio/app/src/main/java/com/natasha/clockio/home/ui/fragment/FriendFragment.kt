@@ -74,6 +74,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     friendSwipeRefresh.setOnRefreshListener(this)
     observeFindAllEmployee()
     showFriends(employeeList)
+    showFriendVisibility()
     showAddEmployee()
   }
 
@@ -182,17 +183,20 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
       currentPage = it.number
       isLastPage = it.last
       Log.d(TAG, "observeFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+      showFriendVisibility()
+      attachAdapter(employeeList)
     })
   }
 
   fun doFindAllEmployee(page: Int?, size: Int?) {
     viewModel.findAllEmployee(page, size)
-//    observeFindAllEmployee()
     Log.d(TAG, "doFindAll Friends currPage: $currentPage totalPage: $totalPages islastPage: $isLastPage")
+  }
 
+  private fun attachAdapter(list: List<Employee>) {
     Handler().postDelayed({
       if (currentPage != pageStart) friendAdapter.removeLoading()
-      friendAdapter.addAll(employeeList)
+      friendAdapter.addAll(list)
       friendSwipeRefresh?.isRefreshing = false
 
       if (!isLastPage) {
@@ -201,7 +205,7 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         isLastPage = true
       }
       isLoading = false
-    }, 1000)
+    }, 1500)
   }
 
   override fun onRefresh() {
@@ -221,6 +225,20 @@ class FriendFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         replace(R.id.content, EmployeeAddFragment.newInstance())?.
         addToBackStack(null)?.
         commit()
+    }
+  }
+
+  private fun showFriendVisibility() {
+    if (employeeList.isEmpty()) {
+      friendLoadingIcon.visibility = View.VISIBLE
+      friendLoadingTextView.visibility = View.VISIBLE
+      friendSwipeRefresh.visibility = View.INVISIBLE
+      friendRecyclerView.visibility = View.INVISIBLE
+    } else {
+      friendLoadingIcon.visibility = View.INVISIBLE
+      friendLoadingTextView.visibility = View.INVISIBLE
+      friendSwipeRefresh.visibility = View.VISIBLE
+      friendRecyclerView.visibility = View.VISIBLE
     }
   }
 }

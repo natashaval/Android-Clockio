@@ -1,22 +1,13 @@
 package com.natasha.clockio.home.ui.adapter
 
-import android.content.Context
-import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.natasha.clockio.MainActivity
 import com.natasha.clockio.R
-import com.natasha.clockio.activity.ui.ActivityDetailsFragment
-import com.natasha.clockio.base.constant.ParcelableConst
 import com.natasha.clockio.home.entity.Activity
-import com.natasha.clockio.home.ui.HomeActivity
 import kotlinx.android.synthetic.main.item_activity.view.*
+import java.text.SimpleDateFormat
 
 //https://www.raywenderlich.com/1560485-android-recyclerview-tutorial-with-kotlin
 class ActivityAdapter constructor(private val activities: MutableList<Activity>):
@@ -56,13 +47,14 @@ class ActivityAdapter constructor(private val activities: MutableList<Activity>)
       Log.d(TAG, "click $p0")
     }
 
-    fun bind(activity: Activity) {
-      v.activityTitle.text = activity.title
-      v.activityContent.text = activity.content
-      v.activityDate.text = activity.date.toString()
+    fun bind(actvy: Activity) {
+      v.activityTitle.text = actvy.title
+      v.activityContent.text = actvy.content
+      val dateFormat = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+      v.activityDate.text = dateFormat.format(actvy.date).toString()
       v.setOnClickListener {
-        Log.d(TAG, "activity clicked $activity")
-        listener?.onActivityClick(activity)
+        Log.d(TAG, "activity clicked $actvy")
+        listener?.onActivityClick(actvy)
       }
     }
     //    https://stackoverflow.com/questions/28984879/how-to-open-a-different-fragment-on-recyclerview-onclick

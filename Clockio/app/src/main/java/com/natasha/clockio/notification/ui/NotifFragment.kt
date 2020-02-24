@@ -20,6 +20,7 @@ import com.natasha.clockio.R
 import com.natasha.clockio.base.constant.PreferenceConst
 import com.natasha.clockio.base.constant.UserConst
 import com.natasha.clockio.home.ui.HomeActivity
+import com.natasha.clockio.notification.entity.Notif
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_notif.*
 import javax.inject.Inject
@@ -34,11 +35,12 @@ class NotifFragment : Fragment() {
   @Inject lateinit var sharedPref: SharedPreferences
   @Inject lateinit var factory: ViewModelProvider.Factory
   private lateinit var viewModel: NotifViewModel
-  private val adapter = NotifAdapter()
+  private lateinit var act: HomeActivity
+  private var adapter = NotifAdapter()
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
-    val act = activity as HomeActivity
+    act = activity as HomeActivity
     act.supportActionBar?.setTitle(R.string.navigation_notif)
     return inflater.inflate(R.layout.fragment_notif, container, false)
   }
@@ -66,6 +68,13 @@ class NotifFragment : Fragment() {
   }
 
   private fun observeAdapter() {
+    adapter.setListener(object : NotifAdapter.OnNotifClickListener {
+      override fun onNotifClick(notif: Notif) {
+        viewModel.updateNotif(notif)
+        act.addFragmentBackstack(NotifDetailsFragment.newInstance(notif))
+      }
+
+    })
     notifRecyclerView.adapter = adapter
     Log.d(TAG, "notif trigger!")
     viewModel.notifs.observe(this, Observer {
@@ -81,9 +90,11 @@ class NotifFragment : Fragment() {
   private fun showEmptyList(show: Boolean) {
     if (show) {
       notifNoResult.visibility = View.VISIBLE
-      notifRecyclerView.visibility = View.GONE
+      notifNoResultIcon.visibility = View.VISIBLE
+      notifRecyclerView.visibility = View.INVISIBLE
     } else {
-      notifNoResult.visibility = View.GONE
+      notifNoResult.visibility = View.INVISIBLE
+      notifNoResultIcon.visibility = View.INVISIBLE
       notifRecyclerView.visibility = View.VISIBLE
     }
   }
@@ -94,10 +105,7 @@ class NotifFragment : Fragment() {
     else notifAddButton.visibility = View.INVISIBLE
     notifAddButton.setOnClickListener {
       Log.d(TAG, "FAB notif clicked!")
-      fragmentManager?.beginTransaction()?.
-          replace(R.id.content, NotifAddFragment.newInstance())?.
-          addToBackStack(null)?.
-          commit()
+      act.addFragmentBackstack(NotifAddFragment.newInstance())
     }
   }
 
@@ -136,6 +144,7 @@ class NotifFragment : Fragment() {
   fun setOnNotifReattachListener(callback: OnNotifReattachListener) {
     this.reattachCallback = callback
   }
+
   fun reAttachFragment() {
     Log.d(TAG, "notif reattach")
     val frg = fragmentManager?.findFragmentByTag(TAG)
